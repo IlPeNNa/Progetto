@@ -2,6 +2,11 @@
   <!-- Header con toolbar -->
   <mat-toolbar color="primary" class="dashboard-header">
     <span>MyBills.com - Status del cliente</span>
+    <span class="header-spacer"></span>
+    <span class="username-display">Ciao, {{getUsername()}}</span>
+    <button mat-icon-button (click)="logout()" matTooltip="Logout">
+      <mat-icon>logout</mat-icon>
+    </button>
   </mat-toolbar>
 
   <div class="dashboard-content">

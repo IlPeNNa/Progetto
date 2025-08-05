@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +18,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BollettaService } from '../../service/bolletta.service';
+import { AuthService } from '../../service/auth.service';
 import { Bolletta, StatisticheCliente } from '../../dto/bolletta.model';
 import { lastValueFrom } from 'rxjs';
 
@@ -58,7 +59,11 @@ export class BolletteDashboardComponent implements OnInit {
   filtroTipo: string = '';
   filtroPagato: boolean | null = null;
 
-  constructor(private bollettaService: BollettaService) {}
+  constructor(
+    private bollettaService: BollettaService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   async ngOnInit() {
     await this.caricaBollette();
@@ -146,5 +151,14 @@ export class BolletteDashboardComponent implements OnInit {
       #f7931e ${gasAngle}deg ${luceAngle}deg,
       #4caf50 ${luceAngle}deg 360deg
     )`;
+  }
+
+  getUsername(): string {
+    return this.authService.getUsername();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

@@ -10,6 +10,18 @@
   left: 0;
   right: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.header-spacer {
+  flex: 1 1 auto;
+}
+
+.username-display {
+  margin-right: 15px;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 .dashboard-content {
