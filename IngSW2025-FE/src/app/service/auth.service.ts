@@ -1,17 +1,29 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+import { LoginRequest, LoginResponse, RegistrationRequest, Utente } from '../dto/auth.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private apiUrl = '/api/utenti';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   private usernameSubject = new BehaviorSubject<string>(this.getStoredUsername());
+  private utenteSubject = new BehaviorSubject<Utente | null>(this.getStoredUser());
 
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   public username$ = this.usernameSubject.asObservable();
+  public utente$ = this.utenteSubject.asObservable();
 
-  constructor() {}
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json'
+    })
+  };
+
+  constructor(private http: HttpClient) {}
 
   private hasToken(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -21,8 +33,55 @@ export class AuthService {
     return localStorage.getItem('username') || '';
   }
 
+  private getStoredUser(): Utente | null {
+    const userStr = localStorage.getItem('utente');
+    return userStr ? JSON.parse(userStr) : null;
+  }
+
+  // Login con chiamata al backend
+  loginWithBackend(email: string, password: string): Observable<LoginResponse> {
+    const loginRequest: LoginRequest = {
+      mail: email,
+      password: password
+    };
+
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, loginRequest, this.httpOptions)
+      .pipe(
+        map(response => {
+          if (response.success && response.utente) {
+            // Salva i dati di autenticazione nel localStorage
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', `${response.utente.nome} ${response.utente.cognome}`);
+            localStorage.setItem('utente', JSON.stringify(response.utente));
+            
+            // Aggiorna i BehaviorSubjects
+            this.isLoggedInSubject.next(true);
+            this.usernameSubject.next(`${response.utente.nome} ${response.utente.cognome}`);
+            this.utenteSubject.next(response.utente);
+          }
+          return response;
+        }),
+        catchError(error => {
+          console.error('Errore durante il login:', error);
+          return throwError(() => new Error('Errore durante il login'));
+        })
+      );
+  }
+
+  // Registrazione di un nuovo utente
+  register(registrationData: RegistrationRequest): Observable<Utente> {
+    return this.http.post<Utente>(this.apiUrl, registrationData, this.httpOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Errore durante la registrazione:', error);
+          return throwError(() => new Error('Errore durante la registrazione'));
+        })
+      );
+  }
+
+  // Metodo compatibile con la vecchia implementazione (mantiene la simulazione)
   login(username: string, password: string): boolean {
-    // Simulazione login - in produzione faresti una chiamata HTTP al backend
+    // Simulazione login - mantiene la compatibilità con il codice esistente
     if (username && password) {
       localStorage.setItem('isLoggedIn', 'true');
       localStorage.setItem('username', username);
@@ -38,9 +97,11 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('username');
+    localStorage.removeItem('utente');
     
     this.isLoggedInSubject.next(false);
     this.usernameSubject.next('');
+    this.utenteSubject.next(null);
   }
 
   isAuthenticated(): boolean {
@@ -49,5 +110,33 @@ export class AuthService {
 
   getUsername(): string {
     return this.getStoredUsername();
+  }
+
+  getCurrentUser(): Utente | null {
+    return this.getStoredUser();
+  }
+
+  // Verifica se l'utente è autenticato tramite backend
+  verifyAuthentication(): Observable<boolean> {
+    const user = this.getCurrentUser();
+    if (!user || !user.cf) {
+      return new Observable<boolean>(observer => {
+        observer.next(false);
+        observer.complete();
+      });
+    }
+
+    return this.http.get<Utente>(`${this.apiUrl}/${user.cf}`)
+      .pipe(
+        map(response => !!response),
+        catchError(error => {
+          console.error('Errore nella verifica autenticazione:', error);
+          this.logout(); // Logout automatico se la verifica fallisce
+          return new Observable<boolean>(observer => {
+            observer.next(false);
+            observer.complete();
+          });
+        })
+      );
   }
 }

@@ -10,8 +10,43 @@
   color: white;
   font-weight: bold;
   font-size: 24px;
-  text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  position: relative;
+}
+
+.header-left {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-center p {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header-right {
+  flex: 0 0 auto;
+  width: 50px; /* Stesso spazio del logo per bilanciare */
+}
+
+.auth-logo {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(100%); /* Rende il logo bianco */
 }
 
 .auth-header h1 {
@@ -74,25 +109,71 @@
   transition: transform 0.2s ease;
 }
 
+/* Error message styles */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f44336;
+  background-color: #ffebee;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid #f44336;
+}
+
+.error-message mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Loading spinner in button */
+.auth-button mat-spinner {
+  margin-right: 8px;
+}
+
 .auth-button:disabled {
   opacity: 0.6;
+  cursor: not-allowed !important;
   cursor: not-allowed;
 }
+  
+
 
 .auth-footer {
   background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
   color: white;
   padding: 15px 0;
   margin-top: auto;
-  transition: all 0.1s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
   overflow: hidden;
   height: 60px;
+  position: relative;
 }
 
-.auth-footer:hover {
-  height: auto;
-  padding: 20px 0 10px 0; /* Ridotto ulteriormente da 25px a 20px */
+/* Su desktop: hover per espandere */
+@media (min-width: 769px) {
+  .auth-footer:hover {
+    height: auto;
+    padding: 20px 0 10px 0;
+  }
+}
+
+/* Su tablet e mobile: sempre espanso */
+@media (max-width: 768px) {
+  .auth-footer {
+    height: auto !important;
+    overflow: visible !important;
+    padding: 20px 0 !important;
+  }
+  
+  .auth-footer:hover {
+    height: auto;
+    padding: 20px 0;
+  }
 }
 
 .footer-content {
@@ -106,11 +187,29 @@
   margin-top: -80px;
   transform: translateY(20px);
   transition: all 0.1s ease 0.1s;
+  pointer-events: none;
 }
 
-.auth-footer:hover .footer-content {
-  opacity: 1;
-  transform: translateY(0);
+/* Su desktop: show al hover */
+@media (min-width: 769px) {
+  .auth-footer:hover .footer-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+
+/* Su tablet e mobile: sempre visibile */
+@media (max-width: 768px) {
+  .footer-content {
+    opacity: 1 !important;
+    margin-top: 0 !important;
+    transform: translateY(0) !important;
+    pointer-events: auto !important;
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 0 20px !important;
+  }
 }
 
 .footer-preview {
@@ -124,9 +223,19 @@
   transition: opacity 0.3s ease;
 }
 
-.auth-footer:hover .footer-preview {
-  opacity: 0;
-  pointer-events: none;
+/* Su desktop: nasconde al hover */
+@media (min-width: 769px) {
+  .auth-footer:hover .footer-preview {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* Su tablet e mobile: sempre nascosto */
+@media (max-width: 768px) {
+  .footer-preview {
+    display: none !important;
+  }
 }
 
 .footer-preview-left {
@@ -147,6 +256,18 @@
   color: #b3c5ef;
   font-size: 12px;
   margin: 0;
+}
+
+.footer-logo-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 .footer-preview-center {
@@ -582,4 +703,21 @@
   color: #f44336;
   font-size: 12px;
   margin-top: 5px;
+}
+
+/* Stili per messaggi di errore specifici dell'email */
+.mat-mdc-form-field .mat-mdc-form-field-error-wrapper .mat-error {
+  color: #f44336;
+  font-size: 12px;
+  line-height: 1.2;
+  margin-top: 4px;
+}
+
+/* Tooltip personalizzato per email */
+.mat-mdc-tooltip {
+  background-color: #1976d2 !important;
+  color: white !important;
+  font-size: 12px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
 }

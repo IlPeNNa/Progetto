@@ -1,4 +1,4 @@
-package it.unife.sample.backend.service;
+/*package it.unife.sample.backend.service;
 
 import it.unife.sample.backend.model.SampleEntity;
 import it.unife.sample.backend.repository.SampleEntityRepository;
@@ -30,4 +30,4 @@ public class SampleEntityService {
     public void deleteById(UUID id) {
         repository.deleteById(id);
     }
-}
+}*/

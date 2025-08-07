@@ -1,7 +1,15 @@
 <div class="auth-container">
   <!-- Header -->
   <div class="auth-header">
-    <p>MyBills</p>
+    <div class="header-left">
+      <img src="mybills.ico" alt="MyBills Logo" class="auth-logo">
+    </div>
+    <div class="header-center">
+      <p>MyBills</p>
+    </div>
+    <div class="header-right">
+      <!-- Spazio per eventuali elementi futuri -->
+    </div>
   </div>
 
   <!-- Main content -->
@@ -35,6 +43,20 @@
                 autocomplete="family-name">
               <mat-icon matSuffix>person</mat-icon>
             </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Codice Fiscale</mat-label>
+              <input 
+                matInput 
+                [(ngModel)]="cf" 
+                name="cf"
+                #cfField="ngModel"
+                required
+                maxlength="16"
+                style="text-transform: uppercase"
+                placeholder="Es. RSSMRA80A01H501Z">
+              <mat-icon matSuffix>badge</mat-icon>
+            </mat-form-field>
           </div>
 
           <!-- Email field (sempre presente) -->
@@ -47,8 +69,18 @@
               name="email"
               #emailField="ngModel"
               required
-              autocomplete="email">
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              autocomplete="email"
+              [matTooltip]="'Formato richiesto: esempio@dominio.com'"
+              matTooltipPosition="above"
+              matTooltipShowDelay="300">
             <mat-icon matSuffix>email</mat-icon>
+            
+            <!-- Messaggi di errore -->
+            <mat-error *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
+              <span *ngIf="emailField.errors?.['required']">L'email è obbligatoria</span>
+              <span *ngIf="emailField.errors?.['pattern']">Inserisci un'email valida (es. nome&#64;dominio.com)</span>
+            </mat-error>
           </mat-form-field>
 
           <!-- Password field -->
@@ -65,21 +97,30 @@
             <mat-icon matSuffix>lock</mat-icon>
           </mat-form-field>
 
+          <!-- Messaggio di errore -->
+          <div *ngIf="errorMessage" class="error-message">
+            <mat-icon>error</mat-icon>
+            <span>{{ errorMessage }}</span>
+          </div>
+
           <!-- Buttons -->
           <div class="auth-buttons">
             <button 
               mat-raised-button 
               color="primary" 
               type="submit"
-              [disabled]="!authForm.form.valid"
+              [disabled]="isLoading || !authForm.form.valid"
               class="auth-button">
-              {{isLoginMode ? 'Log in' : 'Registrati'}}
+              <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+              <span *ngIf="!isLoading">{{isLoginMode ? 'Log in' : 'Registrati'}}</span>
+              <span *ngIf="isLoading">{{isLoginMode ? 'Accesso in corso...' : 'Registrazione in corso...'}}</span>
             </button>
 
             <button 
               mat-raised-button 
               color="accent" 
               type="button"
+              [disabled]="isLoading"
               (click)="toggleMode()"
               class="auth-button">
               {{isLoginMode ? 'Registrati' : 'Torna al Login'}}
@@ -96,7 +137,10 @@
     <!-- Anteprima compatta (visibile di default) -->
     <div class="footer-preview">
       <div class="footer-preview-left">
-        <h4>MyBills</h4>
+        <div class="footer-logo-section">
+          <img src="mybills.ico" alt="MyBills Logo" class="footer-logo">
+          <h4>MyBills</h4>
+        </div>
         <p>&copy; 2025 - Gestione bollette intelligente</p>
       </div>
       
@@ -120,7 +164,10 @@
     <!-- Contenuto completo (visibile al hover) -->
     <div class="footer-content">
       <div class="footer-section">
-        <h4>MyBills</h4>
+        <div class="footer-logo-section">
+          <img src="mybills.ico" alt="MyBills Logo" class="footer-logo">
+          <h4>MyBills</h4>
+        </div>
         <p>La soluzione moderna per gestire le tue bollette con semplicità e controllo.</p>
       </div>
       
