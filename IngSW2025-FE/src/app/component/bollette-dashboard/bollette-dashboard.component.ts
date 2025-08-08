@@ -1,26 +1,25 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule, Router } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BollettaService } from '../../service/bolletta.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
-import { Bolletta, StatisticheCliente } from '../../dto/bolletta.model';
-import { lastValueFrom } from 'rxjs';
+import { BollettaService } from '../../service/bolletta.service';
+import { Bolletta, StatisticheCliente, TipoBolletta } from '../../dto/bolletta.model';
 
 @Component({
   selector: 'app-bollette-dashboard',
@@ -28,129 +27,68 @@ import { lastValueFrom } from 'rxjs';
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    MatCheckboxModule,
     MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    MatGridListModule,
-    MatTooltipModule
+    MatCardModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    RouterModule
   ],
   templateUrl: './bollette-dashboard.component.html',
-  styleUrl: './bollette-dashboard.component.scss'
+  styleUrl: './bollette-dashboard.component.scss',
+  providers: []
 })
 export class BolletteDashboardComponent implements OnInit {
   bollette: Bolletta[] = [];
   statistiche: StatisticheCliente = { gas: 0, luce: 0, wifi: 0 };
-  displayedColumns: string[] = ['tipo', 'fornitore', 'importo', 'scadenza', 'stato', 'azioni'];
+  displayedColumns: string[] = ['tipo', 'fornitore', 'importo', 'scadenza', 'pagato', 'actions'];
   
-  // Filtri
+  // Proprietà per i filtri
   filtroDataDa: Date | null = null;
   filtroDataA: Date | null = null;
   filtroTipo: string = '';
   filtroPagato: boolean | null = null;
 
   constructor(
-    private bollettaService: BollettaService,
     private authService: AuthService,
+    private bollettaService: BollettaService,
     private router: Router
   ) {}
 
-  async ngOnInit() {
-    await this.caricaBollette();
-    await this.caricaStatistiche();
+  ngOnInit(): void {
+    this.loadBollette();
+    this.loadStatistiche();
   }
 
-  async caricaBollette(): Promise<void> {
-    this.bollette = await lastValueFrom(this.bollettaService.getAll());
-  }
-
-  async caricaStatistiche(): Promise<void> {
-    this.statistiche = await lastValueFrom(this.bollettaService.getStatistiche());
-  }
-
-  get bolletteFiltrate(): Bolletta[] {
-    return this.bollette.filter(bolletta => {
-      let passa = true;
-      
-      if (this.filtroTipo && bolletta.tipo !== this.filtroTipo) {
-        passa = false;
+  loadBollette(): void {
+    this.bollettaService.getAll().subscribe({
+      next: (data) => {
+        this.bollette = data;
+      },
+      error: (error) => {
+        console.error('Errore nel caricamento delle bollette:', error);
       }
-      
-      if (this.filtroPagato !== null && bolletta.pagato !== this.filtroPagato) {
-        passa = false;
-      }
-      
-      if (this.filtroDataDa && bolletta.scadenza < this.filtroDataDa) {
-        passa = false;
-      }
-      
-      if (this.filtroDataA && bolletta.scadenza > this.filtroDataA) {
-        passa = false;
-      }
-      
-      return passa;
     });
   }
 
-  async marcaComePageto(bolletta: Bolletta): Promise<void> {
-    if (bolletta.id) {
-      await lastValueFrom(this.bollettaService.marcaComePageto(bolletta.id));
-      bolletta.pagato = true;
-      bolletta.dataPagamento = new Date();
-    }
-  }
-
-  isScaduta(bolletta: Bolletta): boolean {
-    return !bolletta.pagato && bolletta.scadenza < new Date();
-  }
-
-  getTotalePagato(): number {
-    return this.bollette
-      .filter(b => b.pagato)
-      .reduce((total, b) => total + b.importo, 0);
-  }
-
-  getTotaleDaPagare(): number {
-    return this.bollette
-      .filter(b => !b.pagato)
-      .reduce((total, b) => total + b.importo, 0);
-  }
-
-  clearFiltri(): void {
-    this.filtroDataDa = null;
-    this.filtroDataA = null;
-    this.filtroTipo = '';
-    this.filtroPagato = null;
-  }
-
-  getTipoIcon(tipo: string): string {
-    switch(tipo) {
-      case 'Gas': return 'local_gas_station';
-      case 'Luce': return 'lightbulb';
-      case 'WiFi': return 'wifi';
-      default: return 'receipt';
-    }
-  }
-
-  getChartStyle(): string {
-    const gasAngle = (this.statistiche.gas / 100) * 360;
-    const luceAngle = ((this.statistiche.gas + this.statistiche.luce) / 100) * 360;
-    
-    return `conic-gradient(
-      #ff6b35 0deg ${gasAngle}deg,
-      #f7931e ${gasAngle}deg ${luceAngle}deg,
-      #4caf50 ${luceAngle}deg 360deg
-    )`;
+  loadStatistiche(): void {
+    this.bollettaService.getStatistiche().subscribe({
+      next: (data) => {
+        this.statistiche = data;
+      },
+      error: (error) => {
+        console.error('Errore nel caricamento delle statistiche:', error);
+      }
+    });
   }
 
   getUsername(): string {
@@ -159,6 +97,129 @@ export class BolletteDashboardComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth']);
+  }
+
+  getChartStyle(): string {
+    const { gas, luce, wifi } = this.statistiche;
+    const total = gas + luce + wifi;
+    
+    if (total === 0) {
+      return 'conic-gradient(#4CAF50 0deg 360deg)';
+    }
+    
+    const gasAngle = (gas / total) * 360;
+    const luceAngle = gasAngle + (luce / total) * 360;
+    
+    return `conic-gradient(
+      #4CAF50 0deg ${gasAngle}deg,
+      #FF9800 ${gasAngle}deg ${luceAngle}deg,
+      #2196F3 ${luceAngle}deg 360deg
+    )`;
+  }
+
+  getTipoBollettaIcon(tipo: TipoBolletta): string {
+    switch (tipo) {
+      case TipoBolletta.GAS:
+        return 'local_gas_station';
+      case TipoBolletta.LUCE:
+        return 'lightbulb';
+      case TipoBolletta.WIFI:
+        return 'wifi';
+      default:
+        return 'receipt';
+    }
+  }
+
+  getTipoBollettaColor(tipo: TipoBolletta): string {
+    switch (tipo) {
+      case TipoBolletta.GAS:
+        return '#4CAF50';
+      case TipoBolletta.LUCE:
+        return '#FF9800';
+      case TipoBolletta.WIFI:
+        return '#2196F3';
+      default:
+        return '#666';
+    }
+  }
+
+  marcaComePageto(bolletta: Bolletta): void {
+    if (bolletta.id) {
+      this.bollettaService.marcaComePageto(bolletta.id).subscribe({
+        next: () => {
+          bolletta.pagato = true;
+          bolletta.dataPagamento = new Date();
+        },
+        error: (error) => {
+          console.error('Errore nel pagamento della bolletta:', error);
+        }
+      });
+    }
+  }
+
+  eliminaBolletta(bolletta: Bolletta): void {
+    if (bolletta.id && confirm('Sei sicuro di voler eliminare questa bolletta?')) {
+      this.bollettaService.delete(bolletta.id).subscribe({
+        next: () => {
+          this.bollette = this.bollette.filter(b => b.id !== bolletta.id);
+        },
+        error: (error) => {
+          console.error('Errore nell\'eliminazione della bolletta:', error);
+        }
+      });
+    }
+  }
+
+  getStatoPagamento(bolletta: Bolletta): string {
+    return bolletta.pagato ? 'Pagato' : 'Da pagare';
+  }
+
+  getStatoClass(bolletta: Bolletta): string {
+    return bolletta.pagato ? 'stato-pagato' : 'stato-non-pagato';
+  }
+
+  isScaduta(bolletta: Bolletta): boolean {
+    return !bolletta.pagato && new Date() > bolletta.scadenza;
+  }
+
+  // Proprietà calcolata per le bollette filtrate
+  get bolletteFiltrate(): Bolletta[] {
+    return this.bollette.filter(bolletta => {
+      // Filtro per data da
+      if (this.filtroDataDa && bolletta.scadenza < this.filtroDataDa) {
+        return false;
+      }
+      
+      // Filtro per data a
+      if (this.filtroDataA && bolletta.scadenza > this.filtroDataA) {
+        return false;
+      }
+      
+      // Filtro per tipo
+      if (this.filtroTipo && bolletta.tipo !== this.filtroTipo) {
+        return false;
+      }
+      
+      // Filtro per stato pagamento
+      if (this.filtroPagato !== null && bolletta.pagato !== this.filtroPagato) {
+        return false;
+      }
+      
+      return true;
+    });
+  }
+
+  // Metodo per pulire i filtri
+  clearFiltri(): void {
+    this.filtroDataDa = null;
+    this.filtroDataA = null;
+    this.filtroTipo = '';
+    this.filtroPagato = null;
+  }
+
+  // Metodo per ottenere l'icona del tipo
+  getTipoIcon(tipo: TipoBolletta): string {
+    return this.getTipoBollettaIcon(tipo);
   }
 }

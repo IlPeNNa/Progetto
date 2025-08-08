@@ -144,7 +144,7 @@
 
                 <!-- Colonna Fornitore -->
                 <ng-container matColumnDef="fornitore">
-                  <th mat-header-cell *matHeaderCellDef>Fatture da pagare</th>
+                  <th mat-header-cell *matHeaderCellDef>Fornitore</th>
                   <td mat-cell *matCellDef="let bolletta">{{bolletta.fornitore}}</td>
                 </ng-container>
 
@@ -164,7 +164,7 @@
                 </ng-container>
 
                 <!-- Colonna Stato -->
-                <ng-container matColumnDef="stato">
+                <ng-container matColumnDef="pagato">
                   <th mat-header-cell *matHeaderCellDef>Pagato</th>
                   <td mat-cell *matCellDef="let bolletta">
                     <mat-icon [color]="bolletta.pagato ? 'primary' : 'warn'">
@@ -174,7 +174,7 @@
                 </ng-container>
 
                 <!-- Colonna Azioni -->
-                <ng-container matColumnDef="azioni">
+                <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef>Azioni</th>
                   <td mat-cell *matCellDef="let bolletta">
                     <button mat-icon-button 

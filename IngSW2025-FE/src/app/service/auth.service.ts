@@ -113,7 +113,8 @@ export class AuthService {
   }
 
   getCurrentUser(): Utente | null {
-    return this.getStoredUser();
+    const userStr = localStorage.getItem('utente');
+    return userStr ? JSON.parse(userStr) : null;
   }
 
   // Verifica se l'utente è autenticato tramite backend
