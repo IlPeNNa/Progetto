@@ -50,7 +50,7 @@ import { Bolletta, StatisticheCliente, TipoBolletta } from '../../dto/bolletta.m
 export class BolletteDashboardComponent implements OnInit {
   bollette: Bolletta[] = [];
   statistiche: StatisticheCliente = { gas: 0, luce: 0, wifi: 0 };
-  displayedColumns: string[] = ['tipo', 'fornitore', 'importo', 'scadenza', 'pagato', 'actions'];
+  displayedColumns: string[] = ['idBolletta', 'importo', 'tipologia', 'scadenza', 'dataPagamento', 'actions'];
   
   // Proprietà per i filtri
   filtroDataDa: Date | null = null;
@@ -219,7 +219,18 @@ export class BolletteDashboardComponent implements OnInit {
   }
 
   // Metodo per ottenere l'icona del tipo
-  getTipoIcon(tipo: TipoBolletta): string {
-    return this.getTipoBollettaIcon(tipo);
+  getTipoIcon(tipologia: string | undefined): string {
+    if (!tipologia) return 'receipt';
+    
+    switch (tipologia.toLowerCase()) {
+      case 'gas':
+        return 'local_gas_station';
+      case 'luce':
+        return 'lightbulb';
+      case 'wifi':
+        return 'wifi';
+      default:
+        return 'receipt';
+    }
   }
 }

@@ -79,21 +79,6 @@ export class AuthService {
       );
   }
 
-  // Metodo compatibile con la vecchia implementazione (mantiene la simulazione)
-  login(username: string, password: string): boolean {
-    // Simulazione login - mantiene la compatibilità con il codice esistente
-    if (username && password) {
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('username', username);
-      
-      this.isLoggedInSubject.next(true);
-      this.usernameSubject.next(username);
-      
-      return true;
-    }
-    return false;
-  }
-
   logout(): void {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('username');

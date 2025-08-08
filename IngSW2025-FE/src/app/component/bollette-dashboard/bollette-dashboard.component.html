@@ -131,27 +131,27 @@
             </mat-card-header>
             <mat-card-content>
               <table mat-table [dataSource]="bolletteFiltrate" class="bollette-table">
-                <!-- Colonna Tipo -->
-                <ng-container matColumnDef="tipo">
-                  <th mat-header-cell *matHeaderCellDef>Tipo</th>
-                  <td mat-cell *matCellDef="let bolletta">
-                    <mat-icon [class]="'icon-' + bolletta.tipo.toLowerCase()">
-                      {{getTipoIcon(bolletta.tipo)}}
-                    </mat-icon>
-                    {{bolletta.tipo}}
-                  </td>
-                </ng-container>
-
-                <!-- Colonna Fornitore -->
-                <ng-container matColumnDef="fornitore">
-                  <th mat-header-cell *matHeaderCellDef>Fornitore</th>
-                  <td mat-cell *matCellDef="let bolletta">{{bolletta.fornitore}}</td>
+                <!-- Colonna ID Bolletta -->
+                <ng-container matColumnDef="idBolletta">
+                  <th mat-header-cell *matHeaderCellDef>ID Bolletta</th>
+                  <td mat-cell *matCellDef="let bolletta">{{bolletta.idBolletta}}</td>
                 </ng-container>
 
                 <!-- Colonna Importo -->
                 <ng-container matColumnDef="importo">
                   <th mat-header-cell *matHeaderCellDef>Importo</th>
-                  <td mat-cell *matCellDef="let bolletta">€{{bolletta.importo}}</td>
+                  <td mat-cell *matCellDef="let bolletta">€{{bolletta.importo | number:'1.2-2'}}</td>
+                </ng-container>
+
+                <!-- Colonna Tipologia -->
+                <ng-container matColumnDef="tipologia">
+                  <th mat-header-cell *matHeaderCellDef>Tipologia</th>
+                  <td mat-cell *matCellDef="let bolletta">
+                    <mat-icon [class]="'icon-' + bolletta.tipologia?.toLowerCase()">
+                      {{getTipoIcon(bolletta.tipologia)}}
+                    </mat-icon>
+                    {{bolletta.tipologia}}
+                  </td>
                 </ng-container>
 
                 <!-- Colonna Scadenza -->
@@ -163,13 +163,16 @@
                   </td>
                 </ng-container>
 
-                <!-- Colonna Stato -->
-                <ng-container matColumnDef="pagato">
-                  <th mat-header-cell *matHeaderCellDef>Pagato</th>
+                <!-- Colonna Data Pagamento -->
+                <ng-container matColumnDef="dataPagamento">
+                  <th mat-header-cell *matHeaderCellDef>Data Pagamento</th>
                   <td mat-cell *matCellDef="let bolletta">
-                    <mat-icon [color]="bolletta.pagato ? 'primary' : 'warn'">
-                      {{bolletta.pagato ? 'check_circle' : 'cancel'}}
-                    </mat-icon>
+                    <span *ngIf="bolletta.dataPagamento; else noPagamento">
+                      {{bolletta.dataPagamento | date:'dd/MM/yyyy'}}
+                    </span>
+                    <ng-template #noPagamento>
+                      <span class="non-pagato">Non pagato</span>
+                    </ng-template>
                   </td>
                 </ng-container>
 

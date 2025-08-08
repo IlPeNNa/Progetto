@@ -13,7 +13,7 @@ export class BollettaService {
   // Ottieni tutte le bollette dall'utente corrente
   getAll(): Observable<Bolletta[]> {
     // Prendi l'utente corrente dalla localStorage per ottenere il CF
-    const currentUser = localStorage.getItem('currentUser');
+    const currentUser = localStorage.getItem('utente'); // Correzione: chiave corretta
     if (!currentUser) {
       return of([]);
     }
@@ -68,12 +68,21 @@ export class BollettaService {
   }
 
   getStatistiche(): Observable<StatisticheCliente> {
-    const stats: StatisticheCliente = {
-      gas: 40,
-      luce: 35,
-      wifi: 25
-    };
-    return of(stats);
+    // Prendi l'utente corrente dalla localStorage per ottenere il CF
+    const currentUser = localStorage.getItem('utente');
+    if (!currentUser) {
+      return of({ gas: 0, luce: 0, wifi: 0 });
+    }
+    
+    const user = JSON.parse(currentUser);
+    const cf = user.cf;
+    
+    if (!cf) {
+      return of({ gas: 0, luce: 0, wifi: 0 });
+    }
+    
+    // Chiamata al backend per ottenere le statistiche dell'utente
+    return this.http.get<StatisticheCliente>(`${this.apiUrl}/utente/${cf}/statistiche`);
   }
 
   create(bolletta: Bolletta): Observable<Bolletta> {

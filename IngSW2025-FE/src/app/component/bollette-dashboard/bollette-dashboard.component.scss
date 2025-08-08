@@ -316,3 +316,26 @@
     min-width: auto;
   }
 }
+
+/* Stili per la data di pagamento */
+.non-pagato {
+  color: #f44336;
+  font-style: italic;
+  font-weight: 500;
+}
+
+/* Stili per le tipologie */
+.icon-gas {
+  color: #4CAF50;
+  margin-right: 8px;
+}
+
+.icon-luce {
+  color: #FF9800;
+  margin-right: 8px;
+}
+
+.icon-wifi {
+  color: #2196F3;
+  margin-right: 8px;
+}
