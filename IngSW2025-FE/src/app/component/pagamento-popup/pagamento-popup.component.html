@@ -1,0 +1,31 @@
+<div *ngIf="bolletta" class="popup-overlay">
+  <div class="popup-content">
+    <h3>Pagamento Bolletta</h3>
+    <div *ngIf="bolletta">
+      <div><b>ID:</b> {{bolletta?.idBolletta || bolletta?.id}}</div>
+      <div><b>Importo:</b> €{{bolletta?.importo}}</div>
+      <div><b>Tipologia:</b> {{bolletta?.tipologia || bolletta?.tipo}}</div>
+      <div><b>Scadenza:</b> {{bolletta?.scadenza }}</div>
+    </div>
+    <form (ngSubmit)="effettuaPagamento()">
+      <label>Nome titolare:<br>
+        <input [(ngModel)]="pagamentoForm.nomeTitolare" name="nomeTitolare" required />
+      </label><br>
+      <label>Cognome titolare:<br>
+        <input [(ngModel)]="pagamentoForm.cognomeTitolare" name="cognomeTitolare" required />
+      </label><br>
+      <label>Codice carta:<br>
+        <input [(ngModel)]="pagamentoForm.codiceCarta" name="codiceCarta" maxlength="16" required />
+      </label><br>
+      <label>CVV:<br>
+        <input [(ngModel)]="pagamentoForm.cvv" name="cvv" maxlength="4" required />
+      </label><br>
+      <label>Scadenza (MM/YY):<br>
+        <input [(ngModel)]="pagamentoForm.scadenza" name="scadenza" maxlength="5" required />
+      </label><br>
+      <div *ngIf="erroreScadenza" class="errore">{{ erroreScadenza }}</div>
+      <button type="submit">Effettua pagamento</button>
+      <button type="button" (click)="chiudiPopup()">Annulla</button>
+    </form>
+  </div>
+</div>

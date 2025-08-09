@@ -20,6 +20,7 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { BollettaService } from '../../service/bolletta.service';
 import { Bolletta, StatisticheCliente, TipoBolletta } from '../../dto/bolletta.model';
+import { PagamentoPopupComponent } from '../pagamento-popup/pagamento-popup.component';
 
 @Component({
   selector: 'app-bollette-dashboard',
@@ -41,13 +42,16 @@ import { Bolletta, StatisticheCliente, TipoBolletta } from '../../dto/bolletta.m
     MatOptionModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    RouterModule
+    RouterModule,
+    PagamentoPopupComponent
   ],
   templateUrl: './bollette-dashboard.component.html',
   styleUrl: './bollette-dashboard.component.scss',
   providers: []
 })
 export class BolletteDashboardComponent implements OnInit {
+  pagamentoPopupVisible: boolean = false;
+  bollettaSelezionata: Bolletta | null = null;
   bollette: Bolletta[] = [];
   statistiche: StatisticheCliente = { gas: 0, luce: 0, wifi: 0 };
   displayedColumns: string[] = ['idBolletta', 'importo', 'tipologia', 'scadenza', 'dataPagamento', 'actions'];
@@ -69,10 +73,31 @@ export class BolletteDashboardComponent implements OnInit {
     this.loadStatistiche();
   }
 
+  aggiornaStatisticheDaBollette(): void {
+  const stats = { gas: 0, luce: 0, wifi: 0 };
+  const totale = this.bollette.length;
+
+  this.bollette.forEach(b => {
+    const tipo = b.tipo?.toLowerCase() || b.tipologia?.toLowerCase();
+    if (tipo === 'gas') stats.gas++;
+    else if (tipo === 'luce') stats.luce++;
+    else if (tipo === 'wifi') stats.wifi++;
+  });
+
+  this.statistiche = totale > 0
+    ? {
+        gas: Math.round((stats.gas / totale) * 100),
+        luce: Math.round((stats.luce / totale) * 100),
+        wifi: Math.round((stats.wifi / totale) * 100)
+      }
+    : { gas: 0, luce: 0, wifi: 0 };
+}
+
   loadBollette(): void {
     this.bollettaService.getAll().subscribe({
       next: (data) => {
         this.bollette = data;
+        this.aggiornaStatisticheDaBollette(); // <-- aggiungi questa riga
       },
       error: (error) => {
         console.error('Errore nel caricamento delle bollette:', error);
@@ -90,6 +115,8 @@ export class BolletteDashboardComponent implements OnInit {
       }
     });
   }
+
+  
 
   getUsername(): string {
     return this.authService.getUsername();
@@ -134,28 +161,51 @@ export class BolletteDashboardComponent implements OnInit {
   getTipoBollettaColor(tipo: TipoBolletta): string {
     switch (tipo) {
       case TipoBolletta.GAS:
-        return '#4CAF50';
+        return '#4CAF50'; // Gas: verde
       case TipoBolletta.LUCE:
-        return '#FF9800';
+        return '#FF9800'; // Luce: arancione
       case TipoBolletta.WIFI:
-        return '#2196F3';
+        return '#2196F3'; // WiFi: blu
       default:
         return '#666';
     }
   }
 
-  marcaComePageto(bolletta: Bolletta): void {
-    if (bolletta.id) {
-      this.bollettaService.marcaComePageto(bolletta.id).subscribe({
-        next: () => {
-          bolletta.pagato = true;
-          bolletta.dataPagamento = new Date();
+
+  apriPagamentoPopup(bolletta: Bolletta): void {
+    this.bollettaSelezionata = bolletta;
+    this.pagamentoPopupVisible = true;
+  }
+
+  onPagamentoEffettuato() {
+    if (this.bollettaSelezionata && this.bollettaSelezionata.id) {
+      this.bollettaService.marcaComePageto(this.bollettaSelezionata.id).subscribe({
+        next: (bollettaAggiornata) => {
+          // Aggiorna la bolletta nella lista
+          const idx = this.bollette.findIndex(b => b.id === this.bollettaSelezionata!.id);
+          if (idx !== -1) {
+            this.bollette[idx] = { ...this.bollettaSelezionata!, ...bollettaAggiornata, pagato: true };
+          }
+          this.aggiornaStatisticheDaBollette();
+          alert('Pagamento effettuato con successo!');
         },
-        error: (error) => {
-          console.error('Errore nel pagamento della bolletta:', error);
+        error: () => {
+          alert('Errore durante il pagamento.');
+        },
+        complete: () => {
+          this.pagamentoPopupVisible = false;
+          this.bollettaSelezionata = null;
         }
       });
+    } else {
+      this.pagamentoPopupVisible = false;
+      this.bollettaSelezionata = null;
     }
+  }
+
+  onChiudiPopup() {
+    this.pagamentoPopupVisible = false;
+    this.bollettaSelezionata = null;
   }
 
   eliminaBolletta(bolletta: Bolletta): void {
@@ -197,7 +247,7 @@ export class BolletteDashboardComponent implements OnInit {
       }
       
       // Filtro per tipo
-      if (this.filtroTipo && bolletta.tipo !== this.filtroTipo) {
+      if (this.filtroTipo.toLocaleLowerCase() && bolletta.tipo?.toLocaleLowerCase() !== this.filtroTipo.toLocaleLowerCase()) {
         return false;
       }
       

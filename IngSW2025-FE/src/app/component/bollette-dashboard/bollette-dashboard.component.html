@@ -1,3 +1,4 @@
+<!-- Nessun pop-up: il pagamento avviene su una pagina dedicata -->
 <div class="dashboard-container">
   <!-- Header con toolbar -->
   <mat-toolbar color="primary" class="dashboard-header">
@@ -47,15 +48,24 @@
                 <div class="chart-legend">
                   <div class="chart-item">
                     <div class="chart-color gas-color"></div>
-                    <span>Gas: {{statistiche.gas}}%</span>
+                    <span style="color:#4CAF50; display: flex; align-items: center; gap: 6px;">
+                      <div class="chart-color gas-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
+                      Gas: {{statistiche.gas}}%
+                    </span>
                   </div>
                   <div class="chart-item">
                     <div class="chart-color luce-color"></div>
-                    <span>Luce: {{statistiche.luce}}%</span>
+                    <span style="color:#FF9800; display: flex; align-items: center; gap: 6px;">
+                      <div class="chart-color luce-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
+                      Luce: {{statistiche.luce}}%
+                    </span>
                   </div>
                   <div class="chart-item">
                     <div class="chart-color wifi-color"></div>
-                    <span>WiFi: {{statistiche.wifi}}%</span>
+                    <span style="color:#2196F3; display: flex; align-items: center; gap: 6px;">
+                      <div class="chart-color wifi-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
+                      WiFi: {{statistiche.wifi}}%
+                    </span>
                   </div>
                 </div>
               </div>
@@ -180,12 +190,18 @@
                 <ng-container matColumnDef="actions">
                   <th mat-header-cell *matHeaderCellDef>Azioni</th>
                   <td mat-cell *matCellDef="let bolletta">
-                    <button mat-icon-button 
-                            *ngIf="!bolletta.pagato" 
-                            (click)="marcaComePageto(bolletta)"
-                            matTooltip="Marca come pagato">
+                    <button *ngIf="!bolletta.pagato" mat-icon-button matTooltip="Effettua pagamento" (click)="apriPagamentoPopup(bolletta)">
                       <mat-icon color="primary">payment</mat-icon>
                     </button>
+
+
+<!-- Popup pagamento -->
+<app-pagamento-popup
+  *ngIf="pagamentoPopupVisible"
+  [bolletta]="bollettaSelezionata"
+  (pagamentoEffettuato)="onPagamentoEffettuato()"
+  (chiudi)="onChiudiPopup()">
+</app-pagamento-popup>
                     <span *ngIf="bolletta.pagato" class="pagato-label">
                       Pagato il {{bolletta.dataPagamento | date:'dd/MM/yyyy'}}
                     </span>
