@@ -71,15 +71,15 @@
               required
               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
               autocomplete="email"
-              [matTooltip]="'Formato richiesto: esempio@dominio.com'"
+              [matTooltip]="'Formato richiesto: nomecognome@dominio.com/it'"
               matTooltipPosition="above"
               matTooltipShowDelay="300">
             <mat-icon matSuffix>email</mat-icon>
             
             <!-- Messaggi di errore -->
             <mat-error *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
-              <span *ngIf="emailField.errors?.['required']">L'email è obbligatoria</span>
-              <span *ngIf="emailField.errors?.['pattern']">Inserisci un'email valida (es. nome&#64;dominio.com)</span>
+              <span *ngIf="emailField.errors?.['required']">*Questo è un campo obbligatorio</span>
+              <span *ngIf="emailField.errors?.['pattern']">Inserisci un'email valida (es. nome&#64;dominio.com/it)</span>
             </mat-error>
           </mat-form-field>
 

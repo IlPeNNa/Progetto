@@ -167,12 +167,12 @@
   .auth-footer {
     height: auto !important;
     overflow: visible !important;
-    padding: 20px 0 !important;
+    padding: 10px 0 !important;
   }
   
   .auth-footer:hover {
     height: auto;
-    padding: 20px 0;
+    padding: 10px 0;
   }
 }
 
@@ -181,10 +181,10 @@
   margin: auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 25px; /* Ridotto da 30px a 25px */
+  gap: 25px;
   padding: 0 40px;
   opacity: 0;
-  margin-top: -80px;
+  margin-top: -65px;
   transform: translateY(20px);
   transition: all 0.1s ease 0.1s;
   pointer-events: none;
