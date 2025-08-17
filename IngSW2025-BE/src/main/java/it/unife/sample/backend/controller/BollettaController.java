@@ -1,23 +1,37 @@
 
 package it.unife.sample.backend.controller;
 
-import it.unife.sample.backend.model.Bolletta;
-import it.unife.sample.backend.repository.BollettaRepository;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
-import org.springframework.http.ResponseEntity;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import it.unife.sample.backend.model.Bolletta;
+import it.unife.sample.backend.model.Utente;
+import it.unife.sample.backend.repository.BollettaRepository;
+import it.unife.sample.backend.repository.UtenteRepository;
 
 @RestController
 @RequestMapping("/api/bollette")
 @CrossOrigin(origins = "*")
 public class BollettaController {
     private final BollettaRepository bollettaRepository;
+    private final UtenteRepository utenteRepository;
 
-    public BollettaController(BollettaRepository bollettaRepository) {
+    @Autowired
+    public BollettaController(BollettaRepository bollettaRepository, UtenteRepository utenteRepository) {
         this.bollettaRepository = bollettaRepository;
+        this.utenteRepository = utenteRepository;
     }
 
     @GetMapping

@@ -16,7 +16,10 @@
     <mat-sidenav-container class="sidenav-container">
       <mat-sidenav mode="side" opened class="sidenav">
         <mat-nav-list>
-          <h3 mat-subheader>Menu per la navigazione</h3>
+          <a mat-list-item [routerLink]="['/']">
+            <mat-icon matListItemIcon>home</mat-icon>
+            <span matListItemTitle>Home</span>
+          </a>
           <a mat-list-item [routerLink]="['/bollette']">
             <mat-icon matListItemIcon>receipt</mat-icon>
             <span matListItemTitle>Bollette</span>

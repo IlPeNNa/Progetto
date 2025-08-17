@@ -1,0 +1,178 @@
+/* Fix per Material Symbols Outlined */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 2.2em;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+.gamification-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  margin-top: 40px;
+}
+.gamification-description {
+  flex: 1 1 340px;
+  max-width: 480px;
+  min-width: 280px;
+  margin-right: 0;
+  padding: 24px 32px 24px 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.gamification-title-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.gamification-title-icon {
+  margin-right: 16px;
+  font-size: 2.5rem;
+  color: #283593;
+  vertical-align: middle;
+}
+.gamification-title {
+  color: #111;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+.gamification-text {
+  font-size: 1.15rem;
+  color: #222;
+  text-align: left;
+  line-height: 1.6;
+  width: 100%;
+  margin: 0 auto;
+}
+@media (max-width: 900px) {
+  .gamification-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .gamification-description, .gamification-card {
+    max-width: 100%;
+    min-width: 0;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .gamification-text {
+    margin: 0;
+  }
+}
+.gamification-card {
+  flex: 1 1 340px;
+  max-width: 400px;
+  min-width: 280px;
+  margin-left: 0;
+}
+@media (max-width: 900px) {
+  .gamification-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .gamification-description, .gamification-card {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+.gamification-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  padding: 32px 24px;
+  max-width: 400px;
+  margin: 40px auto;
+}
+.livello-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.punti {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+}
+.star {
+  color: #2196F3;
+  margin-right: 4px;
+}
+.progress-bar {
+  background: #e0e0e0;
+  border-radius: 8px;
+  height: 8px;
+  margin: 12px 0 20px 0;
+  width: 100%;
+  overflow: hidden;
+}
+.progress {
+  background: #2196F3;
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.4s;
+}
+.badge-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-icon-bg {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.badge-nome {
+  font-size: 1.1em;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 6px;
+  color: #222;
+}
+.sfide-list {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+.sfide-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1em;
+  margin-bottom: 4px;
+}
+.premio-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1em;
+  margin-top: 12px;
+}

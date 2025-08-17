@@ -1,0 +1,62 @@
+<div class="gamification-flex">
+  <div class="gamification-description">
+    <div class="gamification-title-row">
+      <span class="material-icons gamification-title-icon">sports_esports</span>
+      <h1 class="gamification-title">Gamification</h1>
+    </div>
+    <div class="gamification-text">
+      La gamification trasforma la gestione delle bollette in un’esperienza più coinvolgente e motivante. Ogni azione virtuosa come pagare puntualmente, ridurre i consumi o effettuare accessi giornalieri — ti permette di guadagnare badge, punti e salire di livello.<br><br>
+      <span>
+        🔹 <b>Badge:</b> Riconoscimenti per i tuoi traguardi (es. puntualità, risparmio, accessi)
+      </span><br>
+      <span>
+        🔹 <b>Punti MyBills:</b> Accumulabili e visibili nel tuo profilo
+      </span><br>
+      <span>
+        🔹 <b>Sfide mensili:</b> Obiettivi da completare ogni mese per ottenere premi virtuali
+      </span><br>
+      <span>
+        🔹 <b>Livelli utente:</b> Più badge ottieni, più sali di livello e sblocchi vantaggi e sconti
+      </span>
+    </div>
+  </div>
+  <div class="gamification-card">
+  <h2>I miei progressi</h2>
+  <div class="livello-row">
+    <span class="livello">Livello {{ livello }} - Esperto</span>
+    <span class="punti">
+      <mat-icon class="star">star</mat-icon>
+      {{ punti }} pt
+    </span>
+  </div>
+  <div class="progress-bar">
+    <div class="progress" [style.width]="(punti/500)*100 + '%'">
+    </div>
+  </div>
+  <h3>Badge ottenuti</h3>
+  <div class="badge-row">
+    <div *ngFor="let b of badge; let i = index" class="badge">
+      <div class="badge-icon-bg" [style.background]="b.colore">
+        <ng-container *ngIf="i === 1; else defaultIcon">
+          <span style="font-size: 2.2em;">🌿</span>
+        </ng-container>
+        <ng-template #defaultIcon>
+          <span class="material-symbols-outlined" style="color: #fff; font-size: 2.2em;">{{ b.icona }}</span>
+        </ng-template>
+      </div>
+      <div class="badge-nome">{{ b.nome }}</div>
+    </div>
+  </div>
+  <h3>Sfide mensili</h3>
+  <ul class="sfide-list">
+    <li *ngFor="let s of sfide">
+      <mat-icon *ngIf="s.completata" style="color: #43A047">check_circle</mat-icon>
+      <mat-icon *ngIf="!s.completata" style="color: #BDBDBD">radio_button_unchecked</mat-icon>
+      {{ s.nome }}
+    </li>
+  </ul>
+  <div class="premio-row">
+    <mat-icon style="color: #FFA726">card_giftcard</mat-icon>
+    <span>{{ premio }}</span>
+  </div>
+</div>
