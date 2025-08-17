@@ -37,6 +37,28 @@ public class BollettaController {
             Bolletta bolletta = optBolletta.get();
             bolletta.setDataPagamento(LocalDate.now());
             bollettaRepository.save(bolletta);
+
+                // Logica punti utente
+                if (bolletta.getDataPagamento() != null && bolletta.getScadenza() != null && !bolletta.getDataPagamento().isAfter(bolletta.getScadenza())) {
+                    String cf = bolletta.getCf();
+                    // Recupera utente
+                    Optional<Utente> utenteOpt = utenteRepository.findByCf(cf);
+                    if (utenteOpt.isPresent()) {
+                        Utente utente = utenteOpt.get();
+                        // Inizializza punti a 0 se null
+                        if (utente.getPunti() == null) {
+                            utente.setPunti(0);
+                        }
+                        // Aggiungi 10 punti
+                        utente.setPunti(utente.getPunti() + 10);
+                        // Conta bollette pagate puntualmente
+                        long count = bollettaRepository.countBollettePagateInTempo(cf);
+                        if (count % 3 == 0) {
+                            utente.setPunti(utente.getPunti() + 30);
+                        }
+                        utenteRepository.save(utente);
+                    }
+                }
             return ResponseEntity.ok(bolletta);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

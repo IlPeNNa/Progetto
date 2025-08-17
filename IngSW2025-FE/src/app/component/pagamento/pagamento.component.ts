@@ -37,6 +37,11 @@ export class PagamentoComponent {
       this.erroreScadenza = 'La carta è scaduta e non può essere utilizzata.';
       return;
     }
+    // Validazione CVV
+    if (typeof this.pagamentoForm.cvv !== 'string' || this.pagamentoForm.cvv.length !== 3 || !/^[0-9]{3}$/.test(this.pagamentoForm.cvv)) {
+      this.erroreScadenza = 'Il CVV deve essere composto da esattamente 3 cifre.';
+      return;
+    }
     // Simula pagamento
     this.pagamentoCompletato.emit(true);
   }

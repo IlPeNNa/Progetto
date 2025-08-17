@@ -28,13 +28,15 @@
         <input [(ngModel)]="pagamentoForm.codiceCarta" name="codiceCarta" maxlength="16" required />
       </label><br>
       <label>CVV:<br>
-        <input [(ngModel)]="pagamentoForm.cvv" name="cvv" maxlength="4" required />
+        <input [(ngModel)]="pagamentoForm.cvv" name="cvv" maxlength="3" required type="tel"
+          [class.input-error]="pagamentoForm.cvv && !/^[0-9]{3}$/.test(pagamentoForm.cvv)"
+          (input)="pagamentoForm.cvv = pagamentoForm.cvv.replace(/[^0-9]/g, '').slice(0, 3)" />
       </label><br>
       <label>Scadenza (MM/YY):<br>
         <input [(ngModel)]="pagamentoForm.scadenza" name="scadenza" maxlength="5" required />
       </label><br>
       <div *ngIf="erroreScadenza" class="errore">{{ erroreScadenza }}</div>
-      <button type="submit">Paga</button>
+  <button type="submit" [disabled]="!pagamentoForm.cvv || !/^[0-9]{3}$/.test(pagamentoForm.cvv)">Paga</button>
       <button type="button" (click)="chiudiForm()">Annulla</button>
     </form>
   </div>
