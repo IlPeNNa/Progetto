@@ -25,17 +25,25 @@ public class Utente {
     @Column(name = "password")
     private String password;
 
+        @Column(name = "ultimo_accesso")
+        private java.time.LocalDate ultimoAccesso;
+
+        @Column(name = "punti")
+        private Integer punti;
+
     // Costruttore vuoto
     public Utente() {}
 
     // Costruttore con parametri
-    public Utente(String cf, String mail, String nome, String cognome, Double stipendio, String password) {
-        this.cf = cf;
-        this.mail = mail;
-        this.nome = nome;
-        this.cognome = cognome;
-        this.stipendio = stipendio;
-        this.password = password;
+        public Utente(String cf, String mail, String nome, String cognome, Double stipendio, String password, java.time.LocalDate ultimoAccesso, Integer punti) {
+            this.cf = cf;
+            this.mail = mail;
+            this.nome = nome;
+            this.cognome = cognome;
+            this.stipendio = stipendio;
+            this.password = password;
+            this.ultimoAccesso = ultimoAccesso;
+            this.punti = punti;
     }
 
     // Getters and Setters
@@ -86,4 +94,20 @@ public class Utente {
     public void setPassword(String password) {
         this.password = password;
     }
+
+        public java.time.LocalDate getUltimoAccesso() {
+            return ultimoAccesso;
+        }
+
+        public void setUltimoAccesso(java.time.LocalDate ultimoAccesso) {
+            this.ultimoAccesso = ultimoAccesso;
+        }
+
+        public Integer getPunti() {
+            return punti;
+        }
+
+        public void setPunti(Integer punti) {
+            this.punti = punti;
+        }
 }

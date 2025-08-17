@@ -83,6 +83,14 @@ public class UtenteController {
                         : ResponseEntity.notFound().build();
     }
 
+    // PUT - Aggiorna accesso e punti se nuovo giorno
+    @PutMapping("/{cf}/accesso")
+    public ResponseEntity<Utente> aggiornaAccesso(@PathVariable String cf) {
+        Optional<Utente> utenteOpt = utenteService.aggiornaAccesso(cf);
+        return utenteOpt.map(ResponseEntity::ok)
+                        .orElse(ResponseEntity.notFound().build());
+    }
+
     // Classe interna per la richiesta di login
     public static class LoginRequest {
         private String mail;

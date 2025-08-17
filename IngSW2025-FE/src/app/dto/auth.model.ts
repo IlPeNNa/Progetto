@@ -6,6 +6,8 @@ export interface Utente {
   cognome: string;
   stipendio?: number;
   password?: string; // Non dovrebbe essere mai esposta dal backend in operazioni reali
+  punti?: number;
+  ultimo_accesso?: string; // ISO datetime string
 }
 
 // DTO per la richiesta di login

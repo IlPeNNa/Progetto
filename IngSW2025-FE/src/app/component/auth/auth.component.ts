@@ -119,9 +119,23 @@ export class AuthComponent {
     this.authService.loginWithBackend(this.email, this.password).subscribe({
       next: (response) => {
         this.isLoading = false;
-        if (response.success) {
-          console.log('Login successful:', response.utente);
-          this.router.navigate(['/bollette']);
+        if (response.success && response.utente) {
+          // Aggiorna accesso e punti dopo login
+          this.authService.updateAccessoUtente(response.utente.cf!).subscribe({
+            next: (utenteAggiornato) => {
+              // Mostra notifica se sono stati guadagnati punti
+              const puntiPrecedenti = response.utente?.punti || 0;
+              if (utenteAggiornato.punti && utenteAggiornato.punti > puntiPrecedenti) {
+                alert(`Complimenti! Hai guadagnato +${utenteAggiornato.punti - puntiPrecedenti} punti per l'accesso giornaliero!`);
+              }
+              localStorage.setItem('utente', JSON.stringify(utenteAggiornato));
+              this.router.navigate(['/bollette']);
+            },
+            error: (error) => {
+              console.error('Errore aggiornamento accesso:', error);
+              this.router.navigate(['/bollette']); // Prosegui comunque
+            }
+          });
         } else {
           this.errorMessage = response.message || 'Email o password non corretti';
         }

@@ -86,4 +86,20 @@ public class UtenteService {
     public boolean isValidLogin(String mail, String password) {
         return repo.findByMailAndPassword(mail, password).isPresent();
     }
+
+        // Aggiorna accesso e punti se nuovo giorno
+        public Optional<Utente> aggiornaAccesso(String cf) {
+            Optional<Utente> utenteOpt = repo.findByCf(cf);
+            if (utenteOpt.isPresent()) {
+                Utente utente = utenteOpt.get();
+                java.time.LocalDate oggi = java.time.LocalDate.now();
+                if (utente.getUltimoAccesso() == null || !utente.getUltimoAccesso().isEqual(oggi)) {
+                    utente.setUltimoAccesso(oggi);
+                    utente.setPunti(utente.getPunti() == null ? 1 : utente.getPunti() + 1);
+                    repo.save(utente);
+                }
+                return Optional.of(utente);
+            }
+            return Optional.empty();
+        }
 }

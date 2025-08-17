@@ -79,6 +79,11 @@ export class AuthService {
       );
   }
 
+  // Aggiorna ultimo accesso e punti utente
+  updateAccessoUtente(cf: string): Observable<Utente> {
+    return this.http.put<Utente>(`${this.apiUrl}/${cf}/accesso`, {}, this.httpOptions);
+  }
+
   logout(): void {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('username');

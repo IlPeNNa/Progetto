@@ -17,6 +17,11 @@ export const routes: Routes = [
     component: SampleEntitiesComponent,
     canActivate: [authGuard]
   },
+  {
+    path: 'gamification',
+    loadComponent: () => import('./component/gamification/gamification.component').then(m => m.GamificationComponent),
+    canActivate: [authGuard]
+  },
   { path: '**', redirectTo: '/login' }
 ];
 
