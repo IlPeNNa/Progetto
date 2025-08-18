@@ -56,6 +56,10 @@ public class UtenteService {
         return repo.save(utente);
     }
 
+    public int calcolaScontoProgressivo(int punti) {
+        return punti / 100; // 1% di sconto ogni 100 punti
+    }
+
     // Aggiorna utente esistente
     public Optional<Utente> updateUtente(String cf, Utente utenteAggiornato) {
         return repo.findByCf(cf)
@@ -87,19 +91,20 @@ public class UtenteService {
         return repo.findByMailAndPassword(mail, password).isPresent();
     }
 
-        // Aggiorna accesso e punti se nuovo giorno
-        public Optional<Utente> aggiornaAccesso(String cf) {
-            Optional<Utente> utenteOpt = repo.findByCf(cf);
-            if (utenteOpt.isPresent()) {
-                Utente utente = utenteOpt.get();
-                java.time.LocalDate oggi = java.time.LocalDate.now();
-                if (utente.getUltimoAccesso() == null || !utente.getUltimoAccesso().isEqual(oggi)) {
-                    utente.setUltimoAccesso(oggi);
-                    utente.setPunti(utente.getPunti() == null ? 1 : utente.getPunti() + 1);
-                    repo.save(utente);
-                }
-                return Optional.of(utente);
+    // Aggiorna accesso e punti se nuovo giorno
+    public Optional<Utente> aggiornaAccesso(String cf) {
+        Optional<Utente> utenteOpt = repo.findByCf(cf);
+        if (utenteOpt.isPresent()) {
+            Utente utente = utenteOpt.get();
+            java.time.LocalDate oggi = java.time.LocalDate.now();
+            if (utente.getUltimoAccesso() == null || !utente.getUltimoAccesso().isEqual(oggi)) {
+                utente.setUltimoAccesso(oggi);
+                utente.setPunti(utente.getPunti() == null ? 1 : utente.getPunti() + 1);
+                repo.save(utente);
             }
-            return Optional.empty();
+            return Optional.of(utente);
         }
+        return Optional.empty();
+    }
+
 }

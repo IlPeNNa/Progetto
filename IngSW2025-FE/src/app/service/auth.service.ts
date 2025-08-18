@@ -8,6 +8,10 @@ import { LoginRequest, LoginResponse, RegistrationRequest, Utente } from '../dto
   providedIn: 'root'
 })
 export class AuthService {
+  // Recupera utente dal backend tramite CF
+  getUtenteByCf(cf: string): Observable<Utente> {
+    return this.http.get<Utente>(`${this.apiUrl}/${cf}`);
+  }
   private apiUrl = '/api/utenti';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   private usernameSubject = new BehaviorSubject<string>(this.getStoredUsername());
@@ -36,6 +40,10 @@ export class AuthService {
   private getStoredUser(): Utente | null {
     const userStr = localStorage.getItem('utente');
     return userStr ? JSON.parse(userStr) : null;
+  }
+
+  getScontoUtente(cf: string) {
+    return this.http.get<number>(`/api/utenti/${cf}/sconto`);
   }
 
   // Login con chiamata al backend

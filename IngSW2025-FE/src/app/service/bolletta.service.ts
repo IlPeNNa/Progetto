@@ -97,7 +97,8 @@ export class BollettaService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  marcaComePageto(id: string): Observable<Bolletta> {
-    return this.http.patch<Bolletta>(`${this.apiUrl}/${id}/pagato`, {});
+  marcaComePageto(id: string, cvv: string): Observable<number> {
+    return this.http.patch<number>(`${this.apiUrl}/${id}/pagato`, { cvv });
   }
+  
 }

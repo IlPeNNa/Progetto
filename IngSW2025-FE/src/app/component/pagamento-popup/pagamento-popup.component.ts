@@ -12,8 +12,9 @@ import { Bolletta } from '../../dto/bolletta.model';
 })
 export class PagamentoPopupComponent {
   @Input() bolletta: Bolletta | null = null;
-  @Output() pagamentoEffettuato = new EventEmitter<void>();
+  @Output() pagamentoEffettuato = new EventEmitter<string>();
   @Output() chiudi = new EventEmitter<void>();
+  
   pagamentoForm = {
     nomeTitolare: '',
     cognomeTitolare: '',
@@ -39,6 +40,6 @@ export class PagamentoPopupComponent {
       return;
     }
     this.erroreScadenza = '';
-    this.pagamentoEffettuato.emit();
+    this.pagamentoEffettuato.emit(this.pagamentoForm.cvv); // invia il CVV
   }
 }

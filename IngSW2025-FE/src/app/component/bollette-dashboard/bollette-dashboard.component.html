@@ -204,9 +204,8 @@
 
 <!-- Popup pagamento -->
 <app-pagamento-popup
-  *ngIf="pagamentoPopupVisible"
   [bolletta]="bollettaSelezionata"
-  (pagamentoEffettuato)="onPagamentoEffettuato()"
+  (pagamentoEffettuato)="onPagamentoEffettuato($event)"
   (chiudi)="onChiudiPopup()">
 </app-pagamento-popup>
                     <span *ngIf="bolletta.pagato" class="pagato-label">

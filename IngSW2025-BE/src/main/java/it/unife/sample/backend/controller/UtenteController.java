@@ -91,6 +91,18 @@ public class UtenteController {
                         .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/{cf}/sconto")
+    public ResponseEntity<Integer> getScontoUtente(@PathVariable String cf) {
+        Optional<Utente> utenteOpt = utenteService.getUtenteByCf(cf);
+        if (utenteOpt.isPresent()) {
+            int punti = utenteOpt.get().getPunti() != null ? utenteOpt.get().getPunti() : 0;
+            int sconto = utenteService.calcolaScontoProgressivo(punti);
+            return ResponseEntity.ok(sconto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     // Classe interna per la richiesta di login
     public static class LoginRequest {
         private String mail;

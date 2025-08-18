@@ -177,17 +177,17 @@ export class BolletteDashboardComponent implements OnInit {
     this.pagamentoPopupVisible = true;
   }
 
-  onPagamentoEffettuato() {
+  onPagamentoEffettuato(cvv: string) {
     if (this.bollettaSelezionata && this.bollettaSelezionata.id) {
-      this.bollettaService.marcaComePageto(this.bollettaSelezionata.id).subscribe({
-        next: (bollettaAggiornata) => {
-          // Aggiorna la bolletta nella lista
-          const idx = this.bollette.findIndex(b => b.id === this.bollettaSelezionata!.id);
-          if (idx !== -1) {
-            this.bollette[idx] = { ...this.bollettaSelezionata!, ...bollettaAggiornata, pagato: true };
+      this.bollettaService.marcaComePageto(this.bollettaSelezionata.id, cvv).subscribe({
+        next: (sconto) => {
+          if (sconto > 0) {
+            alert(`Pagamento effettuato con successo!\nApplicato uno sconto del ${sconto}%.`);
+          } else {
+            alert('Pagamento effettuato con successo!');
           }
-          this.aggiornaStatisticheDaBollette();
-          alert('Pagamento effettuato con successo!');
+          // Aggiorna la lista bollette se necessario
+          this.loadBollette();
         },
         error: () => {
           alert('Errore durante il pagamento.');
@@ -202,7 +202,6 @@ export class BolletteDashboardComponent implements OnInit {
       this.bollettaSelezionata = null;
     }
   }
-
   onChiudiPopup() {
     this.pagamentoPopupVisible = false;
     this.bollettaSelezionata = null;

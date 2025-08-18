@@ -23,17 +23,23 @@
   <div class="gamification-card">
   <h2>I miei progressi</h2>
   <div class="livello-row">
-    <span class="livello">Livello {{ livello }} - Esperto</span>
+    <span class="livello">Livello {{ livello }}</span>
     <span class="punti">
       <mat-icon class="star">star</mat-icon>
       {{ punti }} pt
     </span>
   </div>
   <div class="progress-bar">
-    <div class="progress" [style.width]="(punti/500)*100 + '%'">
+    <div class="progress" [style.width]="percentualeCompletamento + '%'">
     </div>
   </div>
-  <h3>Badge ottenuti</h3>
+
+  <div class="sconto-row">
+    <mat-icon style="color: #43A047">local_offer</mat-icon>
+    <span>Sconto attuale: {{ sconto }}%</span>
+  </div>
+
+  <!--<h3>Badge ottenuti</h3>
   <div class="badge-row">
     <div *ngFor="let b of badge; let i = index" class="badge">
       <div class="badge-icon-bg" [style.background]="b.colore">
@@ -58,5 +64,5 @@
   <div class="premio-row">
     <mat-icon style="color: #FFA726">card_giftcard</mat-icon>
     <span>{{ premio }}</span>
-  </div>
+  </div> -->
 </div>
