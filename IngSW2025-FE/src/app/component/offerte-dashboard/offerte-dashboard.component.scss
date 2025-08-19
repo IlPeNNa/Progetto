@@ -1,0 +1,165 @@
+.filters-panel {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+  min-width: 260px;
+  border: 1px solid #e3e3e3;
+}
+.filters-panel h2 {
+  font-size: 1.7em;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #222;
+}
+.filter-group label {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: #333;
+}
+.checkbox-group.vertical label {
+  padding: 6px 0;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.checkbox-group.vertical label:hover {
+  background: #f3f7ff;
+}
+.btn-filtra {
+  background: linear-gradient(90deg, #1976d2 0%, #2196f3 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+  transition: background 0.2s;
+}
+.btn-filtra:hover {
+  background: linear-gradient(90deg, #1565c0 0%, #1976d2 100%);
+}
+
+// Layout principale
+.dashboard-layout {
+  display: flex;
+  gap: 32px;
+  max-width: 1200px;
+.checkbox-group.vertical {
+  flex-direction: column;
+  gap: 8px;
+}
+  padding: 32px;
+}
+
+.filters-panel {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  padding: 32px 24px;
+  min-width: 260px;
+}
+.filters-panel h2 {
+  font-size: 1.5em;
+  margin-bottom: 24px;
+}
+.filter-group {
+  margin-bottom: 20px;
+}
+.radio-group, .checkbox-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+.btn-filtra {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 24px;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.main-panel {
+  flex: 3;
+  display: flex;
+  gap: 32px;
+}
+.offers-table-panel {
+  flex: 2;
+}
+.offerte-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  margin-bottom: 16px;
+}
+.offerte-table th, .offerte-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+.offerte-table th {
+  background: #f6f8fa;
+  font-weight: 600;
+}
+.offerte-table tr:last-child td {
+  border-bottom: none;
+}
+.btn-attiva {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-size: 1em;
+  cursor: pointer;
+}
+.notifiche-panel {
+  margin: 18px 0 0 0;
+  color: #1976d2;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.bell-icon {
+  font-size: 1.2em;
+}
+.suggestion-panel {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  padding: 24px 20px;
+  min-width: 260px;
+  margin-left: 8px;
+}
+.suggestion-panel h3 {
+  font-size: 1.2em;
+  margin-bottom: 12px;
+}
+.suggestion-card {
+  background: #f6fff6;
+  border-radius: 8px;
+  padding: 18px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+}
+.suggestion-offerta {
+  font-weight: bold;
+  font-size: 1.2em;
+  margin: 8px 0;
+}
+.suggestion-risparmio {
+  margin-top: 8px;
+  font-weight: 500;
+  color: #222;
+}

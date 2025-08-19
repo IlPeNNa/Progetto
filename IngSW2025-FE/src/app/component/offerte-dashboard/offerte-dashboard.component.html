@@ -1,0 +1,86 @@
+<div class="dashboard-layout">
+  <div class="filters-panel">
+    <h2>Confronta Offerte</h2>
+    <form (ngSubmit)="filtraOfferte()">
+      <div class="filter-group">
+        <label>Tipo servizio:</label>
+        <div class="radio-group">
+          <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="gas"> Gas</label>
+          <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="luce"> Luce</label>
+          <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="wifi"> Wi-Fi</label>
+          <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value=""> Tutti</label>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Prezzo massimo</label>
+        <input type="number" min="0" [(ngModel)]="filtro.prezzoMax" name="prezzoMax" placeholder="Prezzo massimo" />
+      </div>
+      <div class="filter-group">
+        <label>Durata</label>
+        <select [(ngModel)]="filtro.durataMese" name="durataMese">
+          <option value="">Tutte</option>
+          <option value="6">6 mesi</option>
+          <option value="12">12 mesi</option>
+          <option value="24">24 mesi</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Opzioni aggiuntive</label>
+        <div class="checkbox-group vertical">
+          <label><input type="checkbox" [(ngModel)]="filtro.energiaVerde" name="energiaVerde"> Energia verde</label>
+          <label><input type="checkbox" [(ngModel)]="filtro.nessunVincolo" name="nessunVincolo"> Nessun vincolo</label>
+          <label><input type="checkbox" [(ngModel)]="filtro.pagamentoRate" name="pagamentoRate"> Pagamento rateizzato</label>
+          <label><input type="checkbox" [(ngModel)]="filtro.modemGratuito" name="modemGratuito"> Modem gratuito</label>
+        </div>
+      </div>
+      <button type="submit" class="btn-filtra">Applica filtri</button>
+    </form>
+  </div>
+  <div class="main-panel">
+    <div class="offers-table-panel">
+      <h3>Offerte a confronto</h3>
+      <table class="offerte-table">
+        <thead>
+          <tr>
+            <th>Fornitore</th>
+            <th>Tipo</th>
+            <th>Durata</th>
+            <th>Prezzo</th>
+            <th>Descrizione</th>
+            <th>Valida fino al</th>
+            <th>Data Attivazione</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let offerta of offerte">
+            <td>{{ offerta.fornitore?.nome }}</td>
+            <td>{{ offerta.tipo }}</td>
+            <td>{{ offerta.durataMese }} mesi</td>
+            <td>{{ offerta.importo }} €</td>
+            <td>{{ offerta.descrizione }}</td>
+            <td style="white-space: nowrap;">{{ offerta.dataFine }}</td>
+            <td>
+              <ng-container *ngIf="offerta.dataAttivazione; else vuoto">
+                {{ offerta.dataAttivazione.split('T')[0] }}
+              </ng-container>
+              <ng-template #vuoto></ng-template>
+            </td>
+            <td>
+              <button class="btn-attiva" (click)="attivaOfferta(offerta)" [disabled]="offerta.dataAttivazione">Attiva</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="suggestion-panel" *ngIf="offertaSuggerita">
+      <h3>Suggerimento</h3>
+      <div class="suggestion-card">
+        <p>ti consigliamo l'offerta &rarr;</p>
+        <h4>{{ offertaSuggerita?.fornitore?.nome }}</h4>
+        <div class="suggestion-offerta">{{ offertaSuggerita?.tipo }} {{ offertaSuggerita?.importo }} €</div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -4,8 +4,10 @@ import { BolletteDashboardComponent } from './component/bollette-dashboard/bolle
 import { AuthComponent } from './component/auth/auth.component';
 import { authGuard } from './guards/auth.guard';
 
+import { OfferteDashboardComponent } from './component/offerte-dashboard/offerte-dashboard.component';
+
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/bollette', pathMatch: 'full' },
   { path: 'login', component: AuthComponent },
   { 
     path: 'bollette', 
@@ -20,6 +22,11 @@ export const routes: Routes = [
   {
     path: 'gamification',
     loadComponent: () => import('./component/gamification/gamification.component').then(m => m.GamificationComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'offerte',
+    component: OfferteDashboardComponent,
     canActivate: [authGuard]
   },
   { path: '**', redirectTo: '/login' }

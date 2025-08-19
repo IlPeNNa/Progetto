@@ -21,10 +21,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         // Unauthorized - redirect to login
         localStorage.clear();
         router.navigate(['/login']);
-      } else if (error.status === 0) {
+      } /*else if (error.status === 0) {
         // Errore di rete - server non raggiungibile
         console.error('Server non raggiungibile. Controlla la connessione di rete.');
-      }
+      }*/
       
       return throwError(() => error);
     })
