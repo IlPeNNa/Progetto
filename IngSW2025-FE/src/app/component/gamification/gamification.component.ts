@@ -4,12 +4,15 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../service/auth.service'; // importa il servizio
 import { Utente } from '../../dto/auth.model'; // importa il modello utente
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
   selector: 'app-gamification',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatSidenavModule, MatListModule, RouterModule],
   templateUrl: './gamification.component.html',
   styleUrls: ['./gamification.component.scss']
 })

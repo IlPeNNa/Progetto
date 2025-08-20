@@ -5,12 +5,16 @@ import { OffertaService } from '../../service/offerta.service';
 import { Router } from '@angular/router';
 
 import { FormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-offerte-dashboard',
   templateUrl: './offerte-dashboard.component.html',
   styleUrls: ['./offerte-dashboard.component.scss'],
-  imports: [FormsModule, CommonModule]
+  imports: [FormsModule, CommonModule, MatSidenavModule, MatListModule, MatIconModule, RouterModule]
 })
 export class OfferteDashboardComponent implements OnInit {
   caricaOffertaSuggerita(): void {

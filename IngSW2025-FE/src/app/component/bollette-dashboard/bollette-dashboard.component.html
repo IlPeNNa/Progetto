@@ -41,57 +41,97 @@
 
       <mat-sidenav-content class="main-content">
         <div class="content-grid">
-          <!-- Sezione grafico statistiche -->
-          <mat-card class="stats-card">
-            <mat-card-header>
-              <mat-card-title>Status del cliente</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="chart-container">
-                <!-- Grafico a torta CSS dinamico -->
-                <div class="pie-chart" [style.background]="getChartStyle()"></div>
-                
-                <!-- Legenda del grafico -->
-                <div class="chart-legend">
-                  <div class="chart-item">
-                    <div class="chart-color gas-color"></div>
-                    <span style="color:#4CAF50; display: flex; align-items: center; gap: 6px;">
-                      <div class="chart-color gas-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
-                      Gas: {{statistiche.gas}}%
-                    </span>
-                  </div>
-                  <div class="chart-item">
-                    <div class="chart-color luce-color"></div>
-                    <span style="color:#FF9800; display: flex; align-items: center; gap: 6px;">
-                      <div class="chart-color luce-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
-                      Luce: {{statistiche.luce}}%
-                    </span>
-                  </div>
-                  <div class="chart-item">
-                    <div class="chart-color wifi-color"></div>
-                    <span style="color:#2196F3; display: flex; align-items: center; gap: 6px;">
-                      <div class="chart-color wifi-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
-                      WiFi: {{statistiche.wifi}}%
-                    </span>
+          <!-- Sezione grafici affiancati -->
+          <div class="charts-row">
+            <mat-card class="stats-card">
+              <mat-card-header>
+                <mat-card-title>Status</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="chart-container">
+                  <!-- Grafico a torta CSS dinamico -->
+                  <div class="pie-chart" [style.background]="getChartStyle()"></div>
+                  <!-- Legenda del grafico -->
+                  <div class="chart-legend">
+                    <div class="chart-item">
+                      <div class="chart-color gas-color"></div>
+                      <span style="color:#4CAF50; display: flex; align-items: center; gap: 6px;">
+                        <div class="chart-color gas-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
+                        Gas: {{statistiche.gas}}%
+                      </span>
+                    </div>
+                    <div class="chart-item">
+                      <div class="chart-color luce-color"></div>
+                      <span style="color:#FF9800; display: flex; align-items: center; gap: 6px;">
+                        <div class="chart-color luce-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
+                        Luce: {{statistiche.luce}}%
+                      </span>
+                    </div>
+                    <div class="chart-item">
+                      <div class="chart-color wifi-color"></div>
+                      <span style="color:#2196F3; display: flex; align-items: center; gap: 6px;">
+                        <div class="chart-color wifi-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
+                        WiFi: {{statistiche.wifi}}%
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
+              </mat-card-content>
+            </mat-card>
+            <!-- Grafico a linee: trova il mat-card corrispondente e inseriscilo qui -->
+            <mat-card class="line-chart-card">
+              <mat-card-header>
+                <mat-card-title>Andamento dei costi domestici</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <!-- Qui va il grafico a linee, lascia il contenuto esistente -->
+                <ng-content select=".line-chart"></ng-content>
+              </mat-card-content>
+            </mat-card>
+          </div>
 
           <!-- Sezione ricerca offerte -->
-          <mat-card class="offers-card">
-            <mat-card-header>
-              <mat-card-title>Ricerca delle nuove offerte</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <ul>
-                <li>Gas......</li>
-                <li>Luce......</li>
-                <li>WiFi......</li>
-              </ul>
-            </mat-card-content>
-          </mat-card>
+
+            <div class="offers-active-card">
+              <div class="offers-active-title">Offerte attive</div>
+              <table class="offers-active-table">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Prezzo Mensile</th>
+                    <th>Durata</th>
+                    <th>Scadenza</th>
+                    <th>Stato</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let offerta of offerteAttive">
+                    <td>
+                      <ng-container *ngIf="offerta.tipo.toLowerCase() === 'gas'; else otherType">
+                        <span style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">🔥</span>
+                      </ng-container>
+                      <ng-template #otherType>
+                        <span *ngIf="offerta.tipo === 'Luce'" style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">💡</span>
+                        <mat-icon *ngIf="offerta.tipo === 'WiFi'" style="color:#2196F3; vertical-align:middle; margin-right:6px;">wifi</mat-icon>
+                      </ng-template>
+                      {{ offerta.tipo }}
+                    </td>
+                    <td>€{{ offerta.importo | number:'1.2-2' }}</td>
+                    <td>{{ offerta.durataMese }} mesi</td>
+                    <td>{{ offerta.dataFine | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                      <button class="offers-active-status">
+                        <mat-icon style="color: #fff; margin-right: 4px;">check</mat-icon>
+                        Attiva
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="offers-active-link" (click)="vaiAlleOfferte()" style="border:none; background:#19d219; color:#fff; padding:10px 22px; border-radius:8px; font-size:1.1rem; font-weight:600; cursor:pointer; transition:background 0.2s;">
+                Vedi tutte le altre offerte per te
+              </button>
+            </div>
 
           <!-- Sezione filtri -->
           <mat-card class="filters-card">

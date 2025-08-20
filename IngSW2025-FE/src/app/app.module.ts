@@ -6,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { OfferteDashboardComponent } from './component/offerte-dashboard/offerte-dashboard.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -15,8 +18,11 @@ import { OfferteDashboardComponent } from './component/offerte-dashboard/offerte
   imports: [
     BrowserModule,
     HttpClientModule,
-  FormsModule,
-  CommonModule,
+    FormsModule,
+    CommonModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
     RouterModule.forRoot([])
   ],
   providers: [],

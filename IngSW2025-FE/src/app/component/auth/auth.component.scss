@@ -721,3 +721,18 @@
   border-radius: 4px !important;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
 }
+
+.pie-chart::after {
+  content: 'Status';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: bold;
+  color: #333;
+  z-index: 1;
+  text-align: center;
+  line-height: 1.2;
+  white-space: pre;
+}

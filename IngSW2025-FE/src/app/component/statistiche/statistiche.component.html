@@ -1,0 +1,108 @@
+<div class="dashboard-content">
+  <!-- Navbar -->
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav mode="side" opened class="sidenav">
+      <mat-nav-list>
+        <a mat-list-item [routerLink]="['/bollette']">
+          <mat-icon matListItemIcon>home</mat-icon>
+          <span matListItemTitle>Home</span>
+        </a>
+        <a mat-list-item [routerLink]="['/bollette']">
+          <mat-icon matListItemIcon>receipt</mat-icon>
+          <span matListItemTitle>Bollette</span>
+        </a>
+        <a mat-list-item [routerLink]="['/statistiche']">
+          <mat-icon matListItemIcon>analytics</mat-icon>
+          <span matListItemTitle>Statistiche</span>
+        </a>
+        <a mat-list-item [routerLink]="['/offerte']">
+          <mat-icon matListItemIcon>local_offer</mat-icon>
+          <span matListItemTitle>Offerte</span>
+        </a>
+        <a mat-list-item [routerLink]="['/gamification']">
+          <mat-icon matListItemIcon>sports_esports</mat-icon>
+          <span matListItemTitle>Gamification</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <div class="main-content">
+      <div class="filters-row">
+        <mat-form-field appearance="fill">
+          <mat-label>Periodo</mat-label>
+          <mat-select [(ngModel)]="periodoSelezionato" (selectionChange)="onPeriodoChange()">
+            <mat-option value="3">Ultimi 3 mesi</mat-option>
+            <mat-option value="6">Ultimi 6 mesi</mat-option>
+            <mat-option value="12">Ultimi 12 mesi</mat-option>
+            <mat-option value="60">Ultimi 5 anni</mat-option>
+            <mat-option value="max">Tutto</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Data Inizio</mat-label>
+          <input matInput [matDatepicker]="pickerInizio" [(ngModel)]="dataInizio" (dateChange)="onFiltroChange()">
+          <mat-datepicker-toggle matSuffix [for]="pickerInizio"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInizio></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Data Fine</mat-label>
+          <input matInput [matDatepicker]="pickerFine" [(ngModel)]="dataFine" (dateChange)="onFiltroChange()">
+          <mat-datepicker-toggle matSuffix [for]="pickerFine"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFine></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="media-spesa-card">
+        <mat-card>
+          <div class="media-spesa-title">Spesa media nel periodo selezionato</div>
+          <div class="media-spesa-value">{{ spesaMedia | currency:'EUR' }}</div>
+          <div class="media-spesa-tipologie">
+            <div class="media-spesa-tipologia" *ngFor="let tipo of tipologie">
+              <span class="media-spesa-label">{{ tipo }}:</span>
+              <span class="media-spesa-value">{{ getSpesaMediaTipologia(tipo) | currency:'EUR' }}</span>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+      <div class="chart-row">
+        <div class="chart-container">
+          <!-- Pie chart CSS come bollette-dashboard -->
+          <div class="pie-chart"></div>
+          <div class="chart-legend">
+            <div class="chart-item">
+              <span class="chart-color gas-color"></span>Gas
+              <span class="chart-percent">{{ getPercent('Gas') }}%</span>
+            </div>
+            <div class="chart-item">
+              <span class="chart-color luce-color"></span>Luce
+              <span class="chart-percent">{{ getPercent('Luce') }}%</span>
+            </div>
+            <div class="chart-item">
+              <span class="chart-color wifi-color"></span>WiFi
+              <span class="chart-percent">{{ getPercent('WiFi') }}%</span>
+            </div>
+          </div>
+        </div>
+        <div class="line-chart-container">
+          <div id="googleLineChart" style="width:100%;height:340px;"></div>
+        </div>
+      </div>
+      <div class="table-card">
+        <table class="bollette-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Tipologia</th>
+              <th>Importo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let b of bollettePagate">
+              <td>{{b.dataPagamento | date}}</td>
+              <td>{{b.tipologia}}</td>
+              <td>{{b.importo | currency:'EUR'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </mat-sidenav-container>
+</div>

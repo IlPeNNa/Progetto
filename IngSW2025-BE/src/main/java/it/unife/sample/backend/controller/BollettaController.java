@@ -1,18 +1,26 @@
-
 package it.unife.sample.backend.controller;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping; // aggiungi l'import
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import it.unife.sample.backend.model.Bolletta;
 import it.unife.sample.backend.model.Utente;
 import it.unife.sample.backend.repository.BollettaRepository;
 import it.unife.sample.backend.repository.UtenteRepository;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.time.LocalDate;
-import java.util.Optional;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import java.math.BigDecimal;
-import it.unife.sample.backend.service.UtenteService; // aggiungi l'import
+import it.unife.sample.backend.service.UtenteService;
 
 
 @RestController
@@ -91,5 +99,29 @@ public ResponseEntity<Integer> pagaBolletta(@PathVariable Integer id, @RequestBo
     }
 
         return ResponseEntity.ok(scontoApplicato);
+    }
+
+    @GetMapping("/statistiche")
+    public ResponseEntity<?> getStatistichePagamenti(@RequestParam String cf, @RequestParam String dataInizio, @RequestParam String dataFine) {
+        LocalDate inizio = LocalDate.parse(dataInizio);
+        LocalDate fine = LocalDate.parse(dataFine);
+        // Recupera solo bollette pagate
+    List<Bolletta> bollettePagate = bollettaRepository.findByCfAndDataPagamentoBetweenAndDataPagamentoIsNotNull(cf, inizio, fine);
+
+        // Calcola spese per tipologia
+        java.util.Map<String, Double> spesePerTipologia = new java.util.HashMap<>();
+        double totale = 0;
+        for (Bolletta b : bollettePagate) {
+            String tipo = b.getTipologia();
+            double imp = b.getImporto().doubleValue();
+            spesePerTipologia.put(tipo, spesePerTipologia.getOrDefault(tipo, 0.0) + imp);
+            totale += imp;
+        }
+
+        java.util.Map<String, Object> result = new java.util.HashMap<>();
+        result.put("bollettePagate", bollettePagate);
+        result.put("spesePerTipologia", spesePerTipologia);
+        result.put("totale", totale);
+        return ResponseEntity.ok(result);
     }
 }

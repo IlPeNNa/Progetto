@@ -20,6 +20,8 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { BollettaService } from '../../service/bolletta.service';
 import { Bolletta, StatisticheCliente, TipoBolletta } from '../../dto/bolletta.model';
+import { Offerta } from '../../dto/offerta.model';
+import { OffertaService } from '../../service/offerta.service';
 import { PagamentoPopupComponent } from '../pagamento-popup/pagamento-popup.component';
 
 @Component({
@@ -47,7 +49,7 @@ import { PagamentoPopupComponent } from '../pagamento-popup/pagamento-popup.comp
   ],
   templateUrl: './bollette-dashboard.component.html',
   styleUrl: './bollette-dashboard.component.scss',
-  providers: []
+  providers: [OffertaService]
 })
 export class BolletteDashboardComponent implements OnInit {
   pagamentoPopupVisible: boolean = false;
@@ -55,8 +57,7 @@ export class BolletteDashboardComponent implements OnInit {
   bollette: Bolletta[] = [];
   statistiche: StatisticheCliente = { gas: 0, luce: 0, wifi: 0 };
   displayedColumns: string[] = ['idBolletta', 'importo', 'tipologia', 'scadenza', 'dataPagamento', 'actions'];
-  
-  // Proprietà per i filtri
+  offerteAttive: Offerta[] = [];
   filtroDataDa: Date | null = null;
   filtroDataA: Date | null = null;
   filtroTipo: string = '';
@@ -65,39 +66,50 @@ export class BolletteDashboardComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private bollettaService: BollettaService,
-    private router: Router
+    private router: Router,
+    private offertaService: OffertaService
   ) {}
 
   ngOnInit(): void {
     this.loadBollette();
     this.loadStatistiche();
+    this.caricaOfferteAttive();
+  }
+
+  caricaOfferteAttive(): void {
+    this.offertaService.getOfferte().subscribe((offerte: Offerta[]) => {
+      this.offerteAttive = offerte.filter((o: Offerta) => !!o.dataAttivazione);
+    });
+  }
+
+  vaiAlleOfferte(): void {
+    this.router.navigate(['/offerte']);
   }
 
   aggiornaStatisticheDaBollette(): void {
-  const stats = { gas: 0, luce: 0, wifi: 0 };
-  const totale = this.bollette.length;
-
-  this.bollette.forEach(b => {
-    const tipo = b.tipo?.toLowerCase() || b.tipologia?.toLowerCase();
-    if (tipo === 'gas') stats.gas++;
-    else if (tipo === 'luce') stats.luce++;
-    else if (tipo === 'wifi') stats.wifi++;
-  });
-
-  this.statistiche = totale > 0
-    ? {
-        gas: Math.round((stats.gas / totale) * 100),
-        luce: Math.round((stats.luce / totale) * 100),
-        wifi: Math.round((stats.wifi / totale) * 100)
-      }
-    : { gas: 0, luce: 0, wifi: 0 };
-}
+    const stats = { gas: 0, luce: 0, wifi: 0 };
+    const totale = this.bollette.length;
+    this.bollette.forEach(b => {
+      const tipo = b.tipo?.toLowerCase() || b.tipologia?.toLowerCase();
+      if (tipo === 'gas') stats.gas++;
+      else if (tipo === 'luce') stats.luce++;
+      else if (tipo === 'wifi') stats.wifi++;
+    });
+    this.statistiche = totale > 0
+      ? {
+          gas: Math.round((stats.gas / totale) * 100),
+          luce: Math.round((stats.luce / totale) * 100),
+          wifi: Math.round((stats.wifi / totale) * 100)
+        }
+      : { gas: 0, luce: 0, wifi: 0 };
+  }
 
   loadBollette(): void {
     this.bollettaService.getAll().subscribe({
       next: (data) => {
         this.bollette = data;
-        this.aggiornaStatisticheDaBollette(); // <-- aggiungi questa riga
+        this.aggiornaStatisticheDaBollette();
+        this.caricaOfferteAttive();
       },
       error: (error) => {
         console.error('Errore nel caricamento delle bollette:', error);
@@ -116,8 +128,6 @@ export class BolletteDashboardComponent implements OnInit {
     });
   }
 
-  
-
   getUsername(): string {
     return this.authService.getUsername();
   }
@@ -130,14 +140,11 @@ export class BolletteDashboardComponent implements OnInit {
   getChartStyle(): string {
     const { gas, luce, wifi } = this.statistiche;
     const total = gas + luce + wifi;
-    
     if (total === 0) {
       return 'conic-gradient(#4CAF50 0deg 360deg)';
     }
-    
     const gasAngle = (gas / total) * 360;
     const luceAngle = gasAngle + (luce / total) * 360;
-    
     return `conic-gradient(
       #4CAF50 0deg ${gasAngle}deg,
       #FF9800 ${gasAngle}deg ${luceAngle}deg,
@@ -171,7 +178,6 @@ export class BolletteDashboardComponent implements OnInit {
     }
   }
 
-
   apriPagamentoPopup(bolletta: Bolletta): void {
     this.bollettaSelezionata = bolletta;
     this.pagamentoPopupVisible = true;
@@ -186,7 +192,6 @@ export class BolletteDashboardComponent implements OnInit {
           } else {
             alert('Pagamento effettuato con successo!');
           }
-          // Aggiorna la lista bollette se necessario
           this.loadBollette();
         },
         error: () => {
@@ -202,6 +207,7 @@ export class BolletteDashboardComponent implements OnInit {
       this.bollettaSelezionata = null;
     }
   }
+
   onChiudiPopup() {
     this.pagamentoPopupVisible = false;
     this.bollettaSelezionata = null;
@@ -232,34 +238,24 @@ export class BolletteDashboardComponent implements OnInit {
     return !bolletta.pagato && new Date() > bolletta.scadenza;
   }
 
-  // Proprietà calcolata per le bollette filtrate
   get bolletteFiltrate(): Bolletta[] {
     return this.bollette.filter(bolletta => {
-      // Filtro per data da
       if (this.filtroDataDa && bolletta.scadenza < this.filtroDataDa) {
         return false;
       }
-      
-      // Filtro per data a
       if (this.filtroDataA && bolletta.scadenza > this.filtroDataA) {
         return false;
       }
-      
-      // Filtro per tipo
       if (this.filtroTipo.toLocaleLowerCase() && bolletta.tipo?.toLocaleLowerCase() !== this.filtroTipo.toLocaleLowerCase()) {
         return false;
       }
-      
-      // Filtro per stato pagamento
       if (this.filtroPagato !== null && bolletta.pagato !== this.filtroPagato) {
         return false;
       }
-      
       return true;
     });
   }
 
-  // Metodo per pulire i filtri
   clearFiltri(): void {
     this.filtroDataDa = null;
     this.filtroDataA = null;
@@ -267,10 +263,8 @@ export class BolletteDashboardComponent implements OnInit {
     this.filtroPagato = null;
   }
 
-  // Metodo per ottenere l'icona del tipo
   getTipoIcon(tipologia: string | undefined): string {
     if (!tipologia) return 'receipt';
-    
     switch (tipologia.toLowerCase()) {
       case 'gas':
         return 'local_gas_station';
@@ -283,3 +277,5 @@ export class BolletteDashboardComponent implements OnInit {
     }
   }
 }
+
+

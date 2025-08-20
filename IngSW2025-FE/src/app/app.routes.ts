@@ -5,9 +5,10 @@ import { AuthComponent } from './component/auth/auth.component';
 import { authGuard } from './guards/auth.guard';
 
 import { OfferteDashboardComponent } from './component/offerte-dashboard/offerte-dashboard.component';
+import { StatisticheComponent } from './component/statistiche/statistiche.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/bollette', pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: AuthComponent },
   { 
     path: 'bollette', 
@@ -27,6 +28,11 @@ export const routes: Routes = [
   {
     path: 'offerte',
     component: OfferteDashboardComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'statistiche',
+    loadComponent: () => import('./component/statistiche/statistiche.component').then(m => m.StatisticheComponent),
     canActivate: [authGuard]
   },
   { path: '**', redirectTo: '/login' }
