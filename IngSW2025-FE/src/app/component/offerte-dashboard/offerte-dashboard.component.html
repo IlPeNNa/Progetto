@@ -1,3 +1,12 @@
+  <mat-toolbar color="primary" class="dashboard-header">
+    <img src="mybills.ico" alt="MyBills Logo" class="header-logo">
+    <span>MyBills.com - Status del cliente</span>
+    <span class="header-spacer"></span>
+    <button mat-icon-button color="accent" matTooltip="Logout" (click)="logout()" style="background: #fff; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+      <mat-icon style="color: #1976d2; font-size: 28px;">logout</mat-icon>
+    </button>
+  </mat-toolbar>
+
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav mode="side" opened class="sidenav">
     <mat-nav-list>
@@ -5,9 +14,13 @@
         <mat-icon matListItemIcon>home</mat-icon>
         <span matListItemTitle>Home</span>
       </a>
-      <a mat-list-item [routerLink]="['/bollette']">
+      <!--<a mat-list-item [routerLink]="['/bollette']">
         <mat-icon matListItemIcon>receipt</mat-icon>
         <span matListItemTitle>Bollette</span>
+      </a>-->
+      <a mat-list-item [routerLink]="['/salary']">
+          <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
+          <span matListItemTitle>Stipendio</span>
       </a>
       <a mat-list-item [routerLink]="['/statistiche']">
         <mat-icon matListItemIcon>analytics</mat-icon>
@@ -21,6 +34,7 @@
         <mat-icon matListItemIcon>sports_esports</mat-icon>
         <span matListItemTitle>Gamification</span>
       </a>
+      
     </mat-nav-list>
   </mat-sidenav>
   <div class="dashboard-layout">

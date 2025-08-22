@@ -12,11 +12,9 @@
   min-width: 0;
 }
 .dashboard-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #e3f2fd 0%, #f5f5f5 100%);
 }
-
 .dashboard-header {
   position: fixed;
   top: 0;
@@ -25,6 +23,9 @@
   z-index: 1000;
   display: flex;
   align-items: center;
+  background: linear-gradient(90deg, #1976d2 0%, #2196f3 100%);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.10);
 }
 
 .header-logo {
@@ -55,24 +56,65 @@
 
 .sidenav {
   width: 250px;
-  background-color: #f5f5f5;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  box-shadow: 2px 0 8px rgba(33,150,243,0.04);
 }
 
 .main-content {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(33,150,243,0.08);
   padding: 32px;
+  margin: 24px 0;
 }
 
 .salary-dashboard {
-  background: #f8f9fa;
-  border-radius: 8px;
+  background: linear-gradient(120deg, #e3f2fd 0%, #fff 100%);
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(33,150,243,0.10);
   padding: 2rem;
-  max-width: 400px;
+  max-width: 500px;
   margin: 2rem auto;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 .salary-dashboard h2 {
   margin-bottom: 1rem;
+  color: #1976d2;
+  font-size: 2rem;
+  font-weight: 700;
 }
 .salary-dashboard p {
   font-size: 1.2rem;
+  color: #333;
+}
+.salary-info {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(33,150,243,0.08);
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.salary-icon {
+  font-size: 2.2em;
+  color: #1976d2;
+  margin-right: 12px;
+}
+.salary-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #43A047;
+}
+@media (max-width: 900px) {
+  .main-content {
+    padding: 12px;
+    margin: 0;
+  }
+  .salary-dashboard {
+    max-width: 98vw;
+    padding: 1rem;
+  }
 }

@@ -262,8 +262,19 @@
 }
 
 .bollette-table th {
-  background-color: #f5f5f5;
-  font-weight: bold;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border: none;
+}
+
+.bollette-table tr {
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.bollette-table tr:hover td {
+  box-shadow: 0 2px 8px rgba(33,150,243,0.10);
+  background: #e3f2fd;
 }
 
 .scaduta {

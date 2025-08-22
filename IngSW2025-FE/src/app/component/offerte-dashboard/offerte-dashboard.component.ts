@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Offerta } from '../../dto/offerta.model';
 import { OffertaService } from '../../service/offerta.service';
 import { Router } from '@angular/router';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-offerte-dashboard',
   templateUrl: './offerte-dashboard.component.html',
   styleUrls: ['./offerte-dashboard.component.scss'],
-  imports: [FormsModule, CommonModule, MatSidenavModule, MatListModule, MatIconModule, RouterModule]
+  imports: [ MatToolbarModule, FormsModule, CommonModule, MatSidenavModule, MatListModule, MatIconModule, RouterModule]
 })
 export class OfferteDashboardComponent implements OnInit {
   caricaOffertaSuggerita(): void {
@@ -98,5 +98,9 @@ export class OfferteDashboardComponent implements OnInit {
         alert('Errore durante l\'attivazione dell\'offerta');
       }
     );
+  }
+  logout(): void {
+    localStorage.clear();
+    window.location.href = '/login';
   }
 }

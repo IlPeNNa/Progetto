@@ -61,7 +61,11 @@ export class BolletteDashboardComponent implements OnInit {
   filtroDataDa: Date | null = null;
   filtroDataA: Date | null = null;
   filtroTipo: string = '';
-  filtroPagato: boolean | null = null;
+  filtroPagato: boolean | null = false;
+  // Notifiche Chrome
+  notificheMostrate: Set<string> = new Set();
+
+
 
   constructor(
     private authService: AuthService,
@@ -71,9 +75,10 @@ export class BolletteDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadBollette();
-    this.loadStatistiche();
-    this.caricaOfferteAttive();
+  this.loadBollette();
+  this.loadStatistiche();
+  this.caricaOfferteAttive();
+  setTimeout(() => this.mostraNotificheScadenza(), 1000);
   }
 
   caricaOfferteAttive(): void {
@@ -110,6 +115,7 @@ export class BolletteDashboardComponent implements OnInit {
         this.bollette = data;
         this.aggiornaStatisticheDaBollette();
         this.caricaOfferteAttive();
+        this.mostraNotificheScadenza();
       },
       error: (error) => {
         console.error('Errore nel caricamento delle bollette:', error);
@@ -276,6 +282,36 @@ export class BolletteDashboardComponent implements OnInit {
         return 'receipt';
     }
   }
+
+    // --- NOTIFICHE CHROME ---
+    mostraNotificheScadenza(): void {
+      if (!('Notification' in window)) return;
+      if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+        return;
+      }
+      const oggi = new Date();
+      this.bollette.forEach(b => {
+        if (b.pagato) return;
+        const scadenza = new Date(b.scadenza);
+        const diffGiorni = Math.ceil((scadenza.getTime() - oggi.getTime()) / (1000 * 60 * 60 * 24));
+        const idNotifica = `${b.idBolletta || b.id}`;
+        if (diffGiorni < 2 && !this.notificheMostrate.has(idNotifica + '-2gg')) {
+          new Notification('Bolletta in scadenza', {
+            body: `La bolletta ${idNotifica} scade tra 2 giorni e non è stata ancora pagata.`,
+            icon: '/mybills.ico'
+          });
+          this.notificheMostrate.add(idNotifica + '-2gg');
+        }
+        if (diffGiorni < 0 && !this.notificheMostrate.has(idNotifica + '-scaduta')) {
+          new Notification('Bolletta scaduta', {
+            body: `La bolletta ${idNotifica} è scaduta e non è stata pagata!`,
+            icon: '/mybills.ico'
+          });
+          this.notificheMostrate.add(idNotifica + '-scaduta');
+        }
+      });
+    }
 }
 
 

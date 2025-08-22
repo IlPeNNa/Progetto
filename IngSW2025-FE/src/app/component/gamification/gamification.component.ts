@@ -7,12 +7,12 @@ import { Utente } from '../../dto/auth.model'; // importa il modello utente
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-gamification',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatSidenavModule, MatListModule, RouterModule],
+  imports: [MatToolbarModule, CommonModule, MatIconModule, MatSidenavModule, MatListModule, RouterModule],
   templateUrl: './gamification.component.html',
   styleUrls: ['./gamification.component.scss']
 })
@@ -22,6 +22,7 @@ export class GamificationComponent {
   percentualeCompletamento = 0;
   punti = 0;
   sconto = 0;
+    classifica: Utente[] = [];
 
   constructor(private utenteService: AuthService) {}
 
@@ -41,6 +42,15 @@ export class GamificationComponent {
         });
       });
     }
+      // Recupera la classifica utenti
+      this.utenteService.getClassificaUtenti().subscribe((utenti: Utente[]) => {
+        this.classifica = utenti;
+      });
+  }
+
+  logout(): void {
+    localStorage.clear();
+    window.location.href = '/login';
   }
 
   getLivelloEPercentuale(punti: number): { livello: number, percentuale: number } {

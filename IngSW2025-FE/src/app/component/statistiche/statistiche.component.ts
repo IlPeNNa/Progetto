@@ -260,4 +260,9 @@ export class StatisticheComponent implements OnInit {
     const totaleTipo = bolletteTipo.reduce((sum, b) => sum + (b.importo || 0), 0);
     return totaleTipo / bolletteTipo.length;
   }
+  
+  logout(): void {
+    localStorage.clear();
+    window.location.href = '/login';
+  }
 }

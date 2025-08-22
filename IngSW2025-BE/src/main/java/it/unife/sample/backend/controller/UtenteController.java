@@ -103,6 +103,14 @@ public class UtenteController {
         }
     }
 
+    // GET - Classifica utenti per punti
+    @GetMapping("/classifica")
+    public ResponseEntity<List<Utente>> getClassificaUtenti() {
+        List<Utente> utenti = utenteService.getAllUtenti();
+        utenti.sort((a, b) -> Integer.compare(b.getPunti() != null ? b.getPunti() : 0, a.getPunti() != null ? a.getPunti() : 0));
+        return ResponseEntity.ok(utenti);
+    }
+
     // Classe interna per la richiesta di login
     public static class LoginRequest {
         private String mail;

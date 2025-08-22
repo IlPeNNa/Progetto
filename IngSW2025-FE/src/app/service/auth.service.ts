@@ -92,6 +92,11 @@ export class AuthService {
     return this.http.put<Utente>(`${this.apiUrl}/${cf}/accesso`, {}, this.httpOptions);
   }
 
+  // Recupera la classifica utenti ordinata per punti
+  getClassificaUtenti(): Observable<Utente[]> {
+    return this.http.get<Utente[]>(`${this.apiUrl}/classifica`);
+  }
+
   logout(): void {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('username');
