@@ -24,6 +24,12 @@
             <mat-icon matListItemIcon>receipt</mat-icon>
             <span matListItemTitle>Bollette</span>
           </a>
+
+          <a mat-list-item [routerLink]="['/salary']">
+            <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
+            <span matListItemTitle>Stipendio</span>
+          </a>
+          
           <a mat-list-item [routerLink]="['/statistiche']">
             <mat-icon matListItemIcon>analytics</mat-icon>
             <span matListItemTitle>Statistiche</span>
@@ -36,6 +42,7 @@
             <mat-icon matListItemIcon>sports_esports</mat-icon>
             <span matListItemTitle>Gamification</span>
           </a>
+
         </mat-nav-list>
       </mat-sidenav>
 
@@ -78,16 +85,7 @@
                 </div>
               </mat-card-content>
             </mat-card>
-            <!-- Grafico a linee: trova il mat-card corrispondente e inseriscilo qui -->
-            <mat-card class="line-chart-card">
-              <mat-card-header>
-                <mat-card-title>Andamento dei costi domestici</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <!-- Qui va il grafico a linee, lascia il contenuto esistente -->
-                <ng-content select=".line-chart"></ng-content>
-              </mat-card-content>
-            </mat-card>
+
           </div>
 
           <!-- Sezione ricerca offerte -->

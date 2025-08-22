@@ -2,10 +2,10 @@
   <div class="popup-content">
     <h3>Pagamento Bolletta</h3>
     <div *ngIf="bolletta">
-      <div><b>ID:</b> {{bolletta?.idBolletta || bolletta?.id}}</div>
-      <div><b>Importo:</b> €{{bolletta?.importo}}</div>
-      <div><b>Tipologia:</b> {{bolletta?.tipologia || bolletta?.tipo}}</div>
-      <div><b>Scadenza:</b> {{bolletta?.scadenza }}</div>
+  <div><b>ID:</b> {{bolletta.idBolletta || bolletta.id}}</div>
+  <div><b>Importo:</b> €{{bolletta.importo}}</div>
+  <div><b>Tipologia:</b> {{bolletta.tipologia || bolletta.tipo}}</div>
+  <div><b>Scadenza:</b> {{bolletta.scadenza}}</div>
     </div>
     <form (ngSubmit)="effettuaPagamento()">
       <label>Nome titolare:<br>

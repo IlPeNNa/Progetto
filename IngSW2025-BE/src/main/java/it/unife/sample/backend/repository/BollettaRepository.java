@@ -15,4 +15,8 @@ public interface BollettaRepository extends JpaRepository<Bolletta, Integer> {
 
     @org.springframework.data.jpa.repository.Query("SELECT b FROM Bolletta b WHERE b.cf = :cf AND b.dataPagamento IS NOT NULL AND b.dataPagamento BETWEEN :inizio AND :fine")
     List<Bolletta> findByCfAndDataPagamentoBetweenAndDataPagamentoIsNotNull(@org.springframework.data.repository.query.Param("cf") String cf, @org.springframework.data.repository.query.Param("inizio") java.time.LocalDate inizio, @org.springframework.data.repository.query.Param("fine") java.time.LocalDate fine);
+
+    // Bollette non pagate per utente
+    @org.springframework.data.jpa.repository.Query("SELECT b FROM Bolletta b WHERE b.cf = :cf AND b.dataPagamento IS NULL")
+    List<Bolletta> findByCfAndDataPagamentoIsNull(@org.springframework.data.repository.query.Param("cf") String cf);
 }

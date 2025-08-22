@@ -6,6 +6,7 @@ import { authGuard } from './guards/auth.guard';
 
 import { OfferteDashboardComponent } from './component/offerte-dashboard/offerte-dashboard.component';
 import { StatisticheComponent } from './component/statistiche/statistiche.component';
+import { SalaryDashboardComponent } from './component/salary-dashboard/salary-dashboard.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -33,6 +34,11 @@ export const routes: Routes = [
   {
     path: 'statistiche',
     loadComponent: () => import('./component/statistiche/statistiche.component').then(m => m.StatisticheComponent),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'salary',
+    component: SalaryDashboardComponent,
     canActivate: [authGuard]
   },
   { path: '**', redirectTo: '/login' }
