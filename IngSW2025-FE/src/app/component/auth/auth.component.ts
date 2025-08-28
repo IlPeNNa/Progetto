@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -27,7 +28,18 @@ import { RegistrationRequest } from '../../dto/auth.model';
     MatProgressSpinnerModule
   ],
   templateUrl: './auth.component.html',
-  styleUrl: './auth.component.scss'
+  styleUrl: './auth.component.scss',
+  animations: [
+    trigger('slideInOut', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(60px)' }),
+        animate('400ms cubic-bezier(.6,1.6,.8,2)', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [
+        animate('25ms cubic-bezier(.1,.2,.2,.3)', style({ opacity: 1, transform: 'translateY(60px)' }))
+      ])
+    ])
+  ]
 })
 export class AuthComponent {
   // Campi per il login

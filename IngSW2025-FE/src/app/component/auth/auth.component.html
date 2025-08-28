@@ -1,25 +1,22 @@
 <div class="auth-container">
-  <!-- Header -->
-  <div class="auth-header">
-    <div class="header-left">
-      <img src="mybills.ico" alt="MyBills Logo" class="auth-logo">
+  <!-- Navbar elegante -->
+  <nav class="auth-navbar">
+    <div class="navbar-left">
+      <img src="mybills.ico" alt="MyBills Logo" class="navbar-logo">
+      <span class="navbar-title">MyBills</span>
     </div>
-    <div class="header-center">
-      <p>MyBills</p>
-    </div>
-    <div class="header-right">
-      <!-- Spazio per eventuali elementi futuri -->
-    </div>
-  </div>
+    <span class="navbar-slogan">Accedi al tuo spazio bollette</span>
+  </nav>
 
   <!-- Main content -->
   <div class="auth-content">
     <mat-card class="auth-card">
       <mat-card-content>
-        <form (ngSubmit)="onSubmit()" #authForm="ngForm" novalidate>
+        <h3 class="form-main-title">{{ isLoginMode ? 'Accedi a MyBills' : 'Registrati in MyBills' }}</h3>
+        <form (ngSubmit)="onSubmit()" #authForm="ngForm" novalidate class="modern-form">
           
           <!-- Campi per la registrazione (nome e cognome) -->
-          <div *ngIf="!isLoginMode" class="registration-fields">
+          <div *ngIf="!isLoginMode" class="registration-fields" [@slideInOut]>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Nome</mat-label>
               <input 
@@ -61,7 +58,7 @@
 
           <!-- Email field (sempre presente) -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{isLoginMode ? 'Inserisci email' : 'Email'}}</mat-label>
+            <mat-label>{{isLoginMode ? 'Email' : 'Email'}}</mat-label>
             <input 
               matInput 
               type="email"
@@ -85,7 +82,7 @@
 
           <!-- Password field -->
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{isLoginMode ? 'Inserisci password' : 'Scegli password'}}</mat-label>
+            <mat-label>{{isLoginMode ? 'Password' : 'Password'}}</mat-label>
             <input 
               matInput 
               type="password"
@@ -117,8 +114,7 @@
             </button>
 
             <button 
-              mat-raised-button 
-              color="accent" 
+              mat-raised-button  
               type="button"
               [disabled]="isLoading"
               (click)="toggleMode()"
@@ -131,102 +127,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-
-  <!-- Footer -->
-  <footer class="auth-footer">
-    <!-- Anteprima compatta (visibile di default) -->
-    <div class="footer-preview">
-      <div class="footer-preview-left">
-        <div class="footer-logo-section">
-          <img src="mybills.ico" alt="MyBills Logo" class="footer-logo">
-          <h4>MyBills</h4>
-        </div>
-        <p>&copy; 2025 - Gestione bollette intelligente</p>
-      </div>
-      
-      <div class="footer-preview-center">
-        <div class="preview-sections">
-          <span class="preview-section">Servizi</span>
-          <span class="preview-section">Supporto</span>
-          <span class="preview-section">Azienda</span>
-        </div>
-      </div>
-      
-      <div class="footer-preview-right">
-        <span>IT | EN</span>
-        <div class="expand-hint">
-          <span>Hover per maggiori info</span>
-          <mat-icon>expand_more</mat-icon>
-        </div>
-      </div>
-    </div>
-
-    <!-- Contenuto completo (visibile al hover) -->
-    <div class="footer-content">
-      <div class="footer-section">
-        <div class="footer-logo-section">
-          <img src="mybills.ico" alt="MyBills Logo" class="footer-logo">
-          <h4>MyBills</h4>
-        </div>
-        <p>La soluzione moderna per gestire le tue bollette con semplicità e controllo.</p>
-      </div>
-      
-      <div class="footer-section dropdown-section">
-        <div class="section-header">
-          <h4>Servizi</h4>
-        </div>
-        <ul class="dropdown-content">
-          <li><a href="#">Gestione Bollette</a></li>
-          <li><a href="#">Dashboard Analytics</a></li>
-          <li><a href="#">Ricerca Offerte</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-section dropdown-section">
-        <div class="section-header">
-          <h4>Supporto</h4>
-        </div>
-        <ul class="dropdown-content">
-          <li><a href="#">Centro Assistenza</a></li>
-          <li><a href="#">Contattaci</a></li>
-          <li><a href="#">Tutorial</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-section dropdown-section">
-        <div class="section-header">
-          <h4>Azienda</h4>
-        </div>
-        <ul class="dropdown-content">
-          <li><a href="#">Chi Siamo</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Termini di Servizio</a></li>
-        </ul>
-      </div>
-    </div>
-    
-    <div class="footer-divider"></div>
-    
-    <div class="footer-bottom">
-      <div class="footer-bottom-left">
-        <p>&copy; 2025 MyBills. All rights reserved.</p>
-        <p class="team-credits">Developed by Matteo Ambonati, Enrico Antiga, Alex Pennini</p>
-      </div>
-      
-      <div class="footer-bottom-right">
-        <div class="social-links">
-          <a href="#" aria-label="LinkedIn">
-            <mat-icon>business</mat-icon>
-          </a>
-          <a href="#" aria-label="Twitter">
-            <mat-icon>alternate_email</mat-icon>
-          </a>
-        </div>
-        <div class="language-selector">
-          <mat-icon>language</mat-icon>
-          <span>IT | EN</span>
-        </div>
-      </div>
-    </div>
-  </footer>
 </div>
