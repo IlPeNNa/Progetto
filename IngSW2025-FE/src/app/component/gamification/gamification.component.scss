@@ -1,3 +1,78 @@
+/* Gamification navbar stile gradient come auth */
+.gamification-navbar {
+  width: 100vw;
+  left: 0;
+  top: 0;
+  position: fixed;
+  z-index: 1100;
+  background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 32px;
+  height: 64px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  gap: 32px;
+}
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.navbar-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: 1px;
+  color: #fff;
+}
+.header-spacer {
+  flex: 1 1 auto;
+}
+
+/* Spazio per il contenuto sotto la navbar fissa */
+.sidenav-container {
+  margin-top: 64px;
+}
+/* Logout button in navbar top right */
+.logout-navbar-btn {
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px 0 rgba(25, 118, 210, 0.18), 0 0 0 0 #43a047;
+  transition: box-shadow 0.25s, transform 0.18s;
+  border: 2px solid #024d99;
+  padding: 2px;
+  width: 40px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-navbar-btn:hover {
+  box-shadow: 0 4px 24px 0 #43a04799, 0 0 8px 2px #001429cc;
+  transform: scale(1.12) rotate(-8deg);
+  border-color: #43a047;
+}
+.logout-navbar-btn .mat-icon {
+  background: linear-gradient(135deg, #1976d3 40%, #43a047 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 24px !important;
+  transition: filter 0.2s;
+  filter: drop-shadow(0 1px 2px #1976d2aa);
+}
+.logout-navbar-btn:hover .mat-icon {
+  filter: drop-shadow(0 2px 8px #43a047cc);
+}
 /* Fix per Material Symbols Outlined */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
@@ -19,8 +94,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: 40px;
-  margin-top: 40px;
+  margin-top: 70px;
 }
 .gamification-description {
   max-width: 500px;
@@ -31,27 +105,23 @@
 }
 .gamification-title-row {
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
+
 .gamification-title {
-  color: #fff;
-  margin: 0;
-  font-size: 2.1em;
-  font-weight: 700;
+  margin: 0 auto;
+  font-size: 2em;
+  font-weight: 600;
   letter-spacing: 1px;
 }
-.gamification-title-icon {
-  color: #fff;
-  font-size: 2.2em;
-}
+
 .gamification-text {
   text-align: justify;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  margin-top: 10px;
   width: 100%;
 }
 .sidenav-container {
@@ -214,6 +284,15 @@
   color: #fff;
   font-size: 2.2em;
 }
+
+.header-logo{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
 .classifica-container {
   display: flex;
   flex-direction: column;

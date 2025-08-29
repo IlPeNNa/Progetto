@@ -1,10 +1,12 @@
     <!-- Header con toolbar -->
-  <mat-toolbar color="primary" class="dashboard-header">
-    <img src="mybills.ico" alt="MyBills Logo" class="header-logo">
-    <span>MyBills.com - Status del cliente</span>
+  <mat-toolbar class="gamification-navbar">
+    <div class="navbar-left">
+      <img src="mybills.ico" alt="MyBills Logo" class="navbar-logo">
+      <span class="navbar-title">MyBills - Trasforma le tue bollette in un gioco!</span>
+    </div>
     <span class="header-spacer"></span>
-    <button mat-icon-button color="accent" matTooltip="Logout" (click)="logout()" style="background: #fff; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-      <mat-icon style="color: #1976d2; font-size: 28px;">logout</mat-icon>
+    <button mat-icon-button color="accent" matTooltip="Logout" (click)="logout()" class="logout-navbar-btn">
+      <mat-icon style="color: #24dd3d; font-size: 28px;">logout</mat-icon>
     </button>
   </mat-toolbar>
   <!-- Aggiungere logout nel TS-->
@@ -35,33 +37,12 @@
       </a>
       <a mat-list-item [routerLink]="['/gamification']">
         <mat-icon matListItemIcon>sports_esports</mat-icon>
-        <span matListItemTitle>Gamification</span>
+        <span matListItemTitle>Accedi e vinci</span>
       </a>
 
     </mat-nav-list>
   </mat-sidenav>
   <div class="gamification-flex">
-    <div class="gamification-description">
-      <div class="gamification-title-row header-blu">
-        <span class="material-icons gamification-title-icon">sports_esports</span>
-        <h1 class="gamification-title">Gamification</h1>
-      </div>
-      <div class="gamification-text">
-        La gamification trasforma la gestione delle bollette in un’esperienza più coinvolgente e motivante. Ogni azione virtuosa come pagare puntualmente, ridurre i consumi o effettuare accessi giornalieri — ti permette di guadagnare punti e salire di livello.<br><br>
-        <!--<span>
-          🔹 <b>Badge:</b> Riconoscimenti per i tuoi traguardi (es. puntualità, risparmio, accessi)
-        </span><br>-->
-        <span>
-          🔹 <b>Punti MyBills:</b> Accumulabili e visibili nel tuo profilo
-        </span><br>
-        <!--<span>
-         🔹 <b>Sfide mensili:</b> Obiettivi da completare ogni mese per ottenere premi virtuali
-        </span><br>-->  
-        <span>
-          🔹 <b>Livelli utente:</b> Più punti ottieni, più sali di livello e sblocchi vantaggi e sconti
-        </span>
-      </div>
-    </div>
     <div class="gamification-card">
       <h2>I miei progressi</h2>
       <div class="livello-row">
@@ -107,6 +88,29 @@
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+    <div class="gamification-description">
+      <div class="gamification-title-row header-blu">
+        <span class="material-icons gamification-title-icon">sports_esports</span>
+        <h1 class="gamification-title">Accedi e vinci</h1>
+      </div>
+      <div class="gamification-text">
+        Trasforma la gestione delle bollette in un’esperienza più coinvolgente e motivante.
+        Pagare puntualmente, ridurre i consumi o effettuare accessi giornalieri
+        ti permette di guadagnare punti, salire di livello e avere diritto a sconti esclusivi.<br><br>
+        <!--<span>
+          🔹 <b>Badge:</b> Riconoscimenti per i tuoi traguardi (es. puntualità, risparmio, accessi)
+        </span><br>-->
+        <span>
+          🔹 <b>Punti MyBills:</b> Accumulabili e visibili nel tuo profilo
+        </span><br>
+        <!--<span>
+         🔹 <b>Sfide mensili:</b> Obiettivi da completare ogni mese per ottenere premi virtuali
+        </span><br>-->  
+        <span>
+          🔹 <b>Livelli utente:</b> Più punti ottieni, più sali di livello e sblocchi vantaggi
+        </span>
       </div>
     </div>
   </div>
