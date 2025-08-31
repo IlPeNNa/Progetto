@@ -1,15 +1,18 @@
 <!-- Nessun pop-up: il pagamento avviene su una pagina dedicata -->
 <div class="dashboard-container">
-  <!-- Header con toolbar -->
-  <mat-toolbar color="primary" class="dashboard-header">
-    <img src="mybills.ico" alt="MyBills Logo" class="header-logo">
-    <span>MyBills.com - Status del cliente</span>
+  <!-- Navbar con toolbar -->
+  <nav class="dashboard-navbar">
+    <div class="navbar-left">
+      <img src="mybills.ico" alt="MyBills Logo" class="navbar-logo">
+      <span class="navbar-title">MyBills</span>
+      <span class="navbar-slogan">MyBills.com - Status del cliente</span>
+    </div>
     <span class="header-spacer"></span>
-    <span class="username-display">Ciao, {{getUsername()}}</span>
-    <button mat-icon-button (click)="logout()" matTooltip="Logout">
-      <mat-icon>logout</mat-icon>
+    <span class="username-display">Ciao, {{getUsername()}} !</span>
+    <button mat-icon-button color="accent" matTooltip="Logout" (click)="logout()" class="logout-navbar-btn">
+      <mat-icon style="font-size: 28px;">logout</mat-icon>
     </button>
-  </mat-toolbar>
+  </nav>
 
   <div class="dashboard-content">
     <!-- Sidebar con menu navigazione -->

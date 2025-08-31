@@ -59,6 +59,7 @@
   transform: translateY(-2px) scale(1.03);
   box-shadow: 0 4px 16px 0 rgba(25, 118, 210, 0.13);
 }
+
 .auth-navbar {
   width: 100%;
   background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
@@ -72,29 +73,34 @@
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   gap: 32px;
 }
+
 .navbar-left {
   display: flex;
   align-items: center;
   gap: 16px;
 }
+
 .navbar-logo {
   width: 40px;
   height: 40px;
   object-fit: contain;
   filter: brightness(0) saturate(100%) invert(100%);
 }
+
 .navbar-title {
   font-size: 1.7rem;
   font-weight: 700;
   letter-spacing: 1px;
   color: #fff;
 }
+
 .navbar-slogan {
   font-size: 1.1rem;
   font-weight: 400;
   color: #e3f2fd;
   letter-spacing: 0.5px;
 }
+
 @media (max-width: 600px) {
   .auth-navbar {
     flex-direction: column;

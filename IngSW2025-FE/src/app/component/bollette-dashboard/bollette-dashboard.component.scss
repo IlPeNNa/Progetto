@@ -17,21 +17,46 @@
   flex-direction: column;
 }
 
-.dashboard-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
+.dashboard-navbar {
+  width: 100%;
+  background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+  color: #fff;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  padding: 0 32px;
+  height: 64px;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  gap: 32px;
 }
 
-.header-logo {
-  width: 32px;
-  height: 32px;
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.navbar-slogan {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #e3f2fd;
+  letter-spacing: 0.5px;
+}
+
+.navbar-logo {
+  width: 64px;
+  height: 64px;
   margin-right: 12px;
   object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(100%);
 }
 
 .header-spacer {
@@ -40,12 +65,55 @@
 
 .username-display {
   margin-right: 15px;
-  font-size: 14px;
+  font-size: 1.2em;
   opacity: 0.9;
+  font-weight: bold;
+  font-style: italic;
+  color: white;
+  text-shadow:
+    -2px -2px 0 #000000,
+     2px -2px 0 #000000,
+    -2px  2px 0 #000000,
+     2px  2px 0 #000000,
+    0px  2px 0 #000000,
+    2px  0px 0 #000000,
+    0px -2px 0 #000000,
+    -2px  0px 0 #000000;
+}
+
+.logout-navbar-btn {
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px 0 rgba(25, 118, 210, 0.18), 0 0 0 0 #43a047;
+  transition: box-shadow 0.25s, transform 0.18s;
+  border: 2px solid #024d99;
+  padding: 2px;
+  width: 40px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-navbar-btn:hover {
+  box-shadow: 0 0px 12px 0 #babdba99, 0 0 100px 5px #f3f5f7cc;
+  transform: scale(1.12) rotate(-8deg);
+  border-color: #43a047;
+}
+.logout-navbar-btn .mat-icon {
+  background: linear-gradient(135deg, #1976d3 40%, #43a047 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 24px !important;
+  transition: filter 0.2s;
+  filter: drop-shadow(0 1px 2px #1976d2aa);
+}
+.logout-navbar-btn:hover .mat-icon {
+  filter: drop-shadow(0 2px 8px #43a047cc);
 }
 
 .dashboard-content {
-  margin-top: 64px; /* Altezza della toolbar */
   height: calc(100vh - 64px);
 }
 

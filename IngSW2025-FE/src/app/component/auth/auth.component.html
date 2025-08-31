@@ -26,7 +26,7 @@
                 #nomeField="ngModel"
                 required
                 autocomplete="given-name">
-              <mat-icon matSuffix>person</mat-icon>
+              <mat-icon matPrefix>person</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
@@ -38,7 +38,7 @@
                 #cognomeField="ngModel"
                 required
                 autocomplete="family-name">
-              <mat-icon matSuffix>person</mat-icon>
+              <mat-icon matPrefix>person</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
@@ -52,7 +52,7 @@
                 maxlength="16"
                 style="text-transform: uppercase"
                 placeholder="Es. RSSMRA80A01H501Z">
-              <mat-icon matSuffix>badge</mat-icon>
+              <mat-icon matPrefix>badge</mat-icon>
             </mat-form-field>
           </div>
 
@@ -71,7 +71,7 @@
               [matTooltip]="'Formato richiesto: nomecognome@dominio.com/it'"
               matTooltipPosition="above"
               matTooltipShowDelay="300">
-            <mat-icon matSuffix>email</mat-icon>
+            <mat-icon matPrefix>email</mat-icon>
             
             <!-- Messaggi di errore -->
             <mat-error *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
@@ -91,7 +91,7 @@
               #passwordField="ngModel"
               required
               autocomplete="current-password">
-            <mat-icon matSuffix>lock</mat-icon>
+            <mat-icon matPrefix>lock</mat-icon>
           </mat-form-field>
 
           <!-- Messaggio di errore -->
