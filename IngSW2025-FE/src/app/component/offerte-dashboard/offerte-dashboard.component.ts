@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Offerta } from '../../dto/offerta.model';
 import { OffertaService } from '../../service/offerta.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../service/auth.service';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { FormsModule } from '@angular/forms';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -39,7 +40,11 @@ export class OfferteDashboardComponent implements OnInit {
   modemGratuito: false,
   };
 
-  constructor(private offertaService: OffertaService, private router: Router) {}
+  constructor(
+    private offertaService: OffertaService,
+    private router: Router,
+    private authService: AuthService
+  ) {}
   vaiHome(): void {
     this.router.navigate(['/login']);
   }
@@ -99,8 +104,12 @@ export class OfferteDashboardComponent implements OnInit {
       }
     );
   }
+  getUsername(): string {
+    return this.authService.getUsername();
+  }
+
   logout(): void {
-    localStorage.clear();
-    window.location.href = '/login';
+    this.authService.logout();
+    this.router.navigate(['/auth']);
   }
 }

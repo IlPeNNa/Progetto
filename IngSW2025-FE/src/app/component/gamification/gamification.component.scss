@@ -1,4 +1,10 @@
 /* Gamification navbar stile gradient come auth */
+.gamification-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .gamification-navbar {
   width: 100vw;
   left: 0;
@@ -22,8 +28,8 @@
   gap: 16px;
 }
 .navbar-logo {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
   filter: brightness(0) saturate(100%) invert(100%);
 }
@@ -33,6 +39,26 @@
   letter-spacing: 1px;
   color: #fff;
 }
+
+.navbar-slogan {
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #1976d2 30%, #43a047 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px #1976d233, 0 1px 0 #fff;
+  padding: 2px 10px;
+  border-radius: 6px;
+  transition: box-shadow 0.2s, background 0.2s, transform 0.18s;
+  display: inline-block;
+  box-shadow: 0 4px 16px #43a04744;
+  background: linear-gradient(90deg, #43a047 0%, #1976d2 100%);
+  transform: scale(1.04);
+  font-style: italic;
+}
+
 .header-spacer {
   flex: 1 1 auto;
 }
@@ -57,7 +83,7 @@
 }
 
 .logout-navbar-btn:hover {
-  box-shadow: 0 4px 24px 0 #43a04799, 0 0 8px 2px #001429cc;
+  box-shadow: 0 0px 12px 0 #babdba99, 0 0 100px 5px #f3f5f7cc;
   transform: scale(1.12) rotate(-8deg);
   border-color: #43a047;
 }
@@ -73,6 +99,25 @@
 .logout-navbar-btn:hover .mat-icon {
   filter: drop-shadow(0 2px 8px #43a047cc);
 }
+
+.username-display {
+  margin-right: 15px;
+  font-size: 1.2em;
+  opacity: 0.9;
+  font-weight: bold;
+  font-style: italic;
+  color: white;
+  text-shadow:
+    -1px -2px 0 #000000,
+     1px -2px 0 #000000,
+    -1px  2px 0 #000000,
+     1px  2px 0 #000000,
+    0px  2px 0 #000000,
+    1px  0px 0 #000000,
+    0px -2px 0 #000000,
+    -1px  0px 0 #000000;
+}
+
 /* Fix per Material Symbols Outlined */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';

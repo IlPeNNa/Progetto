@@ -2,11 +2,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../service/auth.service'; // importa il servizio
+import { AuthService } from '../../service/auth.service';
 import { Utente } from '../../dto/auth.model'; // importa il modello utente
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
@@ -22,9 +22,13 @@ export class GamificationComponent {
   percentualeCompletamento = 0;
   punti = 0;
   sconto = 0;
-    classifica: Utente[] = [];
+  classifica: Utente[] = [];
 
-  constructor(private utenteService: AuthService) {}
+  constructor(
+    private utenteService: AuthService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     // Recupera l'utente dal localStorage
@@ -48,9 +52,13 @@ export class GamificationComponent {
       });
   }
 
+  getUsername(): string {
+    return this.authService.getUsername();
+  }
+
   logout(): void {
-    localStorage.clear();
-    window.location.href = '/login';
+    this.authService.logout();
+    this.router.navigate(['/auth']);
   }
 
   getLivelloEPercentuale(punti: number): { livello: number, percentuale: number } {

@@ -65,7 +65,20 @@ export class StatisticheComponent implements OnInit {
   tipologie: string[] = ['Gas', 'Luce', 'WiFi'];
   chartInstance: any;
 
-  constructor(private bollettaService: BollettaService, private http: HttpClient) {}
+  constructor(
+    private bollettaService: BollettaService,
+    private http: HttpClient,
+    private authService: AuthService,
+    private router: Router
+  ) {}
+  getUsername(): string {
+    return this.authService.getUsername();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/auth']);
+  }
 
   ngOnInit() {
     this.loadGoogleCharts();
@@ -259,10 +272,5 @@ export class StatisticheComponent implements OnInit {
     if (bolletteTipo.length === 0) return 0;
     const totaleTipo = bolletteTipo.reduce((sum, b) => sum + (b.importo || 0), 0);
     return totaleTipo / bolletteTipo.length;
-  }
-  
-  logout(): void {
-    localStorage.clear();
-    window.location.href = '/login';
   }
 }

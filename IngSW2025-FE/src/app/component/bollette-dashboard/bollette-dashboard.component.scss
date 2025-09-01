@@ -11,7 +11,8 @@
   flex: 1 1 0;
   min-width: 0;
 }
-.dashboard-container {
+
+.gamification-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -45,16 +46,27 @@
 }
 
 .navbar-slogan {
-  font-size: 1.3rem;
-  font-weight: 400;
-  color: #e3f2fd;
-  letter-spacing: 0.5px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #1976d2 30%, #43a047 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px #1976d233, 0 1px 0 #fff;
+  padding: 2px 10px;
+  border-radius: 6px;
+  transition: box-shadow 0.2s, background 0.2s, transform 0.18s;
+  display: inline-block;
+  box-shadow: 0 2px 12px #1976d244;
+  background: linear-gradient(90deg, #205eb6 0%, #71a3d4 60%, #205eb6 100%);
+  transform: scale(1.04);
+  font-style: italic;
 }
 
 .navbar-logo {
-  width: 64px;
-  height: 64px;
-  margin-right: 12px;
+  width: 70px;
+  height: 70px;
   object-fit: contain;
   filter: brightness(0) saturate(100%) invert(100%);
 }
@@ -71,14 +83,14 @@
   font-style: italic;
   color: white;
   text-shadow:
-    -2px -2px 0 #000000,
-     2px -2px 0 #000000,
-    -2px  2px 0 #000000,
-     2px  2px 0 #000000,
+    -1px -2px 0 #000000,
+     1px -2px 0 #000000,
+    -1px  2px 0 #000000,
+     1px  2px 0 #000000,
     0px  2px 0 #000000,
-    2px  0px 0 #000000,
+    1px  0px 0 #000000,
     0px -2px 0 #000000,
-    -2px  0px 0 #000000;
+    -1px  0px 0 #000000;
 }
 
 .logout-navbar-btn {
@@ -100,6 +112,7 @@
   transform: scale(1.12) rotate(-8deg);
   border-color: #43a047;
 }
+
 .logout-navbar-btn .mat-icon {
   background: linear-gradient(135deg, #1976d3 40%, #43a047 100%);
   -webkit-background-clip: text;
@@ -109,6 +122,7 @@
   transition: filter 0.2s;
   filter: drop-shadow(0 1px 2px #1976d2aa);
 }
+
 .logout-navbar-btn:hover .mat-icon {
   filter: drop-shadow(0 2px 8px #43a047cc);
 }
