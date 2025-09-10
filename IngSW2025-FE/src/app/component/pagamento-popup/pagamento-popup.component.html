@@ -6,24 +6,26 @@
   <div><b>Importo:</b> €{{bolletta.importo}}</div>
   <div><b>Tipologia:</b> {{bolletta.tipologia || bolletta.tipo}}</div>
   <div><b>Scadenza:</b> {{bolletta.scadenza}}</div>
+  <br>
     </div>
     <form (ngSubmit)="effettuaPagamento()">
-      <label>Nome titolare:<br>
+      <label>Nome titolare:
         <input [(ngModel)]="pagamentoForm.nomeTitolare" name="nomeTitolare" required />
-      </label><br>
-      <label>Cognome titolare:<br>
+      </label>
+      <label>Cognome titolare:
         <input [(ngModel)]="pagamentoForm.cognomeTitolare" name="cognomeTitolare" required />
-      </label><br>
-      <label>Codice carta:<br>
-        <input [(ngModel)]="pagamentoForm.codiceCarta" name="codiceCarta" maxlength="16" required />
-      </label><br>
-      <label>CVV:<br>
-        <input [(ngModel)]="pagamentoForm.cvv" name="cvv" maxlength="3" required />
-      </label><br>
-      <label>Scadenza (MM/YY):<br>
-        <input [(ngModel)]="pagamentoForm.scadenza" name="scadenza" maxlength="5" required />
-      </label><br>
+      </label>
+        <label>Codice carta:
+          <input [(ngModel)]="pagamentoForm.codiceCarta" name="codiceCarta" maxlength="16" pattern="^[0-9]{16}$" required />
+        </label>
+        <label>CVV:
+          <input [(ngModel)]="pagamentoForm.cvv" name="cvv" maxlength="3" pattern="^[0-9]{3}$" required />
+        </label>
+          <label>Scadenza (MM/YY):
+            <input [(ngModel)]="pagamentoForm.scadenza" name="scadenza" maxlength="5" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$" required />
+          </label><br>
       <div *ngIf="erroreScadenza" class="errore">{{ erroreScadenza }}</div>
+      <br>
       <button type="submit">Effettua pagamento</button>
       <button type="button" (click)="chiudiPopup()">Annulla</button>
     </form>

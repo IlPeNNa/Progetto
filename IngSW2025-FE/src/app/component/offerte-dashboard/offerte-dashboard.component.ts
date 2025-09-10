@@ -104,6 +104,7 @@ export class OfferteDashboardComponent implements OnInit {
       }
     );
   }
+  
   getUsername(): string {
     return this.authService.getUsername();
   }

@@ -38,6 +38,10 @@ export class SalaryDashboardComponent implements OnInit {
     window.location.href = '/login';
   }
 
+  getUsername(): string {
+    return this.authService.getUsername();
+  }
+  
   ngOnInit(): void {
     const utente: Utente | null = this.authService['getStoredUser']();
     if (utente && utente.cf) {

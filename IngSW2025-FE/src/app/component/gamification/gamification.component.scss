@@ -139,7 +139,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  margin-top: 70px;
+  margin-top: 50px;
 }
 .gamification-description {
   max-width: 500px;
@@ -210,12 +210,12 @@
   }
 }
 .gamification-card {
-  background: #fff;
-  border-radius: 20px;
+  background: #ffffff;
+  border-radius: 10px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.12);
   padding: 32px 24px;
   max-width: 400px;
-  margin: 40px auto;
+  margin-left: 50px;
 }
 .livello-row {
   display: flex;

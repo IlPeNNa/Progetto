@@ -27,6 +27,9 @@
                 required
                 autocomplete="given-name">
               <mat-icon matPrefix>person</mat-icon>
+              <mat-error *ngIf="cfField.invalid && (cfField.dirty || cfField.touched)">
+                <ng-container *ngIf="cfField.errors?.['pattern']">Codice fiscale non valido. Inserisci 16 caratteri nel formato corretto.</ng-container>
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
@@ -50,7 +53,9 @@
                 #cfField="ngModel"
                 required
                 maxlength="16"
-                style="text-transform: uppercase"
+                pattern="^[a-zA-Z]{6}[0-9]{2}[a-zA-Z][0-9]{2}[a-zA-Z][0-9]{3}[a-zA-Z]$" required="required"
+                style="text-transform: uppercase;"
+                class="cf-input-placeholder"
                 placeholder="Es. RSSMRA80A01H501Z">
               <mat-icon matPrefix>badge</mat-icon>
             </mat-form-field>

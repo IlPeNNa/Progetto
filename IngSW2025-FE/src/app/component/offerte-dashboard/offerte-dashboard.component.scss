@@ -1,3 +1,146 @@
+/* Spazio extra tra label e campo input prezzo massimo */
+.filter-group label[for="prezzoMax"],
+.filter-group label:has(+ input[name="prezzoMax"]) {
+  margin-bottom: 6px !important;
+  display: inline-block;
+}
+.filter-group input[name="prezzoMax"] {
+  margin-top: 6px !important;
+}
+/* Impedisce l'andata a capo delle label radio (es. Wi-Fi) */
+.radio-group label {
+  white-space: nowrap;
+}
+/* --- MODERN FORM & TABLE STYLE --- */
+.filters-panel {
+  background: rgba(255,255,255,0.99);
+  border-radius: 14px;
+  box-shadow: 0 2px 12px 0 rgba(25, 118, 210, 0.10), 0 1.5px 8px 0 #1976d211;
+  padding: 18px 14px 12px 14px;
+  min-width: 420px;
+  width: 100%;
+  border: 1.2px solid #e3eaf7;
+  backdrop-filter: blur(1.5px) saturate(110%);
+  margin-bottom: 12px;
+  transition: box-shadow 0.18s, background 0.18s;
+}
+
+.filter-group select,
+.filter-group input[type="number"] {
+  border-radius: 8px;
+  border: 1.5px solid #b3c6e6;
+  padding: 7px 12px;
+  font-size: 1em;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  background: #f8fbff;
+  box-shadow: 0 2px 8px #1976d111;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+.filter-group input[type="number"]:focus,
+.filter-group select:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px #1976d233, 0 2px 8px #43a04722;
+  outline: none;
+}
+.filter-group input[type="radio"],
+.filter-group input[type="checkbox"] {
+  accent-color: #1976d2;
+  box-shadow: 0 1px 4px #1976d111;
+  margin-right: 4px;
+}
+
+.radio-group label, .checkbox-group label {
+  margin-right: 16px;
+  font-weight: 400;
+  color: #333;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 3px 8px;
+  transition: background 0.18s;
+}
+.radio-group label:hover, .checkbox-group label:hover {
+  background: #e3f2fd;
+}
+.btn-filtra {
+  background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 26px;
+  font-size: 1.08em;
+  font-weight: 600;
+  margin-top: 16px;
+  box-shadow: 0 2px 8px #1976d233;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+}
+.btn-filtra:hover {
+  background: linear-gradient(90deg, #43a047 0%, #1976d2 100%);
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px #43a04722;
+}
+
+.offers-table-panel {
+  background: rgba(255,255,255,0.97);
+  border-radius: 18px;
+  box-shadow: 0 4px 24px 0 rgba(25, 118, 210, 0.10), 0 1.5px 8px 0 #1976d211;
+  padding: 24px 18px 18px 18px;
+  margin-bottom: 18px;
+  border: 1.5px solid #e3eaf7;
+  backdrop-filter: blur(2px) saturate(120%);
+}
+
+.offerte-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: none;
+}
+.offerte-table th, .offerte-table td {
+  padding: 13px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e3eaf7;
+  font-size: 1em;
+}
+.offerte-table th {
+  background: #e3f2fd;
+  font-weight: 700;
+  color: #1976d2;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  letter-spacing: 0.5px;
+}
+.offerte-table tr:last-child td {
+  border-bottom: none;
+}
+.offerte-table tr {
+  transition: background 0.15s;
+}
+.offerte-table tr:hover {
+  background: #f3f7ff;
+}
+.btn-attiva {
+  background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #1976d233;
+  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+}
+.btn-attiva:hover {
+  background: linear-gradient(90deg, #43a047 0%, #1976d2 100%);
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px #43a04722;
+}
 .offerte-container {
   height: 100vh;
   display: flex;
@@ -112,16 +255,8 @@
   filter: drop-shadow(0 2px 8px #43a047cc);
 }
 
-.filters-panel {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  padding: 32px 24px;
-  min-width: 260px;
-  border: 1px solid #e3e3e3;
-}
 .filters-panel h2 {
-  font-size: 1.7em;
+  font-size: 1.5em;
   font-weight: 700;
   margin-bottom: 24px;
   color: #222;
@@ -159,8 +294,9 @@
 // Layout principale
 .dashboard-layout {
   display: flex;
-  gap: 32px;
-  max-width: 1200px;
+  gap: 12px;
+  max-width: 1000px;
+  padding: 10px 4px 4px 4px;
   
 .checkbox-group.vertical {
   flex-direction: column;
@@ -169,24 +305,12 @@
   padding: 32px;
 }
 
-.filters-panel {
-  flex: 1;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
-  padding: 32px 24px;
-  min-width: 260px;
-}
-.filters-panel h2 {
-  font-size: 1.5em;
-  margin-bottom: 24px;
-}
 .filter-group {
   margin-bottom: 20px;
 }
 .radio-group, .checkbox-group {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   margin-top: 8px;
 }
 .btn-filtra {
@@ -205,9 +329,17 @@
   display: flex;
   gap: 32px;
 }
+
 .offers-table-panel {
-  flex: 2;
+  background: rgba(255,255,255,0.99);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px 0 rgba(25, 118, 210, 0.10), 0 1.5px 8px 0 #1976d211;
+  padding: 10px 4px 4px 4px;
+  margin-bottom: 10px;
+  border: 1.2px solid #e3eaf7;
+  backdrop-filter: blur(1.5px) saturate(110%);
 }
+
 .offerte-table {
   width: 100%;
   border-collapse: collapse;

@@ -41,41 +41,43 @@
       </mat-nav-list>
     </mat-sidenav>
     <div class="main-content">
-      <div class="filters-row">
-        <mat-form-field appearance="fill">
-          <mat-label>Periodo</mat-label>
-          <mat-select [(ngModel)]="periodoSelezionato" (selectionChange)="onPeriodoChange()">
-            <mat-option value="3">Ultimi 3 mesi</mat-option>
-            <mat-option value="6">Ultimi 6 mesi</mat-option>
-            <mat-option value="12">Ultimi 12 mesi</mat-option>
-            <mat-option value="60">Ultimi 5 anni</mat-option>
-            <mat-option value="max">Tutto</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Data Inizio</mat-label>
-          <input matInput [matDatepicker]="pickerInizio" [(ngModel)]="dataInizio" (dateChange)="onFiltroChange()">
-          <mat-datepicker-toggle matSuffix [for]="pickerInizio"></mat-datepicker-toggle>
-          <mat-datepicker #pickerInizio></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Data Fine</mat-label>
-          <input matInput [matDatepicker]="pickerFine" [(ngModel)]="dataFine" (dateChange)="onFiltroChange()">
-          <mat-datepicker-toggle matSuffix [for]="pickerFine"></mat-datepicker-toggle>
-          <mat-datepicker #pickerFine></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="media-spesa-card">
-        <mat-card>
-          <div class="media-spesa-title">Spesa media nel periodo selezionato</div>
-          <div class="media-spesa-value">{{ spesaMedia | currency:'EUR' }}</div>
-          <div class="media-spesa-tipologie">
-            <div class="media-spesa-tipologia" *ngFor="let tipo of tipologie">
-              <span class="media-spesa-label">{{ tipo }}:</span>
-              <span class="media-spesa-value">{{ getSpesaMediaTipologia(tipo) | currency:'EUR' }}</span>
+      <div class="filters-media-row">
+        <div class="filters-row">
+          <mat-form-field appearance="fill">
+            <mat-label>Periodo</mat-label>
+            <mat-select [(ngModel)]="periodoSelezionato" (selectionChange)="onPeriodoChange()">
+              <mat-option value="3">Ultimi 3 mesi</mat-option>
+              <mat-option value="6">Ultimi 6 mesi</mat-option>
+              <mat-option value="12">Ultimi 12 mesi</mat-option>
+              <mat-option value="60">Ultimi 5 anni</mat-option>
+              <mat-option value="max">Tutto</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Data Inizio</mat-label>
+            <input matInput [matDatepicker]="pickerInizio" [(ngModel)]="dataInizio" (dateChange)="onFiltroChange()">
+            <mat-datepicker-toggle matSuffix [for]="pickerInizio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInizio></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Data Fine</mat-label>
+            <input matInput [matDatepicker]="pickerFine" [(ngModel)]="dataFine" (dateChange)="onFiltroChange()">
+            <mat-datepicker-toggle matSuffix [for]="pickerFine"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFine></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="media-spesa-card">
+          <mat-card>
+            <div class="media-spesa-title">Spesa media nel periodo selezionato</div>
+            <div class="media-spesa-value">{{ spesaMedia | currency:'EUR' }}</div>
+            <div class="media-spesa-tipologie">
+              <div class="media-spesa-tipologia" *ngFor="let tipo of tipologie">
+                <span class="media-spesa-label">{{ tipo }}:</span>
+                <span class="media-spesa-value">{{ getSpesaMediaTipologia(tipo) | currency:'EUR' }}</span>
+              </div>
             </div>
-          </div>
-        </mat-card>
+          </mat-card>
+        </div>
       </div>
       <div class="chart-row">
         <div class="chart-container">

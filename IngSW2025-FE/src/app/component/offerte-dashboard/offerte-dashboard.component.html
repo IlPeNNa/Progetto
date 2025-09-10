@@ -56,11 +56,11 @@
           </div>
         </div>
         <div class="filter-group">
-          <label>Prezzo massimo</label>
+          <label style="margin-right:10px">Prezzo massimo</label>
           <input type="number" min="0" [(ngModel)]="filtro.prezzoMax" name="prezzoMax" placeholder="Prezzo massimo" />
         </div>
         <div class="filter-group">
-          <label>Durata</label>
+          <label style="margin-right:10px">Durata</label>
           <select [(ngModel)]="filtro.durataMese" name="durataMese">
             <option value="">Tutte</option>
             <option value="6">6 mesi</option>
@@ -82,7 +82,7 @@
     </div>
     <div class="main-panel">
       <div class="offers-table-panel">
-        <h3>Offerte a confronto</h3>
+        <h2>Offerte a confronto</h2>
         <table class="offerte-table">
           <thead>
             <tr>
