@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: webapp
+-- Host: localhost    Database: webapp
 -- ------------------------------------------------------
 -- Server version	8.0.41
 
@@ -47,7 +47,7 @@ CREATE TABLE `bolletta` (
 
 LOCK TABLES `bolletta` WRITE;
 /*!40000 ALTER TABLE `bolletta` DISABLE KEYS */;
-INSERT INTO `bolletta` VALUES (1,'2025-08-24',41.47,'Gas','2025-08-22',1,1,'RSSMRA85T10A562S'),(2,'2025-08-23',28.02,'Enel','2025-08-22',1,2,'RSSMRA85T10A562S'),(3,'2025-08-21',444.00,'WiFi','2025-08-22',1,3,'RSSMRA85T10A562S'),(4,'2024-05-06',800.00,'Luce','2025-08-22',1,4,'RSSMRA85T10A562S'),(5,'2025-08-23',650.00,'Luce','2025-08-22',1,5,'RSSMRA85T10A562S'),(6,'2021-08-30',50.00,'WiFi','2021-09-17',1,5,'RSSMRA85T10A562S'),(30,'2021-03-15',300.00,'Gas','2021-03-14',1,1,'RSSMRA85T10A562S'),(31,'2021-07-18',75.00,'Luce','2021-07-17',1,2,'RSSMRA85T10A562S'),(32,'2021-11-22',38.00,'WiFi','2021-11-21',1,3,'RSSMRA85T10A562S'),(33,'2022-02-20',120.00,'Gas','2022-02-19',1,1,'RSSMRA85T10A562S'),(34,'2022-06-25',95.00,'Luce','2022-06-24',1,2,'RSSMRA85T10A562S'),(35,'2022-10-30',150.00,'WiFi','2022-10-29',1,3,'RSSMRA85T10A562S'),(36,'2023-01-22',130.00,'Gas','2023-01-21',1,1,'RSSMRA85T10A562S'),(37,'2023-05-28',100.00,'Luce','2023-05-27',1,2,'RSSMRA85T10A562S'),(38,'2023-09-19',500.00,'WiFi','2023-09-18',1,3,'RSSMRA85T10A562S'),(39,'2024-03-15',140.00,'Gas','2024-03-14',1,1,'RSSMRA85T10A562S'),(40,'2024-07-20',110.00,'Luce','2024-07-19',1,2,'RSSMRA85T10A562S'),(41,'2024-11-25',45.00,'WiFi','2024-11-24',1,3,'RSSMRA85T10A562S'),(42,'2025-02-10',150.00,'Gas','2025-02-09',1,1,'RSSMRA85T10A562S'),(43,'2025-06-18',115.00,'Luce','2025-06-17',1,2,'RSSMRA85T10A562S'),(44,'2025-09-22',47.00,'WiFi','2025-09-21',1,3,'RSSMRA85T10A562S');
+INSERT INTO `bolletta` VALUES (1,'2025-09-24',41.47,'Gas',NULL,1,1,'RSSMRA85T10A562S'),(2,'2025-08-23',28.02,'Luce','2025-08-22',1,2,'RSSMRA85T10A562S'),(3,'2025-08-21',444.00,'WiFi','2025-08-22',1,3,'RSSMRA85T10A562S'),(4,'2024-05-06',800.00,'Luce','2025-08-22',1,4,'RSSMRA85T10A562S'),(5,'2025-08-27',650.00,'Luce','2025-08-26',1,5,'RSSMRA85T10A562S'),(6,'2021-08-30',50.00,'WiFi','2021-09-17',1,5,'RSSMRA85T10A562S'),(30,'2021-03-15',300.00,'Gas','2025-08-26',1,1,'RSSMRA85T10A562S'),(31,'2021-07-18',75.00,'Luce','2021-07-17',1,2,'RSSMRA85T10A562S'),(32,'2021-11-22',38.00,'WiFi','2021-11-21',1,3,'RSSMRA85T10A562S'),(33,'2022-02-20',120.00,'Gas','2022-02-19',1,1,'RSSMRA85T10A562S'),(34,'2022-06-25',95.00,'Luce','2022-06-24',1,2,'RSSMRA85T10A562S'),(35,'2022-10-30',150.00,'WiFi','2022-10-29',1,3,'RSSMRA85T10A562S'),(36,'2023-01-22',130.00,'Gas','2023-01-21',1,1,'RSSMRA85T10A562S'),(37,'2023-05-28',100.00,'Luce','2023-05-27',1,2,'RSSMRA85T10A562S'),(38,'2023-09-19',500.00,'WiFi','2023-09-18',1,3,'RSSMRA85T10A562S'),(39,'2024-03-15',140.00,'Gas','2024-03-14',1,1,'RSSMRA85T10A562S'),(40,'2024-07-20',110.00,'Luce','2024-07-19',1,2,'RSSMRA85T10A562S'),(41,'2024-11-25',45.00,'WiFi','2024-11-24',1,3,'RSSMRA85T10A562S'),(42,'2025-02-10',150.00,'Gas','2025-02-09',1,1,'RSSMRA85T10A562S'),(43,'2025-06-18',115.00,'Luce','2025-06-17',1,2,'RSSMRA85T10A562S'),(44,'2025-09-22',47.00,'WiFi','2025-09-21',1,3,'RSSMRA85T10A562S');
 /*!40000 ALTER TABLE `bolletta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,29 +110,6 @@ INSERT INTO `offerta` VALUES (1,'Energia verde','2025-05-08','2025-10-12',45.00,
 UNLOCK TABLES;
 
 --
--- Table structure for table `sample_entity`
---
-
-DROP TABLE IF EXISTS `sample_entity`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sample_entity` (
-  `id` binary(16) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sample_entity`
---
-
-LOCK TABLES `sample_entity` WRITE;
-/*!40000 ALTER TABLE `sample_entity` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sample_entity` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `servizio`
 --
 
@@ -184,7 +161,7 @@ CREATE TABLE `utente` (
 
 LOCK TABLES `utente` WRITE;
 /*!40000 ALTER TABLE `utente` DISABLE KEYS */;
-INSERT INTO `utente` VALUES ('eeeeee','orsetto.ambo@gmail.com','matteo','rossi',0,'1234',0,NULL),('eeeeeeeee','enrico.antiga@gmail.com','enrico','antiga',1800,'er',789,'2025-08-22'),('rrrrrrrrrrrrrrrr','alex.penna@gmail.com','alex','pennini',3200,'penna',5000,'2025-08-21'),('RSSMRA85T10A562S','matteo.ambo@gmail.com','Matteo','Ambonati',2500,'qwerty',524,'2025-08-22'),('ttttttttt','matteo.balboni@gmail.com','Matteo','Balboni',0,'balbo',0,NULL);
+INSERT INTO `utente` VALUES ('BLNMTT02E21T521R','matteo.balboni@gmail.com','Matteo','Balboni',0,'balbo',0,NULL),('NTGNRC03R07C326T','enrico.antiga@gmail.com','enrico','antiga',1800,'er',789,'2025-08-22'),('PNNLXA03R10D548V','alex.penna@gmail.com','alex','pennini',3200,'penna',8001,'2025-09-10'),('RSSMRA85T10A562S','matteo.ambo@gmail.com','Matteo','Ambonati',2500,'qwerty',530,'2025-09-16'),('RSSMTT56A12G598W','rossimatteo@HRFlow.it','Matteo','Rossi',3000,'prova1',301,'2025-09-16'),('RSTMBA04L04J864P','orsetto.ambo@gmail.com','matteo','bianchi',0,'1234',0,NULL);
 /*!40000 ALTER TABLE `utente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -197,4 +174,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-22 12:16:36
+-- Dump completed on 2025-09-16 12:26:56

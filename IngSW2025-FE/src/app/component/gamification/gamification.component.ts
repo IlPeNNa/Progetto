@@ -30,6 +30,12 @@ export class GamificationComponent {
     private router: Router
   ) {}
 
+  get showHrFlow(): boolean {
+    const user = this.authService.getCurrentUser();
+    if (!user || !user.mail) return false;
+    return user.mail.toLowerCase().endsWith('@hrflow.it');
+  }
+
   ngOnInit() {
     // Recupera l'utente dal localStorage
     const utenteLocal = this.utenteService.getCurrentUser();

@@ -28,9 +28,9 @@
             <span matListItemTitle>Bollette</span>
           </a>-->
 
-          <a mat-list-item [routerLink]="['/salary']">
-            <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
-            <span matListItemTitle>Stipendio</span>
+          <a *ngIf="showHrFlow" mat-list-item [routerLink]="['/salary']">
+            <mat-icon matListItemIcon>business</mat-icon>
+            <span matListItemTitle>HRFlow</span>
           </a>
           
           <a mat-list-item [routerLink]="['/statistiche']">
@@ -43,7 +43,7 @@
           </a>
           <a mat-list-item [routerLink]="['/gamification']">
             <mat-icon matListItemIcon>sports_esports</mat-icon>
-            <span matListItemTitle>Accedi e vinci</span>
+            <span matListItemTitle>Accedi e Vinci</span>
           </a>
 
         </mat-nav-list>

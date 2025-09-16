@@ -71,6 +71,13 @@ export class StatisticheComponent implements OnInit {
     private authService: AuthService,
     private router: Router
   ) {}
+
+  get showHrFlow(): boolean {
+    const user = this.authService.getCurrentUser();
+    if (!user || !user.mail) return false;
+    return user.mail.toLowerCase().endsWith('@hrflow.it');
+  }
+  
   getUsername(): string {
     return this.authService.getUsername();
   }

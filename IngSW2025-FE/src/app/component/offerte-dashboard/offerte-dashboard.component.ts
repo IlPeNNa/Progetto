@@ -45,6 +45,13 @@ export class OfferteDashboardComponent implements OnInit {
     private router: Router,
     private authService: AuthService
   ) {}
+
+  get showHrFlow(): boolean {
+    const user = this.authService.getCurrentUser();
+    if (!user || !user.mail) return false;
+    return user.mail.toLowerCase().endsWith('@hrflow.it');
+  }
+  
   vaiHome(): void {
     this.router.navigate(['/login']);
   }
