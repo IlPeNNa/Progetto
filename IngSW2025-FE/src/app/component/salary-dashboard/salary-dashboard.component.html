@@ -3,7 +3,7 @@
   <nav class="salary-navbar">
     <div class="navbar-left">
       <img src="mybills.ico" alt="MyBills Logo" class="navbar-logo">
-      <span class="navbar-title">MyBills.com - Status del cliente</span>
+      <span class="navbar-title">MyBills.com - HRFlow</span>
     </div>
     <span class="header-spacer"></span>
     <span class="username-display">Ciao, {{getUsername()}} !</span>
@@ -21,13 +21,9 @@
             <mat-icon matListItemIcon>home</mat-icon>
             <span matListItemTitle>Home</span>
           </a>
-          <!--<a mat-list-item [routerLink]="['/bollette']">
-            <mat-icon matListItemIcon>receipt</mat-icon>
-            <span matListItemTitle>Bollette</span>
-          </a>-->
-          <a mat-list-item [routerLink]="['/salary']">
-            <mat-icon matListItemIcon>account_balance_wallet</mat-icon>
-            <span matListItemTitle>Stipendio netto</span>
+          <a *ngIf="showHrFlow" mat-list-item [routerLink]="['/salary']">
+            <mat-icon matListItemIcon>business</mat-icon>
+            <span matListItemTitle>HRFlow</span>
           </a>
           <a mat-list-item [routerLink]="['/statistiche']">
             <mat-icon matListItemIcon>analytics</mat-icon>
@@ -39,14 +35,14 @@
           </a>
           <a mat-list-item [routerLink]="['/gamification']">
             <mat-icon matListItemIcon>sports_esports</mat-icon>
-            <span matListItemTitle>Gamification</span>
+            <span matListItemTitle>Accedi e Vinci</span>
           </a>
         </mat-nav-list>
       </mat-sidenav>
 
       <mat-sidenav-content class="main-content">
         <div class="salary-dashboard">
-          <h2>Stipendio</h2>
+          <h2>Detrazione HRFlow</h2>
           <div *ngIf="showNetto && stipendioNetto !== null; else loading">
             <p>Codice fiscale: {{ codiceFiscale }}</p>
             <p><strong>Stipendio lordo:</strong> {{ stipendioLordo | currency:'EUR' }}</p>

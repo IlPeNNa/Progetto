@@ -74,6 +74,12 @@ export class BolletteDashboardComponent implements OnInit {
     private offertaService: OffertaService
   ) {}
 
+  get showHrFlow(): boolean {
+    const user = this.authService.getCurrentUser();
+    if (!user || !user.mail) return false;
+    return user.mail.toLowerCase().endsWith('@hrflow.it');
+  }
+
   ngOnInit(): void {
   this.loadBollette();
   this.loadStatistiche();

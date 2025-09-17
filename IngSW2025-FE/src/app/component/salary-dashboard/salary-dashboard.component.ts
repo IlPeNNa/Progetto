@@ -33,6 +33,12 @@ export class SalaryDashboardComponent implements OnInit {
 
   constructor(private salaryService: SalaryService, private authService: AuthService) {}
 
+  get showHrFlow(): boolean {
+    const user = this.authService.getCurrentUser();
+    if (!user || !user.mail) return false;
+    return user.mail.toLowerCase().endsWith('@hrflow.it');
+  }
+  
   logout(): void {
     localStorage.clear();
     window.location.href = '/login';
