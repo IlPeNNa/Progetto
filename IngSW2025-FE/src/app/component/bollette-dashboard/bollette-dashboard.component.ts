@@ -296,7 +296,7 @@ export class BolletteDashboardComponent implements OnInit {
         const scadenza = new Date(b.scadenza);
         const diffGiorni = Math.ceil((scadenza.getTime() - oggi.getTime()) / (1000 * 60 * 60 * 24));
         const idNotifica = `${b.idBolletta || b.id}`;
-        if (diffGiorni < 2 && !this.notificheMostrate.has(idNotifica + '-2gg')) {
+        if (diffGiorni < 2 && diffGiorni>=0 && !this.notificheMostrate.has(idNotifica + '-2gg')) {
           new Notification('Bolletta in scadenza', {
             body: `La bolletta ${idNotifica} scade tra 2 giorni e non è stata ancora pagata.`,
             icon: '/mybills.ico'
