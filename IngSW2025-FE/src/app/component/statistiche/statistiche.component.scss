@@ -1,25 +1,39 @@
+@media (max-width: 900px) {
+  .line-chart-container {
+    min-width: 0 !important;
+    min-height: 220px;
+    padding: 1rem 0.5rem;
+  }
+  .media-spesa-card {
+    margin-top: 12px;
+  }
+}
 /* Modern style for filters-row */
 .filters-row {
   background: rgba(255,255,255,0.92);
   border-radius: 16px;
   box-shadow: 0 2px 12px 0 rgba(25, 118, 210, 0.10), 0 1.5px 8px 0 #1976d211;
-  padding: 14px 18px 10px 18px;
-  gap: 10px;
+  padding: 8px 12px;
   margin-bottom: 0;
   align-items: flex-end;
   border: 1.5px solid #e3eaf7;
   transition: box-shadow 0.18s, background 0.18s;
-  max-width: 870px;
+  max-width: 660px;
   min-width: 0;
   width: 100%;
-  margin-left: 0;
+  margin-top: 0;
+  margin-left: -20px;
   margin-right: auto;
+  gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .filters-row mat-form-field {
-  background: transparent;
+   background: rgba(255,255,255,0.92);
+
   border-radius: 10px;
   box-shadow: none;
-  min-width: 170px;
+  width: 200px;
   border: 1.2px solid #b3c6e6;
   transition: border 0.18s;
 }
@@ -674,14 +688,7 @@ mat-form-field {
   font-weight: 600;
 }
 
-.chart-row {
-  display: flex;
-  flex-direction: row;
-  gap: 40px;
-  justify-content: center;
-  align-items: flex-start;
-  margin-bottom: 32px;
-}
+
 
 .line-chart-container {
   display: flex;

@@ -37,8 +37,8 @@
       </mat-nav-list>
     </mat-sidenav>
     <div class="main-content">
-      <div class="filters-media-row">
-        <div class="filters-row">
+      <div class="row filters-media-row g-3 align-items-end">
+        <div class="col-12 col-md-8 filters-row">
           <mat-form-field appearance="fill">
             <mat-label>Periodo</mat-label>
             <mat-select [(ngModel)]="periodoSelezionato" (selectionChange)="onPeriodoChange()">
@@ -62,7 +62,7 @@
             <mat-datepicker #pickerFine></mat-datepicker>
           </mat-form-field>
         </div>
-        <div class="media-spesa-card">
+  <div class="col-12 col-md-4 media-spesa-card">
           <mat-card>
             <div class="media-spesa-title">Spesa media nel periodo selezionato</div>
             <div class="media-spesa-value">{{ spesaMedia | currency:'EUR' }}</div>
@@ -75,8 +75,8 @@
           </mat-card>
         </div>
       </div>
-      <div class="chart-row">
-        <div class="chart-container">
+      <div class="row chart-row g-3">
+        <div class="col-12 col-lg-6 chart-container mb-3 mb-lg-0">
           <!-- Pie chart CSS come bollette-dashboard -->
           <div class="pie-chart"></div>
           <div class="chart-legend">
@@ -94,11 +94,11 @@
             </div>
           </div>
         </div>
-        <div class="line-chart-container">
+  <div class="col-12 col-lg-6 line-chart-container">
           <div id="googleLineChart" style="width:100%;height:340px;"></div>
         </div>
       </div>
-      <div class="table-card">
+  <div class="table-responsive table-card mt-4">
         <table class="bollette-table">
           <thead>
             <tr>
