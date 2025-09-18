@@ -7,30 +7,45 @@
 .filter-group input[name="prezzoMax"] {
   margin-top: 6px !important;
 }
-/* Impedisce l'andata a capo delle label radio (es. Wi-Fi) */
+
+/* Layout migliorato per i radio button */
+.radio-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
 .radio-group label {
   white-space: nowrap;
+  margin-right: 0;
+  display: inline-block;
 }
-/* Forza l'andata a capo per le ultime due opzioni radio (Rifiuti e Tutti) */
-.radio-group div:nth-child(5),
-.radio-group div:nth-child(6) {
-  width: 100%;
-  display: block;
-  margin-top: 2px;
+
+/* Per dispositivi mobili */
+@media (max-width: 500px) {
+  .radio-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 /* --- MODERN FORM & TABLE STYLE --- */
 .filters-panel {
   background: rgba(255,255,255,0.99);
   border-radius: 14px;
   box-shadow: 0 2px 12px 0 rgba(25, 118, 210, 0.10), 0 1.5px 8px 0 #1976d211;
-  padding: 32px 64px 32px 64px;
-  min-width: 540px;
-  max-width: 820px;
+  padding-top: 5px; /* Ridotto da 32px a 20px */
+  padding-bottom: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  min-width: 300px;
+  max-width: 310px;
   width: 100%;
   border: 1.2px solid #e3eaf7;
   backdrop-filter: blur(1.5px) saturate(110%);
   margin-bottom: 12px;
   transition: box-shadow 0.18s, background 0.18s;
+  margin: 0 auto;
+  text-align: left;
 }
 
 .media-spesa-card-offerte {
@@ -61,7 +76,7 @@
   padding: 7px 12px;
   font-size: 1em;
   margin-top: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 7px;
   background: #f8fbff;
   box-shadow: 0 2px 8px #1976d111;
   transition: border 0.18s, box-shadow 0.18s;
@@ -284,20 +299,6 @@
   filter: drop-shadow(0 2px 8px #43a047cc);
 }
 
-.filters-panel {
-  background: rgba(255,255,255,0.99);
-  border-radius: 14px;
-  box-shadow: 0 2px 12px 0 rgba(25, 118, 210, 0.10), 0 1.5px 8px 0 #1976d211;
-  padding: 32px 64px 32px 64px;
-  min-width: unset;
-  max-width: unset;
-  width: 100%;
-  width: 100%;
-  border: 1.2px solid #e3eaf7;
-  backdrop-filter: blur(1.5px) saturate(110%);
-  margin-bottom: 12px;
-  transition: box-shadow 0.18s, background 0.18s;
-}
 .checkbox-group.vertical label {
   padding: 6px 0;
   border-radius: 6px;
@@ -334,13 +335,6 @@
   padding: 10px 4px 4px 4px;
 }
 
-.filters-panel {
-  flex: 1 1 420px;
-  min-width: 340px;
-  max-width: 600px;
-}
-
-
 .media-spesa-card-offerte {
   width: 100%;
   max-width: 600px;
@@ -355,17 +349,12 @@
 .filter-group {
   margin-bottom: 20px;
 }
-.radio-group, .checkbox-group {
+/* .radio-group è già definito sopra con grid */
+.checkbox-group {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 8px;
   margin-top: 8px;
-}
-
-.radio-row {
-  display: flex;
-  gap: 18px;
-  margin-bottom: 4px;
 }
 .btn-filtra {
   background: #007bff;
