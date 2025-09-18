@@ -55,7 +55,7 @@ export class BolletteDashboardComponent implements OnInit {
   pagamentoPopupVisible: boolean = false;
   bollettaSelezionata: Bolletta | null = null;
   bollette: Bolletta[] = [];
-  statistiche: StatisticheCliente = { gas: 0, luce: 0, wifi: 0 };
+  statistiche: any = { gas: 0, luce: 0, wifi: 0, acqua: 0, rifiuti: 0 };
   displayedColumns: string[] = ['idBolletta', 'importo', 'tipologia', 'scadenza', 'dataPagamento', 'actions'];
   offerteAttive: Offerta[] = [];
   filtroDataDa: Date | null = null;
@@ -98,21 +98,65 @@ export class BolletteDashboardComponent implements OnInit {
   }
 
   aggiornaStatisticheDaBollette(): void {
-    const stats = { gas: 0, luce: 0, wifi: 0 };
+    const stats = { gas: 0, luce: 0, wifi: 0, acqua: 0, rifiuti: 0 };
     const totale = this.bollette.length;
     this.bollette.forEach(b => {
       const tipo = b.tipo?.toLowerCase() || b.tipologia?.toLowerCase();
       if (tipo === 'gas') stats.gas++;
       else if (tipo === 'luce') stats.luce++;
       else if (tipo === 'wifi') stats.wifi++;
+      else if (tipo === 'acqua') stats.acqua++;
+      else if (tipo === 'rifiuti') stats.rifiuti++;
     });
-    this.statistiche = totale > 0
-      ? {
-          gas: Math.round((stats.gas / totale) * 100),
-          luce: Math.round((stats.luce / totale) * 100),
-          wifi: Math.round((stats.wifi / totale) * 100)
+    if (totale > 0) {
+      // Calcolo percentuali precise per tipo
+      const percentuali = [
+        (stats.gas / totale) * 100,
+        (stats.luce / totale) * 100,
+        (stats.wifi / totale) * 100,
+        (stats.acqua / totale) * 100,
+        (stats.rifiuti / totale) * 100
+      ];
+      let arrotondate = percentuali.map(Math.floor);
+      let somma = arrotondate.reduce((a, b) => a + b, 0);
+      let diff = 100 - somma;
+
+      // Se acqua e rifiuti hanno lo stesso numero di bollette, forziamo la stessa percentuale
+      if (stats.acqua === stats.rifiuti && stats.acqua > 0) {
+        // Calcola la media delle due percentuali (usando la somma delle due parti decimali)
+        const media = Math.floor(((percentuali[3] + percentuali[4]) / 2));
+        arrotondate[3] = media;
+        arrotondate[4] = media;
+        // Ricalcola la somma e la differenza
+        somma = arrotondate[0] + arrotondate[1] + arrotondate[2] + arrotondate[3] + arrotondate[4];
+        diff = 100 - somma;
+        // Se la somma non è 100, distribuisci la differenza su gas, luce, wifi (le prime tre categorie)
+        if (diff !== 0) {
+          const idx = [0,1,2];
+          for (let i = 0; i < Math.abs(diff); i++) {
+            arrotondate[idx[i%3]] += diff > 0 ? 1 : -1;
+          }
         }
-      : { gas: 0, luce: 0, wifi: 0 };
+      } else {
+        // Distribuisci la differenza partendo dai tipi con la parte decimale più alta
+        if (diff > 0) {
+          const decimali = percentuali.map((p, i) => ({i, val: p - Math.floor(p)}));
+          decimali.sort((a, b) => b.val - a.val);
+          for (let i = 0; i < diff; i++) {
+            arrotondate[decimali[i].i]++;
+          }
+        }
+      }
+      this.statistiche = {
+        gas: arrotondate[0],
+        luce: arrotondate[1],
+        wifi: arrotondate[2],
+        acqua: arrotondate[3],
+        rifiuti: arrotondate[4]
+      };
+    } else {
+      this.statistiche = { gas: 0, luce: 0, wifi: 0, acqua: 0, rifiuti: 0 };
+    }
   }
 
   loadBollette(): void {
@@ -150,17 +194,21 @@ export class BolletteDashboardComponent implements OnInit {
   }
 
   getChartStyle(): string {
-    const { gas, luce, wifi } = this.statistiche;
-    const total = gas + luce + wifi;
+    const { gas, luce, wifi, acqua, rifiuti } = this.statistiche;
+    const total = gas + luce + wifi + acqua + rifiuti;
     if (total === 0) {
       return 'conic-gradient(#4CAF50 0deg 360deg)';
     }
     const gasAngle = (gas / total) * 360;
     const luceAngle = gasAngle + (luce / total) * 360;
+    const wifiAngle = luceAngle + (wifi / total) * 360;
+    const acquaAngle = wifiAngle + (acqua / total) * 360;
     return `conic-gradient(
       #4CAF50 0deg ${gasAngle}deg,
       #FF9800 ${gasAngle}deg ${luceAngle}deg,
-      #2196F3 ${luceAngle}deg 360deg
+      #2196F3 ${luceAngle}deg ${wifiAngle}deg,
+      #1976d2 ${wifiAngle}deg ${acquaAngle}deg,
+      #8d6e63 ${acquaAngle}deg 360deg
     )`;
   }
 
@@ -284,6 +332,10 @@ export class BolletteDashboardComponent implements OnInit {
         return 'lightbulb';
       case 'wifi':
         return 'wifi';
+      case 'acqua':
+        return 'water_drop';
+      case 'rifiuti':
+        return 'delete';
       default:
         return 'receipt';
     }

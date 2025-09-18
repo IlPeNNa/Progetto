@@ -63,27 +63,11 @@
                   <div class="pie-chart" [style.background]="getChartStyle()"></div>
                   <!-- Legenda del grafico -->
                   <div class="chart-legend">
-                    <div class="chart-item">
-                      <div class="chart-color gas-color"></div>
-                      <span style="color:#4CAF50; display: flex; align-items: center; gap: 6px;">
-                        <div class="chart-color gas-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
-                        Gas: {{statistiche.gas}}%
-                      </span>
-                    </div>
-                    <div class="chart-item">
-                      <div class="chart-color luce-color"></div>
-                      <span style="color:#FF9800; display: flex; align-items: center; gap: 6px;">
-                        <div class="chart-color luce-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
-                        Luce: {{statistiche.luce}}%
-                      </span>
-                    </div>
-                    <div class="chart-item">
-                      <div class="chart-color wifi-color"></div>
-                      <span style="color:#2196F3; display: flex; align-items: center; gap: 6px;">
-                        <div class="chart-color wifi-color" style="width: 14px; height: 14px; display: inline-block; margin-right: 4px;"></div>
-                        WiFi: {{statistiche.wifi}}%
-                      </span>
-                    </div>
+                    <div class="chart-item" style="color:#4CAF50;">Gas: {{statistiche.gas}}%</div>
+                    <div class="chart-item" style="color:#FF9800;">Luce: {{statistiche.luce}}%</div>
+                    <div class="chart-item" style="color:#2196F3;">WiFi: {{statistiche.wifi}}%</div>
+                    <div class="chart-item" style="color:#1976d2;">Acqua: {{statistiche.acqua}}%</div>
+                    <div class="chart-item" style="color:#8d6e63;">Rifiuti: {{statistiche.rifiuti}}%</div>
                   </div>
                 </div>
               </mat-card-content>
@@ -112,6 +96,8 @@
                         <span style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">🔥</span>
                       </ng-container>
                       <ng-template #otherType>
+                        <span *ngIf="offerta.tipo.toLowerCase() === 'acqua'" style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">💧</span>
+                        <span *ngIf="offerta.tipo.toLowerCase() === 'rifiuti'" style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">🗑️</span>
                         <span *ngIf="offerta.tipo === 'Luce'" style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">💡</span>
                         <mat-icon *ngIf="offerta.tipo === 'WiFi'" style="color:#2196F3; vertical-align:middle; margin-right:6px;">wifi</mat-icon>
                       </ng-template>
@@ -162,6 +148,8 @@
                     <mat-option value="Gas">Gas</mat-option>
                     <mat-option value="Luce">Luce</mat-option>
                     <mat-option value="WiFi">WiFi</mat-option>
+                    <mat-option value="Acqua">Acqua</mat-option>
+                    <mat-option value="Rifiuti">Rifiuti</mat-option>
                   </mat-select>
                 </mat-form-field>
 
@@ -205,9 +193,14 @@
                 <ng-container matColumnDef="tipologia">
                   <th mat-header-cell *matHeaderCellDef>Tipologia</th>
                   <td mat-cell *matCellDef="let bolletta">
-                    <mat-icon [class]="'icon-' + bolletta.tipologia?.toLowerCase()">
-                      {{getTipoIcon(bolletta.tipologia)}}
-                    </mat-icon>
+                    <ng-container *ngIf="bolletta.tipologia?.toLowerCase() === 'acqua'; else iconaNormale">
+                      <span style="font-size:1.3em;vertical-align:middle;margin-right:6px;">💧</span>
+                    </ng-container>
+                    <ng-template #iconaNormale>
+                      <mat-icon [class]="'icon-' + bolletta.tipologia?.toLowerCase()" [ngStyle]="bolletta.tipologia?.toLowerCase() === 'acqua' ? {'color': '#1976d2'} : {}">
+                        {{getTipoIcon(bolletta.tipologia)}}
+                      </mat-icon>
+                    </ng-template>
                     {{bolletta.tipologia}}
                   </td>
                 </ng-container>

@@ -45,10 +45,16 @@
         <div class="filter-group">
           <label>Tipo servizio:</label>
           <div class="radio-group">
-            <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="gas"> Gas</label>
-            <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="luce"> Luce</label>
-            <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="wifi"> Wi-Fi</label>
-            <label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value=""> Tutti</label>
+            <div class="radio-row">
+              <div><label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="gas"> Gas</label></div>
+              <div><label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="luce"> Luce</label></div>
+              <div><label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="wifi"> Wi-Fi</label></div>
+            </div>
+            <div class="radio-row">
+              <div><label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="acqua"> Acqua</label></div>
+              <div><label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value="rifiuti"> Rifiuti</label></div>
+              <div><label><input type="radio" [(ngModel)]="filtro.tipo" name="tipo" value=""> Tutti</label></div>
+            </div>
           </div>
         </div>
         <div class="filter-group">
@@ -76,6 +82,7 @@
         <button type="submit" class="btn-filtra">Applica filtri</button>
       </form>
     </div>
+
     <div class="main-panel">
       <div class="offers-table-panel">
         <h2>Offerte a confronto</h2>

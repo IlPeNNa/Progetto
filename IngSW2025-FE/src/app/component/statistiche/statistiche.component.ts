@@ -62,7 +62,7 @@ export class StatisticheComponent implements OnInit {
   totale: number = 0;
   periodoSelezionato: string = '3';
   spesaMedia: number = 0;
-  tipologie: string[] = ['Gas', 'Luce', 'WiFi'];
+  tipologie: string[] = ['Gas', 'Luce', 'WiFi', 'Acqua', 'Rifiuti'];
   chartInstance: any;
 
   constructor(
@@ -162,27 +162,34 @@ export class StatisticheComponent implements OnInit {
   }
 
   aggiornaGraficoTorta() {
-    // Calcola le percentuali e aggiorna il CSS del grafico a torta
+    // Calcola le percentuali e aggiorna il CSS del grafico a torta per 5 tipologie
     const gas = this.categoriaSpese['Gas'] || 0;
     const luce = this.categoriaSpese['Luce'] || 0;
     const wifi = this.categoriaSpese['WiFi'] || 0;
+    const acqua = this.categoriaSpese['Acqua'] || 0;
+    const rifiuti = this.categoriaSpese['Rifiuti'] || 0;
     const totale = this.totale || 1;
+    // Calcola le percentuali angolari
     const gasPerc = Math.round((gas / totale) * 360);
     const lucePerc = Math.round((luce / totale) * 360);
-    const wifiPerc = 360 - gasPerc - lucePerc;
+    const wifiPerc = Math.round((wifi / totale) * 360);
+    const acquaPerc = Math.round((acqua / totale) * 360);
+    const rifiutiPerc = 360 - gasPerc - lucePerc - wifiPerc - acquaPerc;
     const pieChart = document.querySelector('.pie-chart') as HTMLElement;
     if (pieChart) {
       pieChart.style.background = `conic-gradient(
         #ff6b35 0deg ${gasPerc}deg,
         #f7931e ${gasPerc}deg ${gasPerc + lucePerc}deg,
-        #4caf50 ${gasPerc + lucePerc}deg 360deg
+        #4caf50 ${gasPerc + lucePerc}deg ${gasPerc + lucePerc + wifiPerc}deg,
+        #2196f3 ${gasPerc + lucePerc + wifiPerc}deg ${gasPerc + lucePerc + wifiPerc + acquaPerc}deg,
+        #8d6e63 ${gasPerc + lucePerc + wifiPerc + acquaPerc}deg 360deg
       )`;
     }
   }
 
   aggiornaGraficoLinea() {
     if (!(window as any).google || !google.visualization) return;
-    const tipi = ['Gas', 'Luce', 'WiFi'];
+    const tipi = ['Gas', 'Luce', 'WiFi', 'Acqua', 'Rifiuti'];
     const allDates = Array.from(new Set(
       this.bollettePagate
         .filter(b => b.dataPagamento !== undefined && b.dataPagamento !== null)
@@ -243,7 +250,7 @@ export class StatisticheComponent implements OnInit {
         alignment: 'center',
         textStyle: { fontSize: 18, color: '#222', fontName: 'Inter' }
       },
-      colors: ['#1976d2', '#fbc02d', '#43a047'],
+      colors: ['#ff6b35', '#f7931e', '#4caf50', '#2196f3', '#8d6e63'],
       pointSize: 8,
       lineWidth: 4,
       chartArea: { left: 80, top: 80, width: '80%', height: '70%' },
