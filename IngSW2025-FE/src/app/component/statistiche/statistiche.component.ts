@@ -189,35 +189,68 @@ export class StatisticheComponent implements OnInit {
 
   aggiornaGraficoLinea() {
     if (!(window as any).google || !google.visualization) return;
+    if (!this.bollettePagate || this.bollettePagate.length === 0) return;
+    
     const tipi = ['Gas', 'Luce', 'WiFi', 'Acqua', 'Rifiuti'];
-    const allDates = Array.from(new Set(
-      this.bollettePagate
-        .filter(b => b.dataPagamento !== undefined && b.dataPagamento !== null)
-        .map(b => {
-          if (b.dataPagamento instanceof Date) {
-            return b.dataPagamento.toISOString().slice(0, 10);
-          }
-          if (typeof b.dataPagamento === 'string') {
-            return b.dataPagamento;
-          }
-          return '';
-        })
-    )).filter(date => date !== '').sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-    const header = ['Data', ...tipi];
-    const rows = allDates.map(date => {
-      const values = tipi.map(tipo => {
-        const found = this.bollettePagate.find(b => b.tipologia === tipo && (
-          b.dataPagamento !== undefined && b.dataPagamento !== null &&
-          ((b.dataPagamento instanceof Date ? b.dataPagamento.toISOString().slice(0, 10) : typeof b.dataPagamento === 'string' ? b.dataPagamento : '') === date)
-        ));
-        return found ? found.importo || 0 : null;
-      });
-      return [new Date(date), ...values];
+    
+    // Crea oggetti Date validi per ogni bolletta
+    const validBollette = this.bollettePagate.filter(b => b.dataPagamento != null);
+    
+    // Estrai date uniche come oggetti Date
+    const dateMap = new Map<string, Date>();
+    validBollette.forEach(b => {
+      let dateObj: Date;
+      if (b.dataPagamento instanceof Date) {
+        dateObj = b.dataPagamento;
+      } else if (typeof b.dataPagamento === 'string') {
+        dateObj = new Date(b.dataPagamento);
+      } else {
+        return; // Skip invalid dates
+      }
+      
+      // Usa la data ISO come chiave per evitare duplicati
+      const dateKey = dateObj.toISOString().split('T')[0];
+      if (!isNaN(dateObj.getTime())) {
+        dateMap.set(dateKey, dateObj);
+      }
     });
-    const data = google.visualization.arrayToDataTable([
-      header,
-      ...rows
-    ]);
+    
+    // Converti mappa in array ordinato di date
+    const uniqueDates = Array.from(dateMap.values()).sort((a, b) => a.getTime() - b.getTime());
+    
+    // Crea il DataTable direttamente con l'API di Google Charts
+    const dataTable = new google.visualization.DataTable();
+    dataTable.addColumn('date', 'Data');
+    tipi.forEach(tipo => dataTable.addColumn('number', tipo));
+    
+    // Aggiungi righe di dati
+    uniqueDates.forEach(date => {
+      const dateKey = date.toISOString().split('T')[0];
+      const rowArray: any[] = [date];
+      
+      tipi.forEach(tipo => {
+        const bolletta = validBollette.find(b => {
+          if (!b.dataPagamento) return false;
+          
+          let bDate: Date;
+          if (b.dataPagamento instanceof Date) {
+            bDate = b.dataPagamento;
+          } else if (typeof b.dataPagamento === 'string') {
+            bDate = new Date(b.dataPagamento);
+          } else {
+            return false;
+          }
+          const bDateKey = bDate.toISOString().split('T')[0];
+          return b.tipologia === tipo && bDateKey === dateKey;
+        });
+        
+        rowArray.push(bolletta ? bolletta.importo || 0 : null);
+      });
+      
+      dataTable.addRow(rowArray);
+    });
+    
+    const data = dataTable;
     const options = {
       title: 'Andamento dei costi domestici',
       titleTextStyle: {
@@ -231,7 +264,7 @@ export class StatisticheComponent implements OnInit {
         title: '',
         format: 'dd/MM/yyyy',
         textStyle: { fontSize: 16, color: '#222', fontName: 'Inter' },
-        gridlines: { color: '#e9ecef', count: allDates.length },
+        gridlines: { color: '#e9ecef', count: uniqueDates.length },
         baselineColor: '#e9ecef',
         slantedText: true,
         slantedTextAngle: 30
