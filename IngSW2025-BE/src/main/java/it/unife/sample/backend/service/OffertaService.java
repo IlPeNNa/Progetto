@@ -43,14 +43,4 @@ public class OffertaService {
         if (offerte.isEmpty()) return null;
         return offerte.get(0);
     }
-
-        public Offerta attivaOfferta(Integer id) {
-            Offerta offerta = offertaRepository.findById(id).orElse(null);
-            if (offerta != null) {
-                offerta.setDataAttivazione(java.time.LocalDate.now());
-                offertaRepository.save(offerta);
-            }
-            return offerta;
-        }
-    
 }

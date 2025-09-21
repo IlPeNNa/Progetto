@@ -90,7 +90,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let offerta of offerteAttive">
+                  <tr *ngFor="let offerta of offerte">
                     <td>
                       <ng-container *ngIf="offerta.tipo.toLowerCase() === 'gas'; else otherType">
                         <span style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">🔥</span>
@@ -107,10 +107,12 @@
                     <td>{{ offerta.durataMese }} mesi</td>
                     <td>{{ offerta.dataFine | date:'dd/MM/yyyy' }}</td>
                     <td>
-                      <button class="offers-active-status">
-                        <mat-icon style="color: #fff; margin-right: 4px;">check</mat-icon>
-                        Attiva
-                      </button>
+                      <ng-container *ngIf="getDataAttivazione(offerta); else nonAttivata">
+                        {{ getDataAttivazione(offerta) }}
+                      </ng-container>
+                      <ng-template #nonAttivata>
+                        <span style="color: #aaa;">Non attivata</span>
+                      </ng-template>
                     </td>
                   </tr>
                 </tbody>

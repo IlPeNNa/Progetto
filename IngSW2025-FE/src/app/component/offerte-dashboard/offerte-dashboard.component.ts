@@ -1,3 +1,4 @@
+import { Attiva } from '../../dto/attiva.model';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Offerta } from '../../dto/offerta.model';
@@ -46,6 +47,22 @@ export class OfferteDashboardComponent implements OnInit {
     private authService: AuthService
   ) {}
 
+  offerteAttivate: Attiva[] = [];
+
+  caricaOfferteAttivateDaUtente(): void {
+    const utente = this.authService.getCurrentUser();
+    if (!utente || !utente.cf) return;
+    this.offertaService.getAttivazioniByCf(utente.cf).subscribe((attivate: Attiva[]) => {
+      console.log('Attivazioni ricevute:', attivate);
+      this.offerteAttivate = attivate;
+    });
+  }
+
+  /** Restituisce l'attivazione per una offerta, se presente */
+  getAttivazionePerOfferta(offerta: Offerta): Attiva | undefined {
+    return this.offerteAttivate.find(a => a.idOfferta === offerta.idOfferta);
+  }
+
   get showHrFlow(): boolean {
     const user = this.authService.getCurrentUser();
     if (!user || !user.mail) return false;
@@ -59,6 +76,7 @@ export class OfferteDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.caricaOfferte();
     this.caricaOffertaSuggerita();
+    this.caricaOfferteAttivateDaUtente();
     this.aggiornaOraCorrente();
     setInterval(() => this.aggiornaOraCorrente(), 1000 * 60); // aggiorna ogni minuto
   }
@@ -99,15 +117,47 @@ export class OfferteDashboardComponent implements OnInit {
   }
 
   attivaOfferta(offerta: Offerta): void {
-    this.offertaService.attivaOfferta(offerta.idOfferta).subscribe(
-      (res: Offerta) => {
-        const now = new Date();
-        const dataOra = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-        alert('Offerta attivata correttamente!\nData e ora: ' + dataOra);
-        this.caricaOfferte();
+  const utente = this.authService.getCurrentUser();
+  if (!utente || !utente.cf) {
+    alert('Utente non valido');
+    return;
+  }
+  const attivazione: Attiva = {
+    cf: utente.cf,
+    idOfferta: offerta.idOfferta,
+    dataAttivazione: new Date().toISOString().split('T')[0]
+  };
+    this.offertaService.attivaOffertaPerUtente(attivazione).subscribe(
+      (res: Attiva) => {
+        alert('Offerta attivata correttamente!\nData: ' + attivazione.dataAttivazione);
+        this.caricaOfferteAttivateDaUtente();
       },
       err => {
         alert('Errore durante l\'attivazione dell\'offerta');
+      }
+    );
+  }
+
+  annullaOfferta(offerta: Offerta): void {
+    const utente = this.authService.getCurrentUser();
+    if (!utente || !utente.cf) {
+      alert('Utente non valido');
+      return;
+    }
+    
+    const attivazione = this.getAttivazionePerOfferta(offerta);
+    if (!attivazione) {
+      alert('Errore: attivazione non trovata');
+      return;
+    }
+
+    this.offertaService.annullaAttivazioneOfferta(attivazione.cf, attivazione.idOfferta).subscribe(
+      () => {
+        alert('Attivazione offerta annullata correttamente!');
+        this.caricaOfferteAttivateDaUtente();
+      },
+      err => {
+        alert('Errore durante l\'annullamento dell\'attivazione');
       }
     );
   }

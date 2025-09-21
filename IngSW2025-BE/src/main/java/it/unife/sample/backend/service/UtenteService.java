@@ -99,7 +99,7 @@ public class UtenteService {
             java.time.LocalDate oggi = java.time.LocalDate.now();
             if (utente.getUltimoAccesso() == null || !utente.getUltimoAccesso().isEqual(oggi)) {
                 utente.setUltimoAccesso(oggi);
-                utente.setPunti(utente.getPunti() == null ? 1 : utente.getPunti() + 1);
+                    utente.setPunti(utente.getPunti() == null ? 10 : utente.getPunti() + 10);
                 repo.save(utente);
             }
             return Optional.of(utente);

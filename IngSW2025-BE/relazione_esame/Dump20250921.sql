@@ -16,6 +16,34 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `attiva`
+--
+
+DROP TABLE IF EXISTS `attiva`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `attiva` (
+  `CF` char(16) NOT NULL,
+  `ID_offerta` int NOT NULL,
+  `Data_attivazione` date DEFAULT NULL,
+  PRIMARY KEY (`CF`,`ID_offerta`),
+  KEY `ID_offerta_idx` (`ID_offerta`),
+  CONSTRAINT `CF` FOREIGN KEY (`CF`) REFERENCES `utente` (`CF`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `ID_offerta` FOREIGN KEY (`ID_offerta`) REFERENCES `offerta` (`ID_OFFERTA`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `attiva`
+--
+
+LOCK TABLES `attiva` WRITE;
+/*!40000 ALTER TABLE `attiva` DISABLE KEYS */;
+INSERT INTO `attiva` VALUES ('RSSMRA85T10A562S',1,'2025-09-21');
+/*!40000 ALTER TABLE `attiva` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `bolletta`
 --
 
@@ -92,7 +120,6 @@ CREATE TABLE `offerta` (
   `tipo` varchar(255) DEFAULT NULL,
   `D_FORNITORE` int DEFAULT NULL,
   `durata_mese` int DEFAULT NULL,
-  `Data_Attivazione` date DEFAULT NULL,
   PRIMARY KEY (`ID_OFFERTA`),
   KEY `D_FORNITORE` (`D_FORNITORE`),
   CONSTRAINT `offerta_ibfk_1` FOREIGN KEY (`D_FORNITORE`) REFERENCES `fornitore` (`D_FORNITORE`)
@@ -105,34 +132,8 @@ CREATE TABLE `offerta` (
 
 LOCK TABLES `offerta` WRITE;
 /*!40000 ALTER TABLE `offerta` DISABLE KEYS */;
-INSERT INTO `offerta` VALUES (1,'Energia verde','2025-05-08','2025-10-12',45.00,'Luce',1,12,'2025-08-19'),(2,'Modem gratuito','2025-07-09','2026-08-08',234.00,'WiFi',3,6,'2025-08-19'),(3,'prova','2025-09-09','2026-09-07',235.00,'GAS',4,12,'2025-08-20');
+INSERT INTO `offerta` VALUES (1,'Energia verde','2025-05-08','2025-10-12',45.00,'Luce',1,12),(2,'Modem gratuito','2025-07-09','2026-08-08',234.00,'WiFi',3,6),(3,'prova','2025-09-09','2026-09-07',235.00,'GAS',4,12);
 /*!40000 ALTER TABLE `offerta` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `servizio`
---
-
-DROP TABLE IF EXISTS `servizio`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `servizio` (
-  `ID_SERVIZIO` int NOT NULL,
-  `NOME` varchar(100) DEFAULT NULL,
-  `D_FORNITORE` int DEFAULT NULL,
-  PRIMARY KEY (`ID_SERVIZIO`),
-  KEY `D_FORNITORE` (`D_FORNITORE`),
-  CONSTRAINT `servizio_ibfk_1` FOREIGN KEY (`D_FORNITORE`) REFERENCES `fornitore` (`D_FORNITORE`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `servizio`
---
-
-LOCK TABLES `servizio` WRITE;
-/*!40000 ALTER TABLE `servizio` DISABLE KEYS */;
-/*!40000 ALTER TABLE `servizio` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -161,7 +162,7 @@ CREATE TABLE `utente` (
 
 LOCK TABLES `utente` WRITE;
 /*!40000 ALTER TABLE `utente` DISABLE KEYS */;
-INSERT INTO `utente` VALUES ('BLNMTT02E21T521R','matteo.balboni@gmail.com','Matteo','Balboni',0,'balbo',0,NULL),('NTGNRC03R07C326T','enrico.antiga@gmail.com','enrico','antiga',1800,'er',789,'2025-08-22'),('PNNLXA03R10D548V','alex.penna@gmail.com','alex','pennini',3200,'penna',8001,'2025-09-10'),('RSSMRA85T10A562S','matteo.ambo@gmail.com','Matteo','Ambonati',2500,'qwerty',530,'2025-09-16'),('RSSMTT56A12G598W','rossimatteo@HRFlow.it','Matteo','Rossi',3000,'prova1',301,'2025-09-16'),('RSTMBA04L04J864P','orsetto.ambo@gmail.com','matteo','bianchi',0,'1234',0,NULL);
+INSERT INTO `utente` VALUES ('BLNMTT02E21T521R','matteo.balboni@gmail.com','Matteo','Balboni',0,'balbo',0,NULL),('NTGNRC03R07C326T','enrico.antiga@gmail.com','enrico','antiga',1800,'er',789,'2025-08-22'),('PNNLXA03R10D548V','alex.penna@gmail.com','alex','pennini',3200,'penna',8001,'2025-09-10'),('RSSMRA85T10A562S','matteo.ambo@gmail.com','Matteo','Ambonati',2500,'qwerty',550,'2025-09-21'),('RSSMTT56A12G598W','rossimatteo@HRFlow.it','Matteo','Rossi',3000,'prova1',311,'2025-09-21'),('RSTMBA04L04J864P','orsetto.ambo@gmail.com','matteo','bianchi',0,'1234',0,NULL);
 /*!40000 ALTER TABLE `utente` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -174,4 +175,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-16 12:26:56
+-- Dump completed on 2025-09-21 11:26:49

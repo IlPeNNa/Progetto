@@ -75,27 +75,36 @@ public ResponseEntity<Integer> pagaBolletta(@PathVariable Integer id, @RequestBo
         BigDecimal costoOriginale = bolletta.getImporto();
         BigDecimal costoScontato = costoOriginale.multiply(BigDecimal.valueOf(1 - (scontoApplicato / 100.0)));
         bolletta.setImporto(costoScontato);
+        
+        // Sottrai i punti utilizzati per lo sconto (100 punti per ogni 1% di sconto)
+        if (scontoApplicato > 0) {
+            int puntiUtilizzati = scontoApplicato * 100;
+            utente.setPunti(puntiUtente - puntiUtilizzati);
+        }
     }
 
     bolletta.setDataPagamento(LocalDate.now());
     bollettaRepository.save(bolletta);
 
-
-    // Logica punti utente
+    // Logica punti bonus per pagamento in tempo
     if (bolletta.getDataPagamento() != null && bolletta.getScadenza() != null && !bolletta.getDataPagamento().isAfter(bolletta.getScadenza())) {
-        String cf = bolletta.getCf();
         if (utenteOpt.isPresent()) {
             Utente utente = utenteOpt.get();
             if (utente.getPunti() == null) {
                 utente.setPunti(0);
             }
-            utente.setPunti(utente.getPunti() + 10);
-            long count = bollettaRepository.countBollettePagateInTempo(cf);
+            // Aggiungi punti bonus per pagamento puntuale
+            utente.setPunti(utente.getPunti() + 20);
+            long count = bollettaRepository.countBollettePagateInTempo(bolletta.getCf());
             if (count % 3 == 0) {
-                utente.setPunti(utente.getPunti() + 30);
+                utente.setPunti(utente.getPunti() + 100);
             }
-            utenteRepository.save(utente);
         }
+    }
+    
+    // Salva l'utente una sola volta con tutte le modifiche
+    if (utenteOpt.isPresent()) {
+        utenteRepository.save(utenteOpt.get());
     }
 
         return ResponseEntity.ok(scontoApplicato);

@@ -11,5 +11,4 @@ export interface Offerta {
   durataMese: number;
   fornitore: Fornitore;
   risparmioAnnuale?: number;
-  dataAttivazione?: string; // formato YYYY-MM-DD
 }

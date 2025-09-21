@@ -65,7 +65,9 @@
           <label style="margin-right:10px">Durata</label>
           <select [(ngModel)]="filtro.durataMese" name="durataMese">
             <option value="">Tutte</option>
+            <option value="4">4 mesi</option>
             <option value="6">6 mesi</option>
+            <option value="8">8 mesi</option>
             <option value="12">12 mesi</option>
             <option value="24">24 mesi</option>
           </select>
@@ -108,13 +110,17 @@
               <td>{{ offerta.descrizione }}</td>
               <td style="white-space: nowrap;">{{ offerta.dataFine }}</td>
               <td>
-                <ng-container *ngIf="offerta.dataAttivazione; else vuoto">
-                  {{ offerta.dataAttivazione.split('T')[0] }}
+                <ng-container *ngIf="getAttivazionePerOfferta(offerta)">
+                  {{ getAttivazionePerOfferta(offerta)?.dataAttivazione }}
                 </ng-container>
                 <ng-template #vuoto></ng-template>
               </td>
               <td>
-                <button class="btn-attiva" (click)="attivaOfferta(offerta)" [disabled]="offerta.dataAttivazione">Attiva</button>
+                <button class="btn-attiva"
+                        [ngClass]="getAttivazionePerOfferta(offerta) ? 'btn-annulla' : 'btn-attiva'"
+                        (click)="getAttivazionePerOfferta(offerta) ? annullaOfferta(offerta) : attivaOfferta(offerta)">
+                  {{ getAttivazionePerOfferta(offerta) ? 'Annulla' : 'Attiva' }}
+                </button>
               </td>
             </tr>
           </tbody>

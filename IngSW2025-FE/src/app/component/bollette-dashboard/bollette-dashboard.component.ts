@@ -23,6 +23,7 @@ import { Bolletta, StatisticheCliente, TipoBolletta } from '../../dto/bolletta.m
 import { Offerta } from '../../dto/offerta.model';
 import { OffertaService } from '../../service/offerta.service';
 import { PagamentoPopupComponent } from '../pagamento-popup/pagamento-popup.component';
+import { Attiva } from '../../dto/attiva.model';
 
 @Component({
   selector: 'app-bollette-dashboard',
@@ -57,7 +58,8 @@ export class BolletteDashboardComponent implements OnInit {
   bollette: Bolletta[] = [];
   statistiche: any = { gas: 0, luce: 0, wifi: 0, acqua: 0, rifiuti: 0 };
   displayedColumns: string[] = ['idBolletta', 'importo', 'tipologia', 'scadenza', 'dataPagamento', 'actions'];
-  offerteAttive: Offerta[] = [];
+  offerte: Offerta[] = [];
+  attivazioni: Attiva[] = [];
   filtroDataDa: Date | null = null;
   filtroDataA: Date | null = null;
   filtroTipo: string = '';
@@ -81,16 +83,30 @@ export class BolletteDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  this.loadBollette();
-  this.loadStatistiche();
-  this.caricaOfferteAttive();
-  setTimeout(() => this.mostraNotificheScadenza(), 1000);
+    this.loadBollette();
+    this.loadStatistiche();
+    this.caricaOfferteDisponibili();
+    this.caricaAttivazioni();
+    setTimeout(() => this.mostraNotificheScadenza(), 1000);
   }
 
-  caricaOfferteAttive(): void {
+  caricaOfferteDisponibili(): void {
     this.offertaService.getOfferte().subscribe((offerte: Offerta[]) => {
-      this.offerteAttive = offerte.filter((o: Offerta) => !!o.dataAttivazione);
+      this.offerte = offerte;
     });
+  }
+
+  caricaAttivazioni(): void {
+    const utente = this.authService.getCurrentUser();
+    if (!utente || !utente.cf) return;
+    this.offertaService.getAttivazioniByCf(utente.cf).subscribe((attivazioni: Attiva[]) => {
+      this.attivazioni = attivazioni;
+    });
+  }
+
+  getDataAttivazione(offerta: Offerta): string | null {
+    const att = this.attivazioni.find(a => a.idOfferta === offerta.idOfferta);
+    return att ? att.dataAttivazione : null;
   }
 
   vaiAlleOfferte(): void {
@@ -163,9 +179,10 @@ export class BolletteDashboardComponent implements OnInit {
     this.bollettaService.getAll().subscribe({
       next: (data) => {
         this.bollette = data;
-        this.aggiornaStatisticheDaBollette();
-        this.caricaOfferteAttive();
-        this.mostraNotificheScadenza();
+  this.aggiornaStatisticheDaBollette();
+  this.caricaOfferteDisponibili();
+  this.caricaAttivazioni();
+  this.mostraNotificheScadenza();
       },
       error: (error) => {
         console.error('Errore nel caricamento delle bollette:', error);
@@ -245,7 +262,7 @@ export class BolletteDashboardComponent implements OnInit {
 
   onPagamentoEffettuato(cvv: string) {
     if (this.bollettaSelezionata && this.bollettaSelezionata.id) {
-      this.bollettaService.marcaComePageto(this.bollettaSelezionata.id, cvv).subscribe({
+      this.bollettaService.marcaComePagato(this.bollettaSelezionata.id, cvv).subscribe({
         next: (sconto) => {
           if (sconto > 0) {
             alert(`Pagamento effettuato con successo!\nApplicato uno sconto del ${sconto}%.`);

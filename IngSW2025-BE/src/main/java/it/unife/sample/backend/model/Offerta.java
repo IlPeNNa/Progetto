@@ -48,8 +48,6 @@ public class Offerta {
     @Column(name = "durata_mese")
     private Integer durataMese;
 
-        @Column(name = "DATA_ATTIVAZIONE")
-        private java.time.LocalDate dataAttivazione;
 
     // Getters e setters
     public Integer getIdOfferta() { return idOfferta; }
@@ -68,6 +66,4 @@ public class Offerta {
     public void setFornitore(Fornitore fornitore) { this.fornitore = fornitore; }
     public Integer getDurataMese() { return durataMese; }
     public void setDurataMese(Integer durataMese) { this.durataMese = durataMese; }
-        public java.time.LocalDate getDataAttivazione() { return dataAttivazione; }
-        public void setDataAttivazione(java.time.LocalDate dataAttivazione) { this.dataAttivazione = dataAttivazione; }
 }
