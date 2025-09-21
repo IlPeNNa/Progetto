@@ -78,7 +78,7 @@
           <!-- Sezione ricerca offerte -->
 
             <div class="offers-active-card">
-              <div class="offers-active-title">Offerte attive</div>
+              <div class="offers-active-title">Offerte disponibili</div>
               <table class="offers-active-table">
                 <thead>
                   <tr>
@@ -107,12 +107,13 @@
                     <td>{{ offerta.durataMese }} mesi</td>
                     <td>{{ offerta.dataFine | date:'dd/MM/yyyy' }}</td>
                     <td>
-                      <ng-container *ngIf="getDataAttivazione(offerta); else nonAttivata">
-                        {{ getDataAttivazione(offerta) }}
-                      </ng-container>
-                      <ng-template #nonAttivata>
-                        <span style="color: #aaa;">Non attivata</span>
-                      </ng-template>
+                      <button class="btn-attiva"
+                              [ngClass]="getDataAttivazione(offerta) ? 'btn-annulla' : 'btn-attiva'"
+                              (click)="getDataAttivazione(offerta) ? annullaOfferta(offerta) : attivaOfferta(offerta)"
+                              (mouseenter)="onButtonHover(offerta.idOfferta)"
+                              (mouseleave)="onButtonLeave()">
+                        {{ getButtonText(offerta) }}
+                      </button>
                     </td>
                   </tr>
                 </tbody>

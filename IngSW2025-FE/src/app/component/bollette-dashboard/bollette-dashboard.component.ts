@@ -66,6 +66,8 @@ export class BolletteDashboardComponent implements OnInit {
   filtroPagato: boolean | null = false;
   // Notifiche Chrome
   notificheMostrate: Set<string> = new Set();
+  // Hover state per bottoni attivazione
+  hoveredOffertaId: number | null = null;
 
 
 
@@ -387,6 +389,64 @@ export class BolletteDashboardComponent implements OnInit {
         }
       });
     }
+
+  attivaOfferta(offerta: Offerta): void {
+    const utente = this.authService.getCurrentUser();
+    if (!utente || !utente.cf) {
+      alert('Utente non valido');
+      return;
+    }
+    const attivazione: Attiva = {
+      cf: utente.cf,
+      idOfferta: offerta.idOfferta,
+      dataAttivazione: new Date().toISOString().split('T')[0]
+    };
+    this.offertaService.attivaOffertaPerUtente(attivazione).subscribe(
+      (res: Attiva) => {
+        alert('Offerta attivata correttamente!\nData: ' + attivazione.dataAttivazione);
+        this.caricaOfferteDisponibili();
+        this.caricaAttivazioni();
+      },
+      err => {
+        alert('Errore durante l\'attivazione dell\'offerta');
+      }
+    );
+  }
+
+  annullaOfferta(offerta: Offerta): void {
+    const utente = this.authService.getCurrentUser();
+    if (!utente || !utente.cf) {
+      alert('Utente non valido');
+      return;
+    }
+    
+    this.offertaService.annullaAttivazioneOfferta(utente.cf, offerta.idOfferta).subscribe(
+      () => {
+        alert('Offerta disattivata correttamente');
+        this.caricaOfferteDisponibili();
+        this.caricaAttivazioni();
+      },
+      err => {
+        alert('Errore durante l\'annullamento dell\'attivazione');
+      }
+    );
+  }
+
+  onButtonHover(offertaId: number): void {
+    this.hoveredOffertaId = offertaId;
+  }
+
+  onButtonLeave(): void {
+    this.hoveredOffertaId = null;
+  }
+
+  getButtonText(offerta: Offerta): string {
+    const isAttivata = this.getDataAttivazione(offerta);
+    if (isAttivata && this.hoveredOffertaId === offerta.idOfferta) {
+      return 'Disattiva';
+    }
+    return isAttivata ? 'Attivata' : 'Attiva';
+  }
 }
 
 

@@ -523,3 +523,42 @@
   color: #2196F3;
   margin-right: 8px;
 }
+
+/* Stili per i bottoni Attiva/Annulla */
+.btn-attiva {
+  background: linear-gradient(90deg, #1976d2 0%, #43a047 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #1976d233;
+  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+}
+
+.btn-attiva:hover {
+  background: linear-gradient(90deg, #43a047 0%, #1976d2 100%);
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px #43a04722;
+}
+
+.btn-annulla {
+  background: linear-gradient(90deg, #f44336 0%, #ff9800 100%);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 18px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #f4433633;
+  transition: background 0.18s, transform 0.15s, box-shadow 0.18s;
+}
+
+.btn-annulla:hover {
+  background: linear-gradient(90deg, #ff9800 0%, #f44336 100%);
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px #f4433622;
+}

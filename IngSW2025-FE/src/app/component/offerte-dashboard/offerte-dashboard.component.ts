@@ -153,7 +153,7 @@ export class OfferteDashboardComponent implements OnInit {
 
     this.offertaService.annullaAttivazioneOfferta(attivazione.cf, attivazione.idOfferta).subscribe(
       () => {
-        alert('Attivazione offerta annullata correttamente!');
+        alert('Offerta disattivata correttamente!');
         this.caricaOfferteAttivateDaUtente();
       },
       err => {
