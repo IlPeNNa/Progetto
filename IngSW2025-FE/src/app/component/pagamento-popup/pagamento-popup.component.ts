@@ -29,6 +29,39 @@ export class PagamentoPopupComponent {
     this.chiudi.emit();
   }
 
+  // Formatta il codice carta con spazi ogni 4 cifre
+  formatCodiceCarta(event: any) {
+    let value = event.target.value.replace(/\s/g, ''); // Rimuove tutti gli spazi
+    let formattedValue = '';
+    
+    // Limita a 16 cifre e aggiunge spazi ogni 4
+    for (let i = 0; i < value.length && i < 16; i++) {
+      if (i > 0 && i % 4 === 0) {
+        formattedValue += ' ';
+      }
+      formattedValue += value[i];
+    }
+    
+    this.pagamentoForm.codiceCarta = formattedValue;
+    event.target.value = formattedValue;
+  }
+
+  // Formatta la data di scadenza MM/AA
+  formatScadenza(event: any) {
+    let value = event.target.value.replace(/\D/g, ''); // Rimuove tutto tranne i numeri
+    let formattedValue = '';
+    
+    // Limita a 4 cifre e aggiunge lo slash dopo 2
+    if (value.length >= 2) {
+      formattedValue = value.substring(0, 2) + '/' + value.substring(2, 4);
+    } else {
+      formattedValue = value;
+    }
+    
+    this.pagamentoForm.scadenza = formattedValue;
+    event.target.value = formattedValue;
+  }
+
   effettuaPagamento() {
     // Validazione scadenza
     const [mese, anno] = this.pagamentoForm.scadenza.split('/').map(Number);
@@ -40,6 +73,8 @@ export class PagamentoPopupComponent {
       return;
     }
     this.erroreScadenza = '';
+    // Rimuove gli spazi dal codice carta prima di inviarlo
+    const codiceCarta = this.pagamentoForm.codiceCarta.replace(/\s/g, '');
     this.pagamentoEffettuato.emit(this.pagamentoForm.cvv); // invia il CVV
   }
 }

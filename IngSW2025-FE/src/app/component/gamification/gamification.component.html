@@ -40,26 +40,54 @@
     </mat-nav-list>
   </mat-sidenav>
   <div class="gamification-flex">
-    <div class="gamification-card">
-      <h2>I miei progressi</h2>
-      <div class="livello-row">
-        <span class="livello">Livello {{ livello }}</span>
-        <span class="punti">
-          <mat-icon class="star">star</mat-icon>
-          {{ punti }} pt
-        </span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress" [style.width]="percentualeCompletamento + '%'">
+    <div class="gamification-card modern-progress-card">
+      <div class="progress-header">
+        <h2 class="progress-title">I miei progressi</h2>
+        <div class="level-badge">
+          <span class="level-number">{{ livello }}</span>
+          <span class="level-text">LEVEL</span>
         </div>
       </div>
-      <div class="sconto-row">
-        <mat-icon style="color: #43A047">local_offer</mat-icon>
-        <span>Sconto attuale: {{ sconto }}%</span>
+      
+      <div class="stats-grid">
+        <div class="stat-item punti-stat">
+          <div class="stat-icon">
+            <mat-icon>star</mat-icon>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ punti }}</div>
+            <div class="stat-label">Punti Totali</div>
+          </div>
+        </div>
+        
+        <div class="stat-item sconto-stat">
+          <div class="stat-icon sconto-icon">
+            <mat-icon>local_offer</mat-icon>
+          </div>
+          <div class="stat-content">
+            <div class="stat-value">{{ sconto }}%</div>
+            <div class="stat-label">Sconto Attuale</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-header-info">
+          <span class="progress-label">Progresso verso livello {{ livello + 1 }}</span>
+          <span class="progress-numbers">{{ getPuntiNelLivelloCorrente() }}/{{ getPuntiTotaliLivelloCorrente() }} punti</span>
+        </div>
+        <div class="modern-progress-bar">
+          <div class="modern-progress" [style.width]="percentualeCompletamento + '%'">
+            <div class="progress-glow"></div>
+          </div>
+        </div>
+        <div class="progress-footer">
+          <small>{{ getPuntiPerProssimoLivello() }} punti al prossimo livello</small>
+        </div>
       </div>
       <!-- CLASSIFICA UTENTI SOTTO LA CARD -->
       <div class="classifica-container">
-        <h2 style="margin-top: 32px; text-align:center;">Classifica utenti</h2>
+        <h2 style="margin-top: 16px; text-align:center;">Classifica utenti</h2>
         <table class="classifica-table">
           <thead>
             <tr>
@@ -102,9 +130,6 @@
         <span>
           🔹 <b>Punti MyBills:</b> Accumulabili e visibili nel tuo profilo
         </span><br>
-        <!--<span>
-         🔹 <b>Sfide mensili:</b> Obiettivi da completare ogni mese per ottenere premi virtuali
-        </span><br>-->  
         <span>
           🔹 <b>Livelli utente:</b> Più punti ottieni, più sali di livello e sblocchi vantaggi
         </span>

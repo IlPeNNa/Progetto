@@ -55,7 +55,7 @@
           <div class="charts-row">
             <mat-card class="stats-card">
               <mat-card-header>
-                <mat-card-title>Status</mat-card-title>
+                <mat-card-title>STATUS</mat-card-title>
               </mat-card-header>
               <mat-card-content>
                 <div class="chart-container">
@@ -78,8 +78,17 @@
           <!-- Sezione ricerca offerte -->
 
             <div class="offers-active-card">
-              <div class="offers-active-title">Offerte disponibili</div>
-              <table class="offers-active-table">
+              <div class="offers-active-title">OFFERTE ATTIVE</div>
+              
+              <!-- Messaggio quando non ci sono offerte attive -->
+              <div *ngIf="getOfferteAttive().length === 0" class="no-active-offers">
+                <div class="no-offers-icon">✨</div>
+                <h3 class="no-offers-title">Nessuna offerta attiva al momento</h3>
+                <p class="no-offers-subtitle">Scopri le nostre offerte disponibili e inizia a risparmiare!</p>
+              </div>
+
+              <!-- Tabella offerte attive -->
+              <table *ngIf="getOfferteAttive().length > 0" class="offers-active-table">
                 <thead>
                   <tr>
                     <th>Tipo</th>
@@ -90,7 +99,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let offerta of offerte">
+                  <tr *ngFor="let offerta of getOfferteAttive()">
                     <td>
                       <ng-container *ngIf="offerta.tipo.toLowerCase() === 'gas'; else otherType">
                         <span style="display:inline-block; vertical-align:middle; margin-right:6px; font-size:1.3em;">🔥</span>
@@ -119,7 +128,7 @@
                 </tbody>
               </table>
               <button class="offers-active-link" (click)="vaiAlleOfferte()" style="border:none; background:#19d219; color:#fff; padding:10px 22px; border-radius:8px; font-size:1.1rem; font-weight:600; cursor:pointer; transition:background 0.2s;">
-                Vedi tutte le altre offerte per te
+                Vedi tutte le offerte disponibili per te
               </button>
             </div>
 

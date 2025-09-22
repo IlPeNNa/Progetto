@@ -46,10 +46,9 @@ export class GamificationComponent {
         const res = this.getLivelloEPercentuale(this.punti);
         this.livello = res.livello;
         this.percentualeCompletamento = res.percentuale;
-
-        this.utenteService.getScontoUtente(cf).subscribe(sconto => {
-          this.sconto = sconto;
-        });
+        
+        // Calcola lo sconto direttamente dal livello (1% per livello)
+        this.sconto = this.getScontoPercentuale();
       });
     }
       // Recupera la classifica utenti
@@ -67,23 +66,69 @@ export class GamificationComponent {
     this.router.navigate(['/auth']);
   }
 
-  getLivelloEPercentuale(punti: number): { livello: number, percentuale: number } {
-    let livello = 0;
-    let percentuale = 0;
-
-    if (punti < 10) {
-      livello = 0;
-      percentuale = punti * 10;
-    } else if (punti < 100) {
-      livello = Math.floor(punti / 10);
-      percentuale = (punti % 10) * 10;
-    } else {
-      livello = Math.floor(punti / 10);
-      percentuale = (punti % 10) * 10;
+  // Calcola i punti totali necessari per raggiungere un determinato livello
+  // Livello 1: 10, Livello 2: 25 (10+15), Livello 3: 45 (10+15+20), ecc.
+  getPuntiPerLivello(livello: number): number {
+    if (livello === 0) return 0;
+    
+    let puntiTotali = 0;
+    for (let i = 1; i <= livello; i++) {
+      puntiTotali += 10 + (i - 1) * 5; // Livello i richiede 10 + (i-1)*5 punti
     }
+    return puntiTotali;
+  }
 
-    console.log(`Livello: ${livello}, Percentuale: ${percentuale}`);
+  // Calcola il livello attuale basato sui punti posseduti
+  calcolaLivelloAttuale(punti: number): number {
+    let livello = 0;
+    while (this.getPuntiPerLivello(livello + 1) <= punti) {
+      livello++;
+    }
+    return livello;
+  }
+
+  getLivelloEPercentuale(punti: number): { livello: number, percentuale: number } {
+    const livello = this.calcolaLivelloAttuale(punti);
+    
+    // Punti necessari per il livello attuale e il prossimo
+    const puntiLivelloAttuale = this.getPuntiPerLivello(livello);
+    const puntiProssimoLivello = this.getPuntiPerLivello(livello + 1);
+    
+    // Punti nel livello corrente e punti necessari per completarlo
+    const puntiNelLivello = punti - puntiLivelloAttuale;
+    const puntiNecessariPerLivello = puntiProssimoLivello - puntiLivelloAttuale;
+    
+    // Percentuale di completamento verso il prossimo livello
+    const percentuale = (puntiNelLivello / puntiNecessariPerLivello) * 100;
+
+    console.log(`Punti: ${punti}, Livello: ${livello}, Percentuale completamento: ${percentuale.toFixed(1)}%`);
+    console.log(`Punti per livello ${livello}: ${puntiLivelloAttuale}, Punti per livello ${livello + 1}: ${puntiProssimoLivello}`);
 
     return { livello, percentuale };
+  }
+
+  // Calcola lo sconto basato sul livello (1% per livello, massimo 70%)
+  getScontoPercentuale(): number {
+    return Math.min(this.livello, 70); // Massimo 70% di sconto
+  }
+
+  // Funzione helper per ottenere i punti necessari per il prossimo livello
+  getPuntiPerProssimoLivello(): number {
+    const puntiAttualeLivello = this.getPuntiPerLivello(this.livello);
+    const puntiProssimoLivello = this.getPuntiPerLivello(this.livello + 1);
+    return puntiProssimoLivello - this.punti;
+  }
+
+  // Funzione helper per ottenere quanti punti servono per completare il livello attuale
+  getPuntiNelLivelloCorrente(): number {
+    const puntiAttualeLivello = this.getPuntiPerLivello(this.livello);
+    return this.punti - puntiAttualeLivello;
+  }
+
+  // Funzione helper per ottenere quanti punti servono in totale per il livello corrente
+  getPuntiTotaliLivelloCorrente(): number {
+    const puntiAttualeLivello = this.getPuntiPerLivello(this.livello);
+    const puntiProssimoLivello = this.getPuntiPerLivello(this.livello + 1);
+    return puntiProssimoLivello - puntiAttualeLivello;
   }
 }

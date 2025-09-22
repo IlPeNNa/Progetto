@@ -10,19 +10,42 @@
     </div>
     <form (ngSubmit)="effettuaPagamento()">
       <label>Nome titolare:
-        <input [(ngModel)]="pagamentoForm.nomeTitolare" name="nomeTitolare" required />
+        <input [(ngModel)]="pagamentoForm.nomeTitolare" 
+               name="nomeTitolare" 
+               placeholder="Mario"
+               required />
       </label>
       <label>Cognome titolare:
-        <input [(ngModel)]="pagamentoForm.cognomeTitolare" name="cognomeTitolare" required />
+        <input [(ngModel)]="pagamentoForm.cognomeTitolare" 
+               name="cognomeTitolare" 
+               placeholder="Rossi"
+               required />
       </label>
         <label>Codice carta:
-          <input [(ngModel)]="pagamentoForm.codiceCarta" name="codiceCarta" maxlength="16" pattern="^[0-9]{16}$" required />
+          <input [(ngModel)]="pagamentoForm.codiceCarta" 
+                 name="codiceCarta" 
+                 maxlength="19" 
+                 placeholder="1234 5678 9012 3456"
+                 (input)="formatCodiceCarta($event)"
+                 pattern="^[0-9]{4}\s[0-9]{4}\s[0-9]{4}\s[0-9]{4}$" 
+                 required />
         </label>
         <label>CVV:
-          <input [(ngModel)]="pagamentoForm.cvv" name="cvv" maxlength="3" pattern="^[0-9]{3}$" required />
+          <input [(ngModel)]="pagamentoForm.cvv" 
+                 name="cvv"
+                 maxlength="3" 
+                 placeholder="123"
+                 pattern="^[0-9]{3}$" 
+                 required />
         </label>
-          <label>Scadenza (MM/YY):
-            <input [(ngModel)]="pagamentoForm.scadenza" name="scadenza" maxlength="5" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$" required />
+          <label>Scadenza (MM/AA):
+            <input [(ngModel)]="pagamentoForm.scadenza" 
+                   name="scadenza" 
+                   maxlength="5" 
+                   placeholder="12/25"
+                   (input)="formatScadenza($event)"
+                   pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$" 
+                   required />
           </label><br>
       <div *ngIf="erroreScadenza" class="errore">{{ erroreScadenza }}</div>
       <br>

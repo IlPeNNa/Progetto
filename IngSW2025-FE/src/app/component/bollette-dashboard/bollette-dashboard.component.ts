@@ -264,23 +264,107 @@ export class BolletteDashboardComponent implements OnInit {
 
   onPagamentoEffettuato(cvv: string) {
     if (this.bollettaSelezionata && this.bollettaSelezionata.id) {
-      this.bollettaService.marcaComePagato(this.bollettaSelezionata.id, cvv).subscribe({
-        next: (sconto) => {
-          if (sconto > 0) {
-            alert(`Pagamento effettuato con successo!\nApplicato uno sconto del ${sconto}%.`);
-          } else {
-            alert('Pagamento effettuato con successo!');
+      // Prima ottengo lo sconto dell'utente corrente
+      const utente = this.authService.getCurrentUser();
+      if (utente && utente.cf) {
+        // Ottengo i dati dell'utente per avere i punti attuali
+        this.authService.getUtenteByCf(utente.cf).subscribe({
+          next: (utenteCompleto) => {
+            const puntiAttuali = utenteCompleto.punti || 0;
+            const importoOriginale = this.bollettaSelezionata!.importo;
+            
+            // Calcolo il livello massimo che l'utente può raggiungere con i suoi punti attuali
+            let livelloMassimoDisponibile = 0;
+            let puntiTotaliUsati = 0;
+            for (let i = 1; i <= 70; i++) {
+              const puntiPerQuestoLivello = 10 + (i - 1) * 5; // Sistema progressivo
+              if (puntiTotaliUsati + puntiPerQuestoLivello <= puntiAttuali) {
+                puntiTotaliUsati += puntiPerQuestoLivello;
+                livelloMassimoDisponibile = i;
+              } else {
+                break;
+              }
+            }
+            
+            // L'utente può scegliere di usare tutto il suo sconto disponibile
+            const scontoPercentualeDisponibile = Math.min(livelloMassimoDisponibile, 70);
+            const scontoInEuro = (importoOriginale * scontoPercentualeDisponibile) / 100;
+            const importoFinale = Math.max(0, importoOriginale - scontoInEuro);
+            
+            // Calcolo i punti esatti da usare per applicare lo sconto
+            // Uso solo i punti necessari per raggiungere il livello di sconto applicato
+            let puntiUsatiPerSconto = 0;
+            for (let i = 1; i <= scontoPercentualeDisponibile; i++) {
+              puntiUsatiPerSconto += 10 + (i - 1) * 5; // Sistema progressivo
+            }
+            
+            // Calcolo punti bonus per pagamento anticipato (se prima della scadenza)
+            const dataScadenza = new Date(this.bollettaSelezionata!.scadenza);
+            const oggi = new Date();
+            const puntiBonus = dataScadenza > oggi ? 30 : 0;
+            
+            // I punti utilizzati sono solo quelli per il livello di sconto applicato
+            const puntiUsati = puntiUsatiPerSconto;
+            const puntiRimanenti = puntiAttuali - puntiUsati + puntiBonus;
+            
+            // Procedo con il pagamento (il backend dovrebbe detrarre i punti usati)
+            this.bollettaService.marcaComePagato(this.bollettaSelezionata!.id!, cvv).subscribe({
+              next: (sconto) => {
+                let messaggio = 'Pagamento effettuato con successo!';
+                if (scontoInEuro > 0) {
+                  messaggio += `\n\nDettagli pagamento:`;
+                  messaggio += `\nImporto originale: €${importoOriginale.toFixed(2)}`;
+                  messaggio += `\nSconto applicato (${scontoPercentualeDisponibile}%): -€${scontoInEuro.toFixed(2)}`;
+                  messaggio += `\nImporto pagato: €${importoFinale.toFixed(2)}`;
+                } else {
+                  messaggio += `\nImporto pagato: €${importoOriginale.toFixed(2)}`;
+                }
+                alert(messaggio);
+                this.loadBollette();
+              },
+              error: () => {
+                alert('Errore durante il pagamento.');
+              },
+              complete: () => {
+                this.pagamentoPopupVisible = false;
+                this.bollettaSelezionata = null;
+              }
+            });
+          },
+          error: () => {
+            // Se non riesco a ottenere i dati utente, procedo con pagamento senza sconto
+            this.bollettaService.marcaComePagato(this.bollettaSelezionata!.id!, cvv).subscribe({
+              next: (sconto) => {
+                const importoOriginale = this.bollettaSelezionata!.importo;
+                alert(`Pagamento effettuato con successo!\nImporto pagato: €${importoOriginale.toFixed(2)}`);
+                this.loadBollette();
+              },
+              error: () => {
+                alert('Errore durante il pagamento.');
+              },
+              complete: () => {
+                this.pagamentoPopupVisible = false;
+                this.bollettaSelezionata = null;
+              }
+            });
           }
-          this.loadBollette();
-        },
-        error: () => {
-          alert('Errore durante il pagamento.');
-        },
-        complete: () => {
-          this.pagamentoPopupVisible = false;
-          this.bollettaSelezionata = null;
-        }
-      });
+        });
+      } else {
+        // Utente non valido, pagamento senza sconto
+        this.bollettaService.marcaComePagato(this.bollettaSelezionata.id, cvv).subscribe({
+          next: (sconto) => {
+            alert('Pagamento effettuato con successo!');
+            this.loadBollette();
+          },
+          error: () => {
+            alert('Errore durante il pagamento.');
+          },
+          complete: () => {
+            this.pagamentoPopupVisible = false;
+            this.bollettaSelezionata = null;
+          }
+        });
+      }
     } else {
       this.pagamentoPopupVisible = false;
       this.bollettaSelezionata = null;
@@ -446,6 +530,10 @@ export class BolletteDashboardComponent implements OnInit {
       return 'Disattiva';
     }
     return isAttivata ? 'Attivata' : 'Attiva';
+  }
+
+  getOfferteAttive(): Offerta[] {
+    return this.offerte.filter(offerta => this.getDataAttivazione(offerta));
   }
 }
 
