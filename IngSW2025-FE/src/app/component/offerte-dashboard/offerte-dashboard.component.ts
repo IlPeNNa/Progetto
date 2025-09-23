@@ -118,16 +118,52 @@ export class OfferteDashboardComponent implements OnInit {
   }
 
   attivaOfferta(offerta: Offerta): void {
-  const utente = this.authService.getCurrentUser();
-  if (!utente || !utente.cf) {
-    alert('Utente non valido');
-    return;
+    const utente = this.authService.getCurrentUser();
+    if (!utente || !utente.cf) {
+      alert('Utente non valido');
+      return;
+    }
+
+    // Controlla se esiste già un'offerta attiva dello stesso tipo
+    const offertaStessoTipoAttiva = this.offerte.find(o => 
+      o.tipo === offerta.tipo && 
+      o.idOfferta !== offerta.idOfferta && 
+      this.getAttivazionePerOfferta(o)
+    );
+
+    if (offertaStessoTipoAttiva) {
+      const conferma = confirm(
+        `Hai già un'offerta ${offerta.tipo} attiva (${offertaStessoTipoAttiva.fornitore?.nome}).\n\n` +
+        `Per attivare questa nuova offerta devi prima disattivare quella esistente.\n\n` +
+        `Vuoi disattivare l'offerta attuale e attivare questa nuova?`
+      );
+      
+      if (!conferma) {
+        return; // L'utente ha annullato
+      }
+
+      // Disattiva prima l'offerta esistente
+      this.annullaOfferta(offertaStessoTipoAttiva);
+      
+      // Aspetta un momento per completare la disattivazione, poi attiva la nuova
+      setTimeout(() => {
+        this.procediConAttivazioneOfferte(offerta, utente.cf!);
+      }, 500);
+      
+      return;
+    }
+
+    // Se non ci sono conflitti, procedi direttamente con l'attivazione
+    this.procediConAttivazioneOfferte(offerta, utente.cf);
   }
-  const attivazione: Attiva = {
-    cf: utente.cf,
-    idOfferta: offerta.idOfferta,
-    dataAttivazione: new Date().toISOString().split('T')[0]
-  };
+
+  private procediConAttivazioneOfferte(offerta: Offerta, cf: string): void {
+    const attivazione: Attiva = {
+      cf: cf,
+      idOfferta: offerta.idOfferta,
+      dataAttivazione: new Date().toISOString().split('T')[0]
+    };
+    
     this.offertaService.attivaOffertaPerUtente(attivazione).subscribe(
       (res: Attiva) => {
         alert('Offerta attivata correttamente!\nData: ' + attivazione.dataAttivazione);

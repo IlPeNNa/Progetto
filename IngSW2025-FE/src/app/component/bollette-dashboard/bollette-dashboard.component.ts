@@ -480,11 +480,47 @@ export class BolletteDashboardComponent implements OnInit {
       alert('Utente non valido');
       return;
     }
+
+    // Controlla se esiste già un'offerta attiva dello stesso tipo
+    const offertaStessoTipoAttiva = this.offerte.find(o => 
+      o.tipo === offerta.tipo && 
+      o.idOfferta !== offerta.idOfferta && 
+      this.getDataAttivazione(o)
+    );
+
+    if (offertaStessoTipoAttiva) {
+      const conferma = confirm(
+        `Hai già un'offerta ${offerta.tipo} attiva (${offertaStessoTipoAttiva.fornitore?.nome}).\n\n` +
+        `Per attivare questa nuova offerta devi prima disattivare quella esistente.\n\n` +
+        `Vuoi disattivare l'offerta attuale e attivare questa nuova?`
+      );
+      
+      if (!conferma) {
+        return; // L'utente ha annullato
+      }
+
+      // Disattiva prima l'offerta esistente
+      this.annullaOfferta(offertaStessoTipoAttiva);
+      
+      // Aspetta un momento per completare la disattivazione, poi attiva la nuova
+      setTimeout(() => {
+        this.procediConAttivazione(offerta, utente.cf!);
+      }, 500);
+      
+      return;
+    }
+
+    // Se non ci sono conflitti, procedi direttamente con l'attivazione
+    this.procediConAttivazione(offerta, utente.cf);
+  }
+
+  private procediConAttivazione(offerta: Offerta, cf: string): void {
     const attivazione: Attiva = {
-      cf: utente.cf,
+      cf: cf,
       idOfferta: offerta.idOfferta,
       dataAttivazione: new Date().toISOString().split('T')[0]
     };
+    
     this.offertaService.attivaOffertaPerUtente(attivazione).subscribe(
       (res: Attiva) => {
         alert('Offerta attivata correttamente!\nData: ' + attivazione.dataAttivazione);
