@@ -118,7 +118,17 @@
           <tbody>
             <tr *ngFor="let b of bollettePagate">
               <td>{{b.dataPagamento | date}}</td>
-              <td>{{b.tipologia}}</td>
+              <td>
+                <ng-container *ngIf="b.tipologia?.toLowerCase() === 'acqua'; else iconaNormale">
+                  <span style="font-size:1.3em;vertical-align:middle;margin-right:6px;">💧</span>
+                </ng-container>
+                <ng-template #iconaNormale>
+                  <mat-icon [class]="'icon-' + b.tipologia?.toLowerCase()" style="vertical-align:middle;margin-right:6px;font-size:1.2em;">
+                    {{getTipoIcon(b.tipologia)}}
+                  </mat-icon>
+                </ng-template>
+                {{b.tipologia}}
+              </td>
               <td>{{b.importo | currency:'EUR'}}</td>
             </tr>
           </tbody>

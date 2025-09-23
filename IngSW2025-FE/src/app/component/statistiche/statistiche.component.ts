@@ -320,4 +320,22 @@ export class StatisticheComponent implements OnInit {
     const totaleTipo = bolletteTipo.reduce((sum, b) => sum + (b.importo || 0), 0);
     return totaleTipo / bolletteTipo.length;
   }
+
+  getTipoIcon(tipologia: string | undefined): string {
+    if (!tipologia) return 'receipt';
+    switch (tipologia.toLowerCase()) {
+      case 'gas':
+        return 'local_gas_station';
+      case 'luce':
+        return 'lightbulb';
+      case 'wifi':
+        return 'wifi';
+      case 'acqua':
+        return 'water_drop';
+      case 'rifiuti':
+        return 'delete';
+      default:
+        return 'receipt';
+    }
+  }
 }

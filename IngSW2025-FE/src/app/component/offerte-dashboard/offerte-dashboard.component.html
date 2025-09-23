@@ -117,9 +117,11 @@
               </td>
               <td>
                 <button class="btn-attiva"
-                        (click)="attivaOfferta(offerta)"
-                        [disabled]="getAttivazionePerOfferta(offerta)">
-                  {{ getAttivazionePerOfferta(offerta) ? 'Attivata' : 'Attiva' }}
+                        (click)="onButtonClick(offerta)"
+                        (mouseenter)="onButtonHover(offerta.idOfferta)"
+                        (mouseleave)="onButtonLeave()"
+                        [ngClass]="{'btn-attivata': getAttivazionePerOfferta(offerta), 'btn-hover-disattiva': getAttivazionePerOfferta(offerta) && hoveredOffertaId === offerta.idOfferta}">
+                  {{ getButtonText(offerta) }}
                 </button>
               </td>
             </tr>

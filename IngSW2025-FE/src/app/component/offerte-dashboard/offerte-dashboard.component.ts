@@ -48,6 +48,7 @@ export class OfferteDashboardComponent implements OnInit {
   ) {}
 
   offerteAttivate: Attiva[] = [];
+  hoveredOffertaId: number | null = null;
 
   caricaOfferteAttivateDaUtente(): void {
     const utente = this.authService.getCurrentUser();
@@ -169,5 +170,30 @@ export class OfferteDashboardComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth']);
+  }
+
+  onButtonHover(offertaId: number): void {
+    this.hoveredOffertaId = offertaId;
+  }
+
+  onButtonLeave(): void {
+    this.hoveredOffertaId = null;
+  }
+
+  getButtonText(offerta: Offerta): string {
+    const isAttivata = this.getAttivazionePerOfferta(offerta);
+    if (isAttivata && this.hoveredOffertaId === offerta.idOfferta) {
+      return 'Disattiva';
+    }
+    return isAttivata ? 'Attivata' : 'Attiva';
+  }
+
+  onButtonClick(offerta: Offerta): void {
+    const isAttivata = this.getAttivazionePerOfferta(offerta);
+    if (isAttivata) {
+      this.annullaOfferta(offerta);
+    } else {
+      this.attivaOfferta(offerta);
+    }
   }
 }

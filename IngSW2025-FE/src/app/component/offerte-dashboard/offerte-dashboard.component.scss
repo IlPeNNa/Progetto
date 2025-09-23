@@ -186,6 +186,20 @@
   box-shadow: 0 4px 16px #43a04722;
 }
 
+/* Stile per pulsante "Attivata" */
+.btn-attiva.btn-attivata {
+  background: linear-gradient(90deg, #4caf50 0%, #81c784 100%);
+  cursor: pointer;
+  box-shadow: 0 2px 8px #4caf5033;
+}
+
+/* Stile per hover su pulsante attivata (mostra "Disattiva") */
+.btn-attiva.btn-hover-disattiva {
+  background: linear-gradient(90deg, #f44336 0%, #ff5722 100%);
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px #f4433622;
+}
+
 .btn-annulla {
   background: linear-gradient(90deg, #f44336 0%, #ff9800 100%);
   color: #fff;

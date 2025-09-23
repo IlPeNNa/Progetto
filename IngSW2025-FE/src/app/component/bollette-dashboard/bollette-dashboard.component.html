@@ -117,7 +117,7 @@
                     <td>{{ offerta.dataFine | date:'dd/MM/yyyy' }}</td>
                     <td>
                       <button class="btn-attiva"
-                              [ngClass]="getDataAttivazione(offerta) ? 'btn-annulla' : 'btn-attiva'"
+                              [ngClass]="{'btn-attivata': getDataAttivazione(offerta), 'btn-hover-disattiva': getDataAttivazione(offerta) && hoveredOffertaId === offerta.idOfferta}"
                               (click)="getDataAttivazione(offerta) ? annullaOfferta(offerta) : attivaOfferta(offerta)"
                               (mouseenter)="onButtonHover(offerta.idOfferta)"
                               (mouseleave)="onButtonLeave()">
