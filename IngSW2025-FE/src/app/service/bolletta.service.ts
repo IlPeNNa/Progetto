@@ -97,8 +97,12 @@ export class BollettaService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  marcaComePagato(id: string, cvv: string): Observable<number> {
-    return this.http.patch<number>(`${this.apiUrl}/${id}/pagato`, { cvv });
+  marcaComePagato(id: string, cvv: string, scontoScelto?: number): Observable<number> {
+    const payload: any = { cvv };
+    if (scontoScelto !== undefined && scontoScelto > 0) {
+      payload.scontoScelto = scontoScelto;
+    }
+    return this.http.patch<number>(`${this.apiUrl}/${id}/pagato`, payload);
   }
   
 }

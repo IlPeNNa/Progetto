@@ -67,15 +67,9 @@ export class GamificationComponent {
   }
 
   // Calcola i punti totali necessari per raggiungere un determinato livello
-  // Livello 1: 10, Livello 2: 25 (10+15), Livello 3: 45 (10+15+20), ecc.
+  // Sistema fisso: 50 punti per ogni livello (Livello 1: 50, Livello 2: 100, Livello 3: 150, ecc.)
   getPuntiPerLivello(livello: number): number {
-    if (livello === 0) return 0;
-    
-    let puntiTotali = 0;
-    for (let i = 1; i <= livello; i++) {
-      puntiTotali += 10 + (i - 1) * 5; // Livello i richiede 10 + (i-1)*5 punti
-    }
-    return puntiTotali;
+    return livello * 50;
   }
 
   // Calcola il livello attuale basato sui punti posseduti

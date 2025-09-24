@@ -262,7 +262,7 @@ export class BolletteDashboardComponent implements OnInit {
     this.pagamentoPopupVisible = true;
   }
 
-  onPagamentoEffettuato(cvv: string) {
+  onPagamentoEffettuato(datiPagamento: { cvv: string, scontoScelto: number }) {
     if (this.bollettaSelezionata && this.bollettaSelezionata.id) {
       // Prima ottengo lo sconto dell'utente corrente
       const utente = this.authService.getCurrentUser();
@@ -273,30 +273,13 @@ export class BolletteDashboardComponent implements OnInit {
             const puntiAttuali = utenteCompleto.punti || 0;
             const importoOriginale = this.bollettaSelezionata!.importo;
             
-            // Calcolo il livello massimo che l'utente può raggiungere con i suoi punti attuali
-            let livelloMassimoDisponibile = 0;
-            let puntiTotaliUsati = 0;
-            for (let i = 1; i <= 70; i++) {
-              const puntiPerQuestoLivello = 10 + (i - 1) * 5; // Sistema progressivo
-              if (puntiTotaliUsati + puntiPerQuestoLivello <= puntiAttuali) {
-                puntiTotaliUsati += puntiPerQuestoLivello;
-                livelloMassimoDisponibile = i;
-              } else {
-                break;
-              }
-            }
-            
-            // L'utente può scegliere di usare tutto il suo sconto disponibile
-            const scontoPercentualeDisponibile = Math.min(livelloMassimoDisponibile, 70);
-            const scontoInEuro = (importoOriginale * scontoPercentualeDisponibile) / 100;
+            // Uso lo sconto scelto dall'utente
+            const scontoPercentualeApplicato = datiPagamento.scontoScelto || 0;
+            const scontoInEuro = (importoOriginale * scontoPercentualeApplicato) / 100;
             const importoFinale = Math.max(0, importoOriginale - scontoInEuro);
             
-            // Calcolo i punti esatti da usare per applicare lo sconto
-            // Uso solo i punti necessari per raggiungere il livello di sconto applicato
-            let puntiUsatiPerSconto = 0;
-            for (let i = 1; i <= scontoPercentualeDisponibile; i++) {
-              puntiUsatiPerSconto += 10 + (i - 1) * 5; // Sistema progressivo
-            }
+            // Calcolo i punti da detrarre (50 punti per ogni 1% di sconto)
+            const puntiUsatiPerSconto = scontoPercentualeApplicato * 50;
             
             // Calcolo punti bonus per pagamento anticipato (se prima della scadenza)
             const dataScadenza = new Date(this.bollettaSelezionata!.scadenza);
@@ -308,13 +291,13 @@ export class BolletteDashboardComponent implements OnInit {
             const puntiRimanenti = puntiAttuali - puntiUsati + puntiBonus;
             
             // Procedo con il pagamento (il backend dovrebbe detrarre i punti usati)
-            this.bollettaService.marcaComePagato(this.bollettaSelezionata!.id!, cvv).subscribe({
+            this.bollettaService.marcaComePagato(this.bollettaSelezionata!.id!, datiPagamento.cvv, datiPagamento.scontoScelto).subscribe({
               next: (sconto) => {
                 let messaggio = 'Pagamento effettuato con successo!';
                 if (scontoInEuro > 0) {
                   messaggio += `\n\nDettagli pagamento:`;
                   messaggio += `\nImporto originale: €${importoOriginale.toFixed(2)}`;
-                  messaggio += `\nSconto applicato (${scontoPercentualeDisponibile}%): -€${scontoInEuro.toFixed(2)}`;
+                  messaggio += `\nSconto applicato (${scontoPercentualeApplicato}%): -€${scontoInEuro.toFixed(2)}`;
                   messaggio += `\nImporto pagato: €${importoFinale.toFixed(2)}`;
                 } else {
                   messaggio += `\nImporto pagato: €${importoOriginale.toFixed(2)}`;
@@ -333,7 +316,7 @@ export class BolletteDashboardComponent implements OnInit {
           },
           error: () => {
             // Se non riesco a ottenere i dati utente, procedo con pagamento senza sconto
-            this.bollettaService.marcaComePagato(this.bollettaSelezionata!.id!, cvv).subscribe({
+            this.bollettaService.marcaComePagato(this.bollettaSelezionata!.id!, datiPagamento.cvv, 0).subscribe({
               next: (sconto) => {
                 const importoOriginale = this.bollettaSelezionata!.importo;
                 alert(`Pagamento effettuato con successo!\nImporto pagato: €${importoOriginale.toFixed(2)}`);
@@ -351,7 +334,7 @@ export class BolletteDashboardComponent implements OnInit {
         });
       } else {
         // Utente non valido, pagamento senza sconto
-        this.bollettaService.marcaComePagato(this.bollettaSelezionata.id, cvv).subscribe({
+        this.bollettaService.marcaComePagato(this.bollettaSelezionata.id, datiPagamento.cvv, 0).subscribe({
           next: (sconto) => {
             alert('Pagamento effettuato con successo!');
             this.loadBollette();

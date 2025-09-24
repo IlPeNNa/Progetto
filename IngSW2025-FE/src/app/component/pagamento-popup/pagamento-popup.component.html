@@ -48,6 +48,45 @@
                    required />
           </label><br>
       <div *ngIf="erroreScadenza" class="errore">{{ erroreScadenza }}</div>
+      
+      <!-- Sezione selezione sconto -->
+      <div class="sconto-section" *ngIf="opzioniSconto.length > 0">
+        <h4>Seleziona sconto disponibile:</h4>
+        <div class="sconto-info">
+          <p>I tuoi punti: {{ puntiUtente }} (Livello {{ livelloUtente }})</p>
+          <p>Sconto massimo disponibile: {{ scontoMassimoDisponibile }}%</p>
+        </div>
+        
+        <div class="sconto-options">
+          <label class="sconto-option">
+            <input type="radio" 
+                   name="scontoScelto" 
+                   [value]="0" 
+                   [(ngModel)]="scontoSelezionato"
+                   (change)="calcolaImportoConSconto()">
+            Nessuno sconto (0%)
+          </label>
+          
+          <label class="sconto-option" *ngFor="let opzione of opzioniSconto">
+            <input type="radio" 
+                   name="scontoScelto" 
+                   [value]="opzione.percentuale" 
+                   [(ngModel)]="scontoSelezionato"
+                   (change)="calcolaImportoConSconto()">
+            {{ opzione.percentuale }}% di sconto (costa {{ opzione.costoInPunti }} punti)
+          </label>
+        </div>
+        
+        <div class="sconto-preview" *ngIf="scontoSelezionato > 0">
+          <p><strong>Anteprima:</strong></p>
+          <p>Importo originale: €{{ bolletta.importo }}</p>
+          <p>Sconto applicato: {{ scontoSelezionato }}%</p>
+          <p>Risparmio: €{{ (bolletta.importo * scontoSelezionato / 100).toFixed(2) }}</p>
+          <p><strong>Importo finale: €{{ importoFinale.toFixed(2) }}</strong></p>
+          <p>Punti che verranno detratti: {{ scontoSelezionato * 50 }}</p>
+        </div>
+      </div>
+      
       <br>
       <button type="submit">Effettua pagamento</button>
       <button type="button" (click)="chiudiPopup()">Annulla</button>

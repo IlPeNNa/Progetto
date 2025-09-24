@@ -132,22 +132,74 @@ export class AuthComponent {
       next: (response) => {
         this.isLoading = false;
         if (response.success && response.utente) {
-          // Aggiorna accesso e punti dopo login
-          this.authService.updateAccessoUtente(response.utente.cf!).subscribe({
-            next: (utenteAggiornato) => {
-              // Mostra notifica se sono stati guadagnati punti
-              const puntiPrecedenti = response.utente?.punti || 0;
-              if (utenteAggiornato.punti && utenteAggiornato.punti > puntiPrecedenti) {
-                alert(`Complimenti! Hai guadagnato +${utenteAggiornato.punti - puntiPrecedenti} punti per l'accesso giornaliero!`);
+          // Controlla la data dell'ultimo accesso dal database
+          const oggi = new Date().toDateString();
+          const ultimoAccessoDb = response.utente?.ultimo_accesso;
+          let dataUltimoAccessoDb = '';
+          
+          if (ultimoAccessoDb) {
+            dataUltimoAccessoDb = new Date(ultimoAccessoDb).toDateString();
+          }
+          
+          // FALLBACK: Se il backend non gestisce ultimo_accesso, usa localStorage
+          let isPrimoLoginOggi = false;
+          
+          if (ultimoAccessoDb && ultimoAccessoDb !== null) {
+            // Il backend ha restituito ultimo_accesso -> usalo
+            isPrimoLoginOggi = dataUltimoAccessoDb !== oggi;
+            console.log('✅ Usando data dal database per controllo daily login');
+          } else {
+            // Il backend non ha ultimo_accesso -> usa localStorage specifico per utente
+            const chiaveUtente = `ultimoLogin_${response.utente.cf}`;
+            const ultimoLoginLocalStorage = localStorage.getItem(chiaveUtente);
+            isPrimoLoginOggi = !ultimoLoginLocalStorage || ultimoLoginLocalStorage !== oggi;
+            console.log(`⚠️ Backend non ha ultimo_accesso, usando localStorage come fallback per utente ${response.utente.cf}`);
+          }
+          
+          // DEBUG: Stampa tutti i valori per il debug
+          console.log('🔍 DEBUG DAILY LOGIN:');
+          console.log('Utente completo dal DB:', response.utente);
+          console.log('ultimoAccessoDb (valore grezzo):', ultimoAccessoDb);
+          console.log('dataUltimoAccessoDb (convertita):', dataUltimoAccessoDb);
+          console.log('oggi:', oggi);
+          console.log('isPrimoLoginOggi:', isPrimoLoginOggi);
+          
+          if (isPrimoLoginOggi) {
+            // La data nel DB è diversa da oggi -> primo login giornaliero
+            
+            // Aggiorna accesso e punti nel database
+            this.authService.updateAccessoUtente(response.utente.cf!).subscribe({
+              next: (utenteAggiornato) => {
+                
+                // Mostra alert per il bonus giornaliero
+                alert('Complimenti! Hai guadagnato +10 punti per l\'accesso giornaliero!');
+                
+                // Salva la data di oggi nel localStorage per il controllo futuro (specifico per utente)
+                const chiaveUtente = `ultimoLogin_${response.utente?.cf}`;
+                localStorage.setItem(chiaveUtente, oggi);
+                
+                // Salva utente aggiornato e naviga
+                localStorage.setItem('utente', JSON.stringify(utenteAggiornato));
+                this.router.navigate(['/bollette']);
+              },
+              error: (error) => {
+                alert('Complimenti! Hai guadagnato +10 punti per l\'accesso giornaliero!');
+                
+                // Salva la data di oggi nel localStorage per il controllo futuro (specifico per utente)
+                const chiaveUtente = `ultimoLogin_${response.utente?.cf}`;
+                localStorage.setItem(chiaveUtente, oggi);
+                
+                localStorage.setItem('utente', JSON.stringify(response.utente));
+                this.router.navigate(['/bollette']);
               }
-              localStorage.setItem('utente', JSON.stringify(utenteAggiornato));
-              this.router.navigate(['/bollette']);
-            },
-            error: (error) => {
-              console.error('Errore aggiornamento accesso:', error);
-              this.router.navigate(['/bollette']); // Prosegui comunque
-            }
-          });
+            });
+          } else {
+            // La data nel DB è uguale a oggi -> non è il primo login
+            
+            // Non fare nulla nel database, non mostrare alert
+            localStorage.setItem('utente', JSON.stringify(response.utente));
+            this.router.navigate(['/bollette']);
+          }
         } else {
           this.errorMessage = response.message || 'Email o password non corretti';
         }

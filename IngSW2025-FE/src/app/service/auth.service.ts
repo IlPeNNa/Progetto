@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError, of } from 'rxjs';
+import { map, catchError, timeout } from 'rxjs/operators';
 import { LoginRequest, LoginResponse, RegistrationRequest, Utente } from '../dto/auth.model';
 
 @Injectable({
@@ -89,7 +89,18 @@ export class AuthService {
 
   // Aggiorna ultimo accesso e punti utente
   updateAccessoUtente(cf: string): Observable<Utente> {
-    return this.http.put<Utente>(`${this.apiUrl}/${cf}/accesso`, {}, this.httpOptions);
+    return this.http.put<Utente>(`${this.apiUrl}/${cf}/accesso`, {}, this.httpOptions).pipe(
+      timeout(5000), // Timeout di 5 secondi per evitare attese troppo lunghe
+      catchError(error => {
+        console.error('Errore chiamata endpoint accesso:', error);
+        // In caso di errore, ritorna i dati utente dal localStorage
+        const utente = this.getCurrentUser();
+        if (utente) {
+          return of(utente);
+        }
+        return throwError(() => error);
+      })
+    );
   }
 
   // Recupera la classifica utenti ordinata per punti

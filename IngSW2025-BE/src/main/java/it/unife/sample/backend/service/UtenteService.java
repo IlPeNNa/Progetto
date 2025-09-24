@@ -57,7 +57,8 @@ public class UtenteService {
     }
 
     public int calcolaScontoProgressivo(int punti) {
-        return punti / 100; // 1% di sconto ogni 100 punti
+        int livello = punti / 50; // 1 livello ogni 50 punti
+        return Math.min(livello, 70); // Massimo 70% di sconto
     }
 
     // Aggiorna utente esistente
@@ -83,7 +84,12 @@ public class UtenteService {
 
     // Login con mail e password
     public Optional<Utente> login(String mail, String password) {
-        return repo.findByMailAndPassword(mail, password);
+        Optional<Utente> utenteOpt = repo.findByMailAndPassword(mail, password);
+        if (utenteOpt.isPresent()) {
+            // Aggiorna l'accesso e applica bonus giornaliero
+            return aggiornaAccesso(utenteOpt.get().getCf());
+        }
+        return utenteOpt;
     }
 
     // Verifica se il login è valido

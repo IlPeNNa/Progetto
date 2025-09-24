@@ -27,11 +27,16 @@ import it.unife.sample.backend.service.UtenteService;
 @RequestMapping("/api/bollette")
 @CrossOrigin(origins = "*")
 public class BollettaController {
-    // Classe per la richiesta di pagamento (CVV)
+    // Classe per la richiesta di pagamento (CVV e sconto)
     public static class PagamentoRequest {
         private String cvv;
+        private Integer scontoScelto; // Percentuale di sconto scelta dall'utente (0-70)
+        
         public String getCvv() { return cvv; }
         public void setCvv(String cvv) { this.cvv = cvv; }
+        
+        public Integer getScontoScelto() { return scontoScelto; }
+        public void setScontoScelto(Integer scontoScelto) { this.scontoScelto = scontoScelto; }
     }
     private final BollettaRepository bollettaRepository;
     private final UtenteRepository utenteRepository;
@@ -71,14 +76,23 @@ public ResponseEntity<Integer> pagaBolletta(@PathVariable Integer id, @RequestBo
     if (utenteOpt.isPresent()) {
         Utente utente = utenteOpt.get();
         int puntiUtente = utente.getPunti() != null ? utente.getPunti() : 0;
-        scontoApplicato = utenteService.calcolaScontoProgressivo(puntiUtente);
-        BigDecimal costoOriginale = bolletta.getImporto();
-        BigDecimal costoScontato = costoOriginale.multiply(BigDecimal.valueOf(1 - (scontoApplicato / 100.0)));
-        bolletta.setImporto(costoScontato);
         
-        // Sottrai i punti utilizzati per lo sconto (100 punti per ogni 1% di sconto)
+        // Calcola il massimo sconto disponibile
+        int scontoMassimoDisponibile = utenteService.calcolaScontoProgressivo(puntiUtente);
+        
+        // Usa lo sconto scelto dall'utente, se specificato e valido
+        if (pagamentoRequest.getScontoScelto() != null && pagamentoRequest.getScontoScelto() > 0) {
+            scontoApplicato = Math.min(pagamentoRequest.getScontoScelto(), scontoMassimoDisponibile);
+        }
+        
+        // Applica lo sconto solo se maggiore di 0
         if (scontoApplicato > 0) {
-            int puntiUtilizzati = scontoApplicato * 100;
+            BigDecimal costoOriginale = bolletta.getImporto();
+            BigDecimal costoScontato = costoOriginale.multiply(BigDecimal.valueOf(1 - (scontoApplicato / 100.0)));
+            bolletta.setImporto(costoScontato);
+            
+            // Sottrai i punti utilizzati per lo sconto (50 punti per ogni 1% di sconto)
+            int puntiUtilizzati = scontoApplicato * 50;
             utente.setPunti(puntiUtente - puntiUtilizzati);
         }
     }
@@ -94,11 +108,7 @@ public ResponseEntity<Integer> pagaBolletta(@PathVariable Integer id, @RequestBo
                 utente.setPunti(0);
             }
             // Aggiungi punti bonus per pagamento puntuale
-            utente.setPunti(utente.getPunti() + 20);
-            long count = bollettaRepository.countBollettePagateInTempo(bolletta.getCf());
-            if (count % 3 == 0) {
-                utente.setPunti(utente.getPunti() + 100);
-            }
+            utente.setPunti(utente.getPunti() + 40);
         }
     }
     
